@@ -770,13 +770,13 @@ function openModal() {
     <div class="modal-section">
         <div class="modal-section-label">RemoteLOCK Connect ログイン情報</div>
         <div class="cred-box">
-            <div class="cred-item">
-                <label class="form-label">ログインID（メールアドレス）</label>
-                <input type="email" class="form-input" id="m_loginId" value="${formData.loginId || ''}" placeholder="example@gmail.com">
-            </div>
-            <div class="cred-item">
-                <label class="form-label">パスワード</label>
-                <input type="text" class="form-input" id="m_password" value="${formData.password || ''}">
+                <div class="cred-item">
+                    <label class="form-label">ログインID（メールアドレス）<span class="required">*</span></label>
+                    <input type="email" class="form-input" id="m_loginId" value="${formData.loginId || ''}" placeholder="example@gmail.com">
+                </div>
+                <div class="cred-item">
+                    <label class="form-label">パスワード<span class="required">*</span></label>
+                    <input type="text" class="form-input" id="m_password" value="${formData.password || ''}">
             </div>
         </div>
     </div>
@@ -804,6 +804,16 @@ function closeModalOnBg(e) {
 }
 
 function sendFinalEmail() {
+    // Validate login credentials
+    const missingCred = [];
+    if (!formData.loginId) missingCred.push('ログインID（メールアドレス）');
+    if (!formData.password) missingCred.push('パスワード');
+    if (missingCred.length > 0) {
+        alert('以下のログイン情報を入力してください。\n\n・' + missingCred.join('\n・'));
+        if (!formData.loginId) { const el = document.getElementById('m_loginId'); if (el) { el.classList.add('invalid'); el.focus(); } }
+        else if (!formData.password) { const el = document.getElementById('m_password'); if (el) { el.classList.add('invalid'); el.focus(); } }
+        return;
+    }
     const subject = encodeURIComponent(`【導入完了報告】RemoteLOCK 設定完了 (${formData.property})`);
     let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの導入状況についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■ログイン情報\nID: ${formData.loginId || '未入力'}\nPASS: ${formData.password || '未入力'}\n\nご確認と連携作業をお願いいたします。`;
     window.location.href = `mailto:customer@bizpato.com?subject=${subject}&body=${encodeURIComponent(body)}`;
