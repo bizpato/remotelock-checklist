@@ -96,6 +96,11 @@
             opacity: 0;
             pointer-events: none;
         }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -261,6 +266,8 @@
                 setTimeout(() => setToastMsg(''), 2000);
             };
 
+            const isHostInfoFilled = !!(formData.propertyName.trim() && formData.subscriberName.trim() && formData.staffName.trim() && formData.email.trim());
+
             const handleSendEmail = (type, diagnosisResult = null) => {
                 const isFinal = type === 'final';
                 const subject = encodeURIComponent(
@@ -406,6 +413,7 @@
                                             onToggle={() => toggleTask(task.id)}
                                             onCopy={copyToClipboard}
                                             onSendEmail={handleSendEmail}
+                                            isHostInfoFilled={!!(formData.propertyName.trim() && formData.subscriberName.trim() && formData.staffName.trim() && formData.email.trim())}
                                         />
                                     ))}
                                 </div>
@@ -429,22 +437,28 @@
                     </main>
 
                     {/* ── Fixed Footer Bar ── */}
-                    <div className="fixed bottom-0 left-0 right-0 p-8 sticky-report-bar z-40 border-t border-slate-100">
-                        <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
-                            <p className="text-[11px] font-black text-slate-400 flex items-center gap-2">
-                                <Icon name="info" size={16} className="text-[#215387]" /> 本文を編集せずにそのまま送信してください
-                            </p>
-                            <button
-                                onClick={() => {
-                                    if (isAllDone) { setIsModalOpen(true); }
-                                    else { alert('全てのタスクを完了させてください。'); }
-                                }}
-                                className={`w-full deployment-btn py-6 flex items-center justify-center gap-4 text-xl tracking-tight shadow-2xl ${isAllDone ? 'shadow-blue-900/20' : 'opacity-40 cursor-not-allowed shadow-none'}`}
-                            >
-                                <Icon name="send" size={24} /> 導入完了を報告する
-                            </button>
+                    {isAllDone && (
+                        <div className="fixed bottom-0 left-0 right-0 p-8 sticky-report-bar z-40 border-t border-slate-100"
+                             style={{ animation: 'slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
+                            <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
+                                <p className="text-[11px] font-black text-slate-400 flex items-center gap-2">
+                                    <Icon name="info" size={16} className="text-[#215387]" /> 本文を編集せずにそのまま送信してください
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        if (!isHostInfoFilled) {
+                                            alert('ホスト様情報（物件名・契約者名・担当者名・メールアドレス）をすべて入力してください。');
+                                            return;
+                                        }
+                                        setIsModalOpen(true);
+                                    }}
+                                    className="w-full deployment-btn py-6 flex items-center justify-center gap-4 text-xl tracking-tight shadow-2xl shadow-blue-900/20"
+                                >
+                                    <Icon name="send" size={24} /> 導入完了を報告する
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* ── Final Modal ── */}
                     {isModalOpen && (
@@ -506,7 +520,7 @@
         /* ─────────────────────────────────────────────────────────────────
            TaskCard: 完了状態に応じてアクションエリアを確実に制御する
            ───────────────────────────────────────────────────────────────── */
-        const TaskCard = ({ task, onToggle, onCopy, onSendEmail }) => {
+        const TaskCard = ({ task, onToggle, onCopy, onSendEmail, isHostInfoFilled }) => {
             const showAction = !task.completed;
 
             return (
@@ -584,16 +598,23 @@
                                         <p className="text-[10px] font-black text-[#215387] uppercase tracking-widest mb-4">
                                             結果を選択してメール報告（タスク完了）
                                         </p>
+                                        {!isHostInfoFilled && (
+                                            <p className="text-[11px] font-bold text-[#ea4d3c] mb-3 flex items-center gap-2">
+                                                ⚠️ 上のホスト様情報をすべて入力してから報告してください
+                                            </p>
+                                        )}
                                         <div className="flex gap-4">
                                             <button
-                                                onClick={() => onSendEmail('diagnosis', true)}
-                                                className="flex-grow py-4 bg-white border border-blue-100 rounded-2xl text-xs font-black text-[#215387] hover:bg-[#215387] hover:text-white transition shadow-sm"
+                                                onClick={(e) => { e.stopPropagation(); onSendEmail('diagnosis', true); }}
+                                                disabled={!isHostInfoFilled}
+                                                className="flex-grow py-4 bg-white border border-blue-100 rounded-2xl text-xs font-black text-[#215387] hover:bg-[#215387] hover:text-white transition shadow-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#215387]"
                                             >
                                                 設置可能
                                             </button>
                                             <button
-                                                onClick={() => onSendEmail('diagnosis', false)}
-                                                className="flex-grow py-4 bg-white border border-red-100 rounded-2xl text-xs font-black text-red-500 hover:bg-red-500 hover:text-white transition shadow-sm"
+                                                onClick={(e) => { e.stopPropagation(); onSendEmail('diagnosis', false); }}
+                                                disabled={!isHostInfoFilled}
+                                                className="flex-grow py-4 bg-white border border-red-100 rounded-2xl text-xs font-black text-red-500 hover:bg-red-500 hover:text-white transition shadow-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-red-500"
                                             >
                                                 設置不可
                                             </button>
