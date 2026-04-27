@@ -466,8 +466,7 @@ const STORAGE_KEY = 'remotelock_checklist_v2';
 
 const PHASE_NAMES = {
     1: '事前確認・取付診断',
-    2: '購入・施工',
-    3: 'クラウド設定・権限共有'
+    2: 'クラウド設定・権限共有'
 };
 
 const TASKS = [
@@ -484,7 +483,8 @@ const TASKS = [
         inquiry: [
             { label: '写真で診断を依頼', url: 'https://app.jibun-apps.jp/form/db74c406-5cc5-4d03-ab68-89e0b54a4257/new?hsCtaAttrib=198854275741' },
             { label: '図面で診断を依頼', url: 'https://app.jibun-apps.jp/form/3271354b-5cea-4f30-becc-a796a9a2cc8a/new?hsCtaAttrib=198814329651' }
-        ]
+        ],
+        links: [{ label: 'RemoteLOCK500i 製品ページ', url: 'https://remotelock.kke.co.jp/products/remotelock-500i/' }]
     },
     {
         id: 3, phase: 1,
@@ -494,37 +494,19 @@ const TASKS = [
         diagnosis: true
     },
     {
-        id: 4, phase: 2,
-        title: 'RemoteLOCK 本体の購入',
-        desc: '公式ストアまたは提携店よりご購入ください。',
-        links: [{ label: '公式サイトで確認', url: 'https://remotelock.kke.co.jp/products/remotelock-500i/' }]
-    },
-    {
-        id: 5, phase: 2,
-        title: '施工工事の依頼',
-        desc: 'ご自身で手配いただくか、提携施工パートナーへご依頼ください。',
-        optional: true,
-        links: [{ label: '施工パートナー一覧', url: 'https://remotelock.kke.co.jp/installation/' }]
-    },
-    {
-        id: 6, phase: 2,
-        title: 'Wi-Fi環境の整備',
-        desc: '扉付近で 2.4GHz Wi-Fi が安定して届くことを確認してください。'
-    },
-    {
-        id: 7, phase: 3,
+        id: 7, phase: 2,
         title: 'RemoteLOCKアカウントの作成',
         desc: 'Connect へアクセスしアカウントを作成します。',
         links: [{ label: 'Connectログイン', url: 'https://connect.remotelock.jp/sign-in' }]
     },
     {
-        id: 8, phase: 3,
+        id: 8, phase: 2,
         title: 'ビジネススタンダードプランの選択',
         desc: '外部システム連携にはビジネススタンダードプランが必須となります。',
         critical: true
     },
     {
-        id: 9, phase: 3,
+        id: 9, phase: 2,
         title: '弊社アカウントを管理者に招待',
         desc: '民泊管理バンクによる設定代行・サポートのため、招待が必要です。',
         invite: true
@@ -564,7 +546,7 @@ function render() {
     const container = document.getElementById('tasksContainer');
     let html = '';
 
-    [1, 2, 3].forEach(phase => {
+    [1, 2].forEach(phase => {
         html += `<div class="step-section">
             <div class="step-header">
                 <span class="step-badge">STEP 0${phase}</span>
