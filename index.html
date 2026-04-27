@@ -109,6 +109,7 @@
             border: 1px solid #bfdbfe;
         }
         .step-title { font-size: 17px; font-weight: 900; color: #334155; }
+        .step-subtitle { font-size: 11px; font-weight: 700; color: #fff; background: #64748b; padding: 3px 10px; border-radius: 99px; letter-spacing: 0.5px; margin-left: auto; white-space: nowrap; }
 
         /* ── Task Item ── */
         .task-item {
@@ -515,7 +516,7 @@ const TASKS = [
 
 // ===== STATE =====
 let completed = {};
-let formData = { property: '', subscriber: '', staff: '', email: '', loginId: '', password: '', constructionDate: '' };
+let formData = { property: '', subscriber: '', staff: '', email: '', loginId: '', password: '', constructionDate: '', showDateInput: false };
 
 // ===== STORAGE =====
 function saveState() {
@@ -530,7 +531,7 @@ function loadState() {
         if (raw) {
             const parsed = JSON.parse(raw);
             if (parsed.completed) completed = parsed.completed;
-            if (parsed.formData)  formData  = { ...formData, ...parsed.formData };
+            if (parsed.formData)  formData  = { ...formData, ...parsed.formData, showDateInput: false };
         }
     } catch(e) {}
 }
@@ -547,10 +548,11 @@ function render() {
     let html = '';
 
     [1, 2].forEach(phase => {
+        const phaseSubtitle = phase === 2 ? '<span class="step-subtitle">取り付け完了後の作業</span>' : '';
         html += `<div class="step-section">
             <div class="step-header">
                 <span class="step-badge">STEP 0${phase}</span>
-                <span class="step-title">${PHASE_NAMES[phase]}</span>
+                <span class="step-title">${PHASE_NAMES[phase]}</span>${phaseSubtitle}
             </div>`;
 
         TASKS.filter(t => t.phase === phase).forEach(task => {
@@ -583,17 +585,22 @@ function render() {
             }
 
             if (task.diagnosis) {
+                const dateInputHtml = formData.showDateInput ? `
+                <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
+                    <label class="form-label" style="margin-bottom:6px">工事予定日 <span style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:none;letter-spacing:0">（任意）</span></label>
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                        <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation()" oninput="event.stopPropagation(); formData.constructionDate=this.value; saveState()" style="max-width:220px">
+                        <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0">メールを作成する →</button>
+                    </div>
+                </div>` : '';
                 actionHtml += `
                 <div class="diagnosis-box">
                     <div class="diagnosis-label">結果を選択してメール報告（タスク完了）</div>
-                    <div style="margin-bottom:14px">
-                        <label class="form-label" style="margin-bottom:6px">工事予定日 <span style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:none;letter-spacing:0">（任意／設置可能の場合）</span></label>
-                        <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation()" oninput="event.stopPropagation(); formData.constructionDate=this.value; saveState()" style="max-width:220px">
-                    </div>
                     <div class="diagnosis-btns">
-                        <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)">設置可能</button>
+                        <button class="btn-diag-ok" onclick="event.stopPropagation(); showDateInput()">設置可能</button>
                         <button class="btn-diag-ng" onclick="event.stopPropagation(); sendDiagnosis(false)">設置不可</button>
                     </div>
+                    ${dateInputHtml}
                 </div>`;
             }
 
@@ -729,6 +736,13 @@ function bindFormInputs() {
     });
 }
 
+// ===== SHOW DATE INPUT =====
+function showDateInput() {
+    if (!validateAndHighlight()) return;
+    formData.showDateInput = true;
+    render();
+}
+
 // ===== DIAGNOSIS EMAIL =====
 function sendDiagnosis(isOk) {
     if (!validateAndHighlight()) return;
@@ -738,6 +752,7 @@ function sendDiagnosis(isOk) {
     let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「${res}」との回答を受け取りました。${dateStr}\n\n`;
     // Mark task 3 as done
     completed[3] = true;
+    formData.showDateInput = false;
     saveState();
     window.location.href = `mailto:customer@bizpato.com?subject=${subject}&body=${encodeURIComponent(body)}`;
     render();
