@@ -749,9 +749,6 @@ function sendDiagnosis(isOk) {
     const res = isOk ? '設置可能' : '設置不可';
     const subject = encodeURIComponent(`【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`);
     let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「${res}」との回答を受け取りました。\n\n`;
-    if (!isOk) {
-        body += `※設置不可のため、別途メールにて代替品等の今後の対応についてご案内させていただきます。\n`;
-    }
     // Mark task 3 as done
     completed[3] = true;
     saveState();
