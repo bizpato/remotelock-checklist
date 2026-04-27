@@ -482,8 +482,8 @@ const TASKS = [
         title: '取り付け診断の申し込み',
         desc: '公式ページのフォームより写真または図面を送付し、設置診断を受けてください。',
         inquiry: [
-            { label: '写真で診断を依頼', url: 'https://remotelock.kke.co.jp/installation/#photo' },
-            { label: '図面で診断を依頼', url: 'https://remotelock.kke.co.jp/installation/#drawing' }
+            { label: '写真で診断を依頼', url: 'https://app.jibun-apps.jp/form/db74c406-5cc5-4d03-ab68-89e0b54a4257/new?hsCtaAttrib=198854275741' },
+            { label: '図面で診断を依頼', url: 'https://app.jibun-apps.jp/form/3271354b-5cea-4f30-becc-a796a9a2cc8a/new?hsCtaAttrib=198814329651' }
         ]
     },
     {
@@ -533,7 +533,7 @@ const TASKS = [
 
 // ===== STATE =====
 let completed = {};
-let formData = { property: '', subscriber: '', staff: '', email: '', loginId: '', password: '' };
+let formData = { property: '', subscriber: '', staff: '', email: '', loginId: '', password: '', constructionDate: '' };
 
 // ===== STORAGE =====
 function saveState() {
@@ -604,6 +604,10 @@ function render() {
                 actionHtml += `
                 <div class="diagnosis-box">
                     <div class="diagnosis-label">結果を選択してメール報告（タスク完了）</div>
+                    <div style="margin-bottom:14px">
+                        <label class="form-label" style="margin-bottom:6px">工事予定日 <span style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:none;letter-spacing:0">（任意／設置可能の場合）</span></label>
+                        <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation()" oninput="event.stopPropagation(); formData.constructionDate=this.value; saveState()" style="max-width:220px">
+                    </div>
                     <div class="diagnosis-btns">
                         <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)">設置可能</button>
                         <button class="btn-diag-ng" onclick="event.stopPropagation(); sendDiagnosis(false)">設置不可</button>
@@ -748,7 +752,8 @@ function sendDiagnosis(isOk) {
     if (!validateAndHighlight()) return;
     const res = isOk ? '設置可能' : '設置不可';
     const subject = encodeURIComponent(`【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`);
-    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「${res}」との回答を受け取りました。\n\n`;
+    const dateStr = (isOk && formData.constructionDate) ? `\n工事予定日: ${formData.constructionDate}` : '';
+    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「${res}」との回答を受け取りました。${dateStr}\n\n`;
     // Mark task 3 as done
     completed[3] = true;
     saveState();
