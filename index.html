@@ -4,671 +4,845 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RemoteLOCK 導入チェックリスト</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React & Babel -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --brand-navy: #215387;
-            --brand-light-blue: #eef8ff;
+            --brand: #215387;
+            --brand-light: #3174b5;
+            --brand-base: #eef8ff;
             --brand-accent: #d7f0ff;
-            --brand-danger: #ea4d3c;
-            --brand-text: #1e293b;
+            --danger: #ea4d3c;
+            --text: #1e293b;
         }
 
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background-color: #f8fafc;
-            color: var(--brand-text);
+            background: #f8fafc;
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 140px;
         }
 
-        .font-black-jp { font-weight: 900; }
-
-        .progress-transition { transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
-
-        .glass-header {
-            background: rgba(255, 255, 255, 0.95);
+        /* ── Header ── */
+        .header {
+            position: sticky; top: 0; z-index: 30;
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
         }
-
-        .card-shadow {
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        .header-inner {
+            max-width: 896px; margin: 0 auto;
+            padding: 20px 16px;
+            display: flex; flex-wrap: wrap; align-items: center;
+            justify-content: space-between; gap: 12px;
         }
-
-        .sticky-report-bar {
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 -10px 30px -5px rgba(0, 0, 0, 0.05);
-            backdrop-filter: blur(12px);
+        .header-logo { display: flex; align-items: center; gap: 14px; }
+        .logo-icon {
+            background: var(--brand); padding: 12px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(33,83,135,0.2);
         }
+        .logo-icon svg { width: 26px; height: 26px; color: white; display: block; }
+        .logo-title { font-size: 22px; font-weight: 900; color: #1e293b; letter-spacing: -0.5px; }
+        .logo-sub { font-size: 11px; font-weight: 700; color: #94a3b8; margin-top: 3px; }
+        .progress-pill {
+            display: flex; align-items: center; gap: 10px;
+            background: white; padding: 10px 20px; border-radius: 16px;
+            border: 1px solid #f1f5f9; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            min-width: 200px;
+        }
+        .progress-label { font-size: 10px; font-weight: 900; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.15em; white-space: nowrap; }
+        .progress-pct { font-size: 16px; font-weight: 900; color: var(--brand); min-width: 40px; text-align: right; }
+        .header-progress-bar { height: 3px; background: #f1f5f9; }
+        .header-progress-fill { height: 100%; background: var(--brand); transition: width 0.7s cubic-bezier(0.65,0,0.35,1); width: 0%; }
 
-        .modal-overlay { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); }
+        /* ── Main ── */
+        .main { max-width: 896px; margin: 0 auto; padding: 28px 16px; }
 
-        .host-input {
-            font-weight: 700;
-            font-size: 1.125rem;
-            color: #334155;
-            background-color: #f8fafc;
+        /* ── Card ── */
+        .card {
+            background: white; border-radius: 28px;
             border: 1px solid #e2e8f0;
-            transition: all 0.2s;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+            overflow: hidden; margin-bottom: 32px;
         }
-        .host-input:focus {
-            background-color: #fff;
-            border-color: var(--brand-navy);
-            box-shadow: 0 0 0 4px rgba(33, 83, 135, 0.05);
-            outline: none;
+        .card-header {
+            background: #f8fafc; padding: 20px 28px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
-        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
-        .pill-badge {
-            border: 1px solid #e2e8f0;
-            border-radius: 9999px;
-            background: white;
+        .card-header-title {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 15px; font-weight: 900; color: #475569;
         }
+        .card-header-title svg { width: 18px; height: 18px; color: var(--brand); }
+        .card-header-badge { font-size: 9px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.2em; }
+        .card-body { padding: 28px; }
 
-        .deployment-btn {
-            background-color: var(--brand-navy);
-            border-radius: 9999px;
-            color: white;
-            font-weight: 900;
-            transition: all 0.2s;
+        /* ── Form ── */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-full { grid-column: 1 / -1; }
+        .form-label { display: block; font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px; }
+        .form-label .required { color: var(--danger); margin-left: 3px; }
+        .form-input {
+            width: 100%; background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 16px; padding: 16px 20px;
+            font-size: 15px; font-weight: 700; color: #334155;
+            font-family: inherit; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
+        .form-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(33,83,135,0.1); background: white; }
+        .form-input.invalid { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(234,77,60,0.1); }
+        .form-hint { font-size: 11px; font-weight: 700; color: var(--danger); margin-top: 6px; display: none; }
+        .form-hint.show { display: block; }
 
-        /* 完了済みタスクのアクションエリアを確実に非表示 */
-        .task-action-area {
+        /* ── Step ── */
+        .step-section { margin-bottom: 32px; }
+        .step-header { display: flex; align-items: center; gap: 14px; padding: 0 4px; margin-bottom: 16px; }
+        .step-badge {
+            background: var(--brand-accent); color: var(--brand);
+            padding: 6px 14px; border-radius: 99px;
+            font-size: 10px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
+            border: 1px solid #bfdbfe;
+        }
+        .step-title { font-size: 17px; font-weight: 900; color: #334155; }
+
+        /* ── Task Item ── */
+        .task-item {
+            background: white; border-radius: 28px; border: 1px solid #e2e8f0;
+            padding: 24px 28px; margin-bottom: 14px;
+            display: flex; gap: 20px; cursor: pointer;
+            transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .task-item:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(33,83,135,0.08); }
+        .task-item.done { background: #f0f9ff; border-color: #bfdbfe; opacity: 0.65; }
+        .task-item.done:hover { transform: none; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+        .task-item.critical { background: #fffcf0; border-color: #fde68a; }
+        .task-item.done.critical { background: #f0f9ff; border-color: #bfdbfe; }
+
+        .task-checkbox { flex-shrink: 0; margin-top: 2px; }
+        .checkbox-empty {
+            width: 32px; height: 32px; border-radius: 12px;
+            border: 2px solid #e2e8f0; background: #f8fafc;
+            transition: border-color 0.2s;
+        }
+        .task-item:hover .checkbox-empty { border-color: var(--brand); }
+        .checkbox-done {
+            width: 32px; height: 32px; border-radius: 12px;
+            background: #10b981;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(16,185,129,0.3);
+        }
+        .checkbox-done svg { width: 16px; height: 16px; color: white; display: block; }
+
+        .task-content { flex: 1; min-width: 0; }
+        .task-title-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .task-title { font-size: 16px; font-weight: 900; color: #1e293b; }
+        .task-item.done .task-title { color: #94a3b8; text-decoration: line-through; }
+        .badge { font-size: 9px; font-weight: 900; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .badge-critical { background: var(--danger); color: white; }
+        .badge-optional { background: #94a3b8; color: white; }
+        .task-desc { font-size: 13px; color: #64748b; font-weight: 500; line-height: 1.6; }
+        .task-item.done .task-desc { color: #cbd5e1; }
+
+        /* ── Action Area (accordion) ── */
+        .task-action {
             overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.3s ease;
-        }
-        .task-action-area.visible {
-            max-height: 600px;
-            opacity: 1;
-        }
-        .task-action-area.hidden-area {
             max-height: 0;
             opacity: 0;
+            transition: max-height 0.4s cubic-bezier(0.65,0,0.35,1), opacity 0.3s ease, margin-top 0.3s ease;
+            margin-top: 0;
             pointer-events: none;
         }
+        .task-action.open {
+            max-height: 700px;
+            opacity: 1;
+            margin-top: 16px;
+            pointer-events: auto;
+        }
+
+        /* ── Buttons ── */
+        .btn-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--brand); color: white;
+            padding: 11px 22px; border-radius: 16px;
+            font-size: 12px; font-weight: 900; text-decoration: none;
+            transition: background 0.2s; border: none; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(33,83,135,0.15); font-family: inherit;
+        }
+        .btn-primary:hover { background: #1a416a; }
+        .btn-primary svg { width: 13px; height: 13px; display: block; }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: white; color: #475569;
+            padding: 11px 18px; border-radius: 16px;
+            font-size: 12px; font-weight: 700; text-decoration: none;
+            border: 1px solid #e2e8f0; transition: border-color 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .btn-outline:hover { border-color: var(--brand); }
+        .btn-outline svg { width: 14px; height: 14px; color: var(--brand); display: block; }
+
+        /* ── Diagnosis Buttons ── */
+        .diagnosis-box {
+            background: #f8fafc; border-radius: 20px; border: 1px solid #f1f5f9;
+            padding: 20px 24px;
+        }
+        .diagnosis-label { font-size: 10px; font-weight: 900; color: var(--brand); text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 14px; }
+        .diagnosis-btns { display: flex; gap: 12px; }
+        .btn-diag-ok {
+            flex: 1; padding: 14px; border-radius: 16px;
+            background: white; border: 1px solid #bfdbfe;
+            font-size: 13px; font-weight: 900; color: var(--brand);
+            cursor: pointer; transition: background 0.2s, color 0.2s;
+            font-family: inherit;
+        }
+        .btn-diag-ok:hover { background: var(--brand); color: white; }
+        .btn-diag-ng {
+            flex: 1; padding: 14px; border-radius: 16px;
+            background: white; border: 1px solid #fecaca;
+            font-size: 13px; font-weight: 900; color: var(--danger);
+            cursor: pointer; transition: background 0.2s, color 0.2s;
+            font-family: inherit;
+        }
+        .btn-diag-ng:hover { background: var(--danger); color: white; }
+
+        /* ── Invite Guide ── */
+        .invite-box {
+            background: white; border-radius: 20px; border: 1px solid #e2e8f0;
+            padding: 24px;
+        }
+        .invite-section-label { font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 10px; }
+        .invite-email-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .invite-email-code {
+            display: block; background: #f8fafc; border: 1px solid #f1f5f9;
+            border-radius: 12px; padding: 14px 18px;
+            font-size: 14px; font-weight: 700; color: #334155; font-family: monospace;
+        }
+        .btn-copy {
+            font-size: 10px; font-weight: 900; color: var(--brand);
+            border: 1px solid #bfdbfe; padding: 6px 14px; border-radius: 10px;
+            background: white; cursor: pointer; transition: background 0.2s;
+            font-family: inherit; white-space: nowrap;
+        }
+        .btn-copy:hover { background: var(--brand-base); }
+        .invite-steps { list-style: none; margin-top: 16px; }
+        .invite-steps li {
+            display: flex; gap: 12px; align-items: flex-start;
+            font-size: 13px; font-weight: 500; color: #475569;
+            line-height: 1.6; margin-bottom: 10px;
+        }
+        .invite-steps li:last-child { margin-bottom: 0; }
+        .step-num {
+            flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+            background: #f1f5f9; color: var(--brand);
+            font-size: 10px; font-weight: 900;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* ── Sticky Bar ── */
+        .sticky-bar {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -8px 24px rgba(33,83,135,0.08);
+            padding: 16px; z-index: 40;
+            display: none;
+        }
+        .sticky-bar.visible { display: block; animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+        .sticky-bar-inner { max-width: 896px; margin: 0 auto; }
+        .sticky-bar-hint {
+            text-align: center; font-size: 11px; font-weight: 700; color: #94a3b8;
+            margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .sticky-bar-hint svg { width: 14px; height: 14px; color: var(--brand); }
+        .btn-report {
+            width: 100%; padding: 18px; border-radius: 20px;
+            font-size: 16px; font-weight: 900; color: white;
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            transition: transform 0.15s, box-shadow 0.15s;
+            background: linear-gradient(90deg, var(--brand), var(--brand-light));
+            box-shadow: 0 8px 24px rgba(33,83,135,0.25);
+            font-family: inherit;
+        }
+        .btn-report:hover { transform: translateY(-2px); }
+        .btn-report:active { transform: scale(0.98); }
+        .btn-report svg { width: 22px; height: 22px; display: block; }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 50;
+            background: rgba(15,23,42,0.55); backdrop-filter: blur(6px);
+            display: none; align-items: flex-end; justify-content: center; padding: 0;
+        }
+        .modal-overlay.open { display: flex; }
+        @media (min-width: 640px) { .modal-overlay { align-items: center; padding: 16px; } }
+        .modal {
+            background: white; width: 100%; max-width: 520px;
+            border-radius: 40px 40px 0 0; overflow: hidden;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+            border: 1px solid #f1f5f9;
+        }
+        @media (min-width: 640px) { .modal { border-radius: 40px; } }
+        .modal-header {
+            background: #f8fafc; padding: 24px 32px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-title { font-size: 16px; font-weight: 900; color: var(--brand); display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .modal-title svg { width: 20px; height: 20px; }
+        .modal-close { background: none; border: none; cursor: pointer; color: #94a3b8; padding: 4px; display: flex; }
+        .modal-close:hover { color: #475569; }
+        .modal-close svg { width: 22px; height: 22px; }
+        .modal-body { padding: 28px 32px; max-height: 70vh; overflow-y: auto; }
+        .modal-section { margin-bottom: 24px; }
+        .modal-section-label { font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 12px; }
+        .modal-info-box { background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 20px; padding: 18px 22px; }
+        .modal-info-name { font-size: 15px; font-weight: 900; color: #1e293b; }
+        .modal-info-sub { font-size: 12px; font-weight: 700; color: #94a3b8; margin-top: 6px; }
+        .final-msg { background: var(--brand-base); border: 1px solid #bfdbfe; border-radius: 20px; padding: 24px; text-align: center; }
+        .final-msg p { font-size: 14px; font-weight: 700; color: var(--brand); line-height: 1.8; }
+        .cred-box { background: white; border: 1px solid #f1f5f9; border-radius: 20px; padding: 20px; }
+        .cred-item { margin-bottom: 14px; }
+        .cred-item:last-child { margin-bottom: 0; }
+        .btn-send {
+            width: 100%; padding: 18px; border-radius: 20px;
+            font-size: 15px; font-weight: 900; color: white;
+            border: none; cursor: pointer; margin-top: 8px;
+            background: var(--brand); box-shadow: 0 8px 24px rgba(33,83,135,0.2);
+            transition: opacity 0.2s; font-family: inherit;
+        }
+        .btn-send:disabled { background: #e2e8f0 !important; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+
+        /* ── Reset button ── */
+        .footer { margin-top: 40px; text-align: center; padding-bottom: 20px; }
+        .btn-reset {
+            background: none; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 8px 20px; font-size: 11px; font-weight: 900; color: #94a3b8;
+            cursor: pointer; font-family: inherit; transition: border-color 0.2s, color 0.2s;
+        }
+        .btn-reset:hover { border-color: var(--danger); color: var(--danger); }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: #1e293b; color: white; padding: 12px 24px;
+            border-radius: 16px; font-size: 13px; font-weight: 900;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 60;
+            opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         @keyframes slideUp {
             from { transform: translateY(100%); opacity: 0; }
             to   { transform: translateY(0);    opacity: 1; }
         }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-full { grid-column: 1; }
+            .logo-title { font-size: 17px; }
+            .card-body { padding: 20px; }
+            .task-item { padding: 18px 20px; }
+        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+<!-- Header -->
+<div class="header">
+    <div class="header-inner">
+        <div class="header-logo">
+            <div class="logo-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg>
+            </div>
+            <div>
+                <div class="logo-title">RemoteLOCK 導入チェックリスト</div>
+                <div class="logo-sub">民泊管理バンク・ホスト様用タスク管理シート</div>
+            </div>
+        </div>
+        <div class="progress-pill">
+            <div class="progress-label">Task Completion</div>
+            <div class="progress-pct" id="progressPct">0%</div>
+        </div>
+    </div>
+    <div class="header-progress-bar">
+        <div class="header-progress-fill" id="progressFill"></div>
+    </div>
+</div>
 
-        const Icon = ({ name, size = 20, className = "" }) => {
-            const ref = useRef(null);
-            useEffect(() => {
-                if (ref.current && window.lucide) {
-                    window.lucide.createIcons({ nodes: [ref.current] });
-                }
-            }, [name]);
-            return <i ref={ref} data-lucide={name} style={{ width: size, height: size, display: 'inline-block' }} className={className}></i>;
-        };
+<!-- Main -->
+<div class="main">
 
-        const STORAGE_KEY_TASKS = 'remotelock_intro_checklist_v1';
-        const STORAGE_KEY_FORM  = 'remotelock_intro_form_v1';
+    <!-- Host Info Card -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-header-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                ホスト様情報
+            </div>
+            <div class="card-header-badge">Required Info</div>
+        </div>
+        <div class="card-body">
+            <div class="form-grid">
+                <div class="form-full">
+                    <label class="form-label">物件名<span class="required">*</span></label>
+                    <input type="text" class="form-input" id="f_property" placeholder="例：〇〇マンション 101号室">
+                    <div class="form-hint" id="hint_property">物件名を入力してください</div>
+                </div>
+                <div>
+                    <label class="form-label">ご契約者様名<span class="required">*</span></label>
+                    <input type="text" class="form-input" id="f_subscriber" placeholder="個人名または会社名">
+                    <div class="form-hint" id="hint_subscriber">ご契約者様名を入力してください</div>
+                </div>
+                <div>
+                    <label class="form-label">担当者名<span class="required">*</span></label>
+                    <input type="text" class="form-input" id="f_staff" placeholder="ご担当者様名">
+                    <div class="form-hint" id="hint_staff">担当者名を入力してください</div>
+                </div>
+                <div class="form-full">
+                    <label class="form-label">連絡先メールアドレス<span class="required">*</span></label>
+                    <input type="email" class="form-input" id="f_email" placeholder="example@minpaku.com">
+                    <div class="form-hint" id="hint_email">メールアドレスを入力してください</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        const initialTasks = [
-            // ─── STEP 01: 事前確認・取付診断 ───────────────────────────────
-            {
-                id: 1, phase: 1,
-                title: '事前確認チェックリスト(PDF)の確認',
-                completed: false,
-                description: '設置環境のセルフチェックシートです。公式PDFをご確認ください。',
-                links: [{ label: '公式チェックリストを確認', url: 'https://remotelock.kke.co.jp/hubfs/manuals/Checklist_RemoteLOCK500i.pdf' }]
-            },
-            {
-                id: 2, phase: 1,
-                title: '取り付け診断の申し込み',
-                completed: false,
-                description: '公式ページのフォームより写真または図面を送付し、設置診断を受けてください。',
-                inquiryLinks: [
-                    { label: '写真で診断を依頼', url: 'https://remotelock.kke.co.jp/installation/#photo', icon: 'camera' },
-                    { label: '図面で診断を依頼', url: 'https://remotelock.kke.co.jp/installation/#drawing', icon: 'file-text' }
-                ]
-            },
-            {
-                id: 3, phase: 1,
-                title: '取付診断結果の報告',
-                completed: false,
-                description: '公式診断の結果（設置可能・不可）を民泊管理バンクへ報告してください。報告後にタスク完了となります。',
-                isCritical: true,
-                showDiagnosisButtons: true
-            },
+    <!-- Tasks -->
+    <div id="tasksContainer"></div>
 
-            // ─── STEP 02: 購入・施工 ────────────────────────────────────────
-            {
-                id: 4, phase: 2,
-                title: 'RemoteLOCK 本体の購入',
-                completed: false,
-                description: '公式ストアまたは提携店よりご購入ください。',
-                links: [{ label: '公式サイトで確認', url: 'https://remotelock.kke.co.jp/products/remotelock-500i/' }]
-            },
-            {
-                id: 5, phase: 2,
-                title: '施工工事の依頼',
-                completed: false,
-                isOptional: true,
-                description: 'ご自身で手配いただくか、提携施工パートナーへご依頼ください。',
-                links: [{ label: '施工パートナー一覧', url: 'https://remotelock.kke.co.jp/installation/' }]
-            },
-            {
-                id: 6, phase: 2,
-                title: 'Wi-Fi環境の整備',
-                completed: false,
-                description: '扉付近で 2.4GHz Wi-Fi が安定して届くことを確認してください。'
-            },
+    <!-- Footer -->
+    <div class="footer">
+        <button class="btn-reset" onclick="resetProgress()">RESET PROGRESS</button>
+    </div>
+</div>
 
-            // ─── STEP 03: クラウド設定・権限共有 ───────────────────────────
-            {
-                id: 7, phase: 3,
-                title: 'RemoteLOCKアカウントの作成',
-                completed: false,
-                description: 'Connect へアクセスしアカウントを作成します。',
-                links: [{ label: 'Connectログイン', url: 'https://connect.remotelock.jp/sign-in' }]
-            },
-            {
-                id: 8, phase: 3,
-                title: 'ビジネススタンダードプランの選択',
-                completed: false,
-                isCritical: true,
-                description: '外部システム連携にはビジネススタンダードプランが必須となります。'
-            },
-            {
-                id: 9, phase: 3,
-                title: '弊社アカウントを管理者に招待',
-                completed: false,
-                description: '民泊管理バンクによる設定代行・サポートのため、招待が必要です。',
-                showInviteGuide: true
+<!-- Sticky Bar -->
+<div class="sticky-bar" id="stickyBar">
+    <div class="sticky-bar-inner">
+        <div class="sticky-bar-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            本文を編集せずにそのまま送信してください
+        </div>
+        <button class="btn-report" id="btnReport" onclick="openModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            導入完了を報告する
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Host Deployment Report
+            </div>
+            <button class="modal-close" onclick="closeModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== CONSTANTS =====
+const STORAGE_KEY = 'remotelock_checklist_v2';
+
+const PHASE_NAMES = {
+    1: '事前確認・取付診断',
+    2: '購入・施工',
+    3: 'クラウド設定・権限共有'
+};
+
+const TASKS = [
+    {
+        id: 1, phase: 1,
+        title: '事前確認チェックリスト(PDF)の確認',
+        desc: '設置環境のセルフチェックシートです。公式PDFをご確認ください。',
+        links: [{ label: '公式チェックリストを確認', url: 'https://remotelock.kke.co.jp/hubfs/manuals/Checklist_RemoteLOCK500i.pdf' }]
+    },
+    {
+        id: 2, phase: 1,
+        title: '取り付け診断の申し込み',
+        desc: '公式ページのフォームより写真または図面を送付し、設置診断を受けてください。',
+        inquiry: [
+            { label: '写真で診断を依頼', url: 'https://remotelock.kke.co.jp/installation/#photo' },
+            { label: '図面で診断を依頼', url: 'https://remotelock.kke.co.jp/installation/#drawing' }
+        ]
+    },
+    {
+        id: 3, phase: 1,
+        title: '取付診断結果の報告',
+        desc: '公式診断の結果（設置可能・不可）を民泊管理バンクへ報告してください。報告後にタスク完了となります。',
+        critical: true,
+        diagnosis: true
+    },
+    {
+        id: 4, phase: 2,
+        title: 'RemoteLOCK 本体の購入',
+        desc: '公式ストアまたは提携店よりご購入ください。',
+        links: [{ label: '公式サイトで確認', url: 'https://remotelock.kke.co.jp/products/remotelock-500i/' }]
+    },
+    {
+        id: 5, phase: 2,
+        title: '施工工事の依頼',
+        desc: 'ご自身で手配いただくか、提携施工パートナーへご依頼ください。',
+        optional: true,
+        links: [{ label: '施工パートナー一覧', url: 'https://remotelock.kke.co.jp/installation/' }]
+    },
+    {
+        id: 6, phase: 2,
+        title: 'Wi-Fi環境の整備',
+        desc: '扉付近で 2.4GHz Wi-Fi が安定して届くことを確認してください。'
+    },
+    {
+        id: 7, phase: 3,
+        title: 'RemoteLOCKアカウントの作成',
+        desc: 'Connect へアクセスしアカウントを作成します。',
+        links: [{ label: 'Connectログイン', url: 'https://connect.remotelock.jp/sign-in' }]
+    },
+    {
+        id: 8, phase: 3,
+        title: 'ビジネススタンダードプランの選択',
+        desc: '外部システム連携にはビジネススタンダードプランが必須となります。',
+        critical: true
+    },
+    {
+        id: 9, phase: 3,
+        title: '弊社アカウントを管理者に招待',
+        desc: '民泊管理バンクによる設定代行・サポートのため、招待が必要です。',
+        invite: true
+    }
+];
+
+// ===== STATE =====
+let completed = {};
+let formData = { property: '', subscriber: '', staff: '', email: '', loginId: '', password: '' };
+
+// ===== STORAGE =====
+function saveState() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ completed, formData }));
+    } catch(e) {}
+}
+
+function loadState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.completed) completed = parsed.completed;
+            if (parsed.formData)  formData  = { ...formData, ...parsed.formData };
+        }
+    } catch(e) {}
+}
+
+// ===== SVG =====
+const SVG = {
+    check: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    extLink: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
+};
+
+// ===== RENDER =====
+function render() {
+    const container = document.getElementById('tasksContainer');
+    let html = '';
+
+    [1, 2, 3].forEach(phase => {
+        html += `<div class="step-section">
+            <div class="step-header">
+                <span class="step-badge">STEP 0${phase}</span>
+                <span class="step-title">${PHASE_NAMES[phase]}</span>
+            </div>`;
+
+        TASKS.filter(t => t.phase === phase).forEach(task => {
+            const done = !!completed[task.id];
+            const itemClass = done ? 'done' : (task.critical ? 'critical' : '');
+            const checkHtml = done
+                ? `<div class="checkbox-done">${SVG.check}</div>`
+                : `<div class="checkbox-empty"></div>`;
+
+            const badges = !done ? [
+                task.critical  ? `<span class="badge badge-critical">重要</span>` : '',
+                task.optional  ? `<span class="badge badge-optional">任意</span>`  : ''
+            ].join('') : '';
+
+            // Action area (only shown when NOT done)
+            let actionHtml = '';
+
+            if (task.inquiry) {
+                let btns = task.inquiry.map(l =>
+                    `<a href="${l.url}" target="_blank" class="btn-outline" onclick="event.stopPropagation()">${l.label} ${SVG.extLink}</a>`
+                ).join('');
+                actionHtml += `<div class="btn-group">${btns}</div>`;
             }
-        ];
 
-        const phaseLabels = {
-            1: '事前確認・取付診断',
-            2: '購入・施工',
-            3: 'クラウド設定・権限共有'
-        };
+            if (task.links) {
+                let btns = task.links.map(l =>
+                    `<a href="${l.url}" target="_blank" class="btn-primary" onclick="event.stopPropagation()">${l.label} ${SVG.extLink}</a>`
+                ).join('');
+                actionHtml += `<div class="btn-group">${btns}</div>`;
+            }
 
-        const App = () => {
-            const [tasks, setTasks] = useState(() => {
-                try {
-                    const saved = localStorage.getItem(STORAGE_KEY_TASKS);
-                    if (saved) {
-                        const parsed = JSON.parse(saved);
-                        // initialTasks をベースに saved の completed 状態を反映（構造崩れ防止）
-                        return initialTasks.map(t => {
-                            const found = parsed.find(p => p.id === t.id);
-                            return found ? { ...t, completed: found.completed } : t;
-                        });
-                    }
-                } catch (e) {}
-                return initialTasks;
-            });
-
-            const [formData, setFormData] = useState(() => {
-                try {
-                    const saved = localStorage.getItem(STORAGE_KEY_FORM);
-                    if (saved) return JSON.parse(saved);
-                } catch (e) {}
-                return { propertyName: '', subscriberName: '', staffName: '', email: '', loginId: '', password: '' };
-            });
-
-            const [isModalOpen, setIsModalOpen] = useState(false);
-            const [toastMsg, setToastMsg]       = useState('');
-
-            useEffect(() => {
-                localStorage.setItem(STORAGE_KEY_TASKS, JSON.stringify(tasks.map(t => ({ id: t.id, completed: t.completed }))));
-            }, [tasks]);
-
-            useEffect(() => {
-                localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData));
-            }, [formData]);
-
-            useEffect(() => {
-                if (window.lucide) window.lucide.createIcons();
-            }, [tasks]);
-
-            const progress  = Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100);
-            const isAllDone = tasks.every(t => t.completed);
-
-            const toggleTask = (id) => {
-                setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
-            };
-
-            const copyToClipboard = (text) => {
-                navigator.clipboard.writeText(text).catch(() => {
-                    const el = document.createElement('textarea');
-                    el.value = text;
-                    document.body.appendChild(el);
-                    el.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(el);
-                });
-                showToast('コピーしました');
-            };
-
-            const showToast = (msg) => {
-                setToastMsg(msg);
-                setTimeout(() => setToastMsg(''), 2000);
-            };
-
-            const isHostInfoFilled = !!(formData.propertyName.trim() && formData.subscriberName.trim() && formData.staffName.trim() && formData.email.trim());
-
-            const handleSendEmail = (type, diagnosisResult = null) => {
-                const isFinal = type === 'final';
-                const subject = encodeURIComponent(
-                    isFinal
-                        ? `【導入完了報告】RemoteLOCK 設定完了 (${formData.propertyName})`
-                        : `【診断報告】RemoteLOCK 取付診断結果報告 (${formData.propertyName})`
-                );
-
-                let body = `民泊管理バンク カスタマーサポート様\n\n` +
-                           `RemoteLOCKの導入状況について報告いたします。\n\n` +
-                           `■ホスト様情報\n` +
-                           `物件名: ${formData.propertyName || '未入力'}\n` +
-                           `契約者名: ${formData.subscriberName || '未入力'}\n` +
-                           `担当者名: ${formData.staffName || '未入力'}\n` +
-                           `連絡先: ${formData.email || '未入力'}\n\n`;
-
-                if (isFinal) {
-                    body += `■ログイン情報\n` +
-                            `ID: ${formData.loginId || '未入力'}\n` +
-                            `PASS: ${formData.password || '未入力'}\n\n` +
-                            `ご確認と連携作業をお願いいたします。`;
-                } else {
-                    const res = diagnosisResult ? '設置可能' : '設置不可';
-                    body += `取付診断の結果、公式診断フォームより「${res}」との回答を受け取りました。\n\n`;
-                    if (!diagnosisResult) {
-                        body += `※設置不可のため、別途メールにて代替品等の今後の対応についてご案内させていただきます。\n`;
-                    }
-                    setTasks(prev => prev.map(t => t.id === 3 ? { ...t, completed: true } : t));
-                }
-
-                window.location.href = `mailto:customer@bizpato.com?subject=${subject}&body=${encodeURIComponent(body)}`;
-                if (isFinal) setIsModalOpen(false);
-            };
-
-            return (
-                <div className="min-h-screen pb-48">
-
-                    {/* ── Header ── */}
-                    <header className="sticky top-0 z-40 glass-header border-b border-slate-200">
-                        <div className="max-w-4xl mx-auto px-4 py-6 md:py-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                            <div className="flex items-center gap-5">
-                                <div className="bg-[#215387] p-3 rounded-[18px] shadow-lg shadow-blue-900/10 shrink-0">
-                                    <Icon name="key" size={28} className="text-white" />
-                                </div>
-                                <div>
-                                    <h1 className="text-2xl md:text-3xl font-black-jp text-slate-800 tracking-tight leading-none mb-2">
-                                        RemoteLOCK 導入チェックリスト
-                                    </h1>
-                                    <p className="text-slate-500 font-bold text-[11px] md:text-xs tracking-tight">
-                                        民泊管理バンク・ホスト様用タスク管理シート
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="pill-badge px-6 py-2 flex items-center gap-6 shadow-sm min-w-[240px]">
-                                <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest leading-none">Task Completion</div>
-                                <span className="text-[#215387] font-black text-xl w-12 text-right leading-none">{progress}%</span>
-                            </div>
-                        </div>
-
-                        {/* Progress Bar */}
-                        <div className="h-1 bg-slate-100">
-                            <div
-                                className="h-full bg-[#215387] progress-transition"
-                                style={{ width: `${progress}%` }}
-                            />
-                        </div>
-                    </header>
-
-                    <main className="max-w-4xl mx-auto p-4 md:p-8 space-y-12 mt-6">
-
-                        {/* ── Host Info Card ── */}
-                        <div className="bg-white rounded-[32px] shadow-sm border border-slate-200 overflow-hidden card-shadow">
-                            <div className="bg-white px-10 py-6 border-b border-slate-50 flex justify-between items-center">
-                                <h2 className="text-slate-700 font-black-jp text-lg flex items-center gap-3">
-                                    <Icon name="user" size={20} className="text-[#215387]" /> ホスト様情報
-                                </h2>
-                                <span className="text-slate-400 text-[10px] font-black tracking-widest uppercase">Required Info</span>
-                            </div>
-                            <div className="p-10 space-y-8">
-                                <div>
-                                    <label className="block text-[11px] font-black text-slate-400 mb-2 uppercase tracking-widest leading-none">物件名</label>
-                                    <input
-                                        type="text"
-                                        value={formData.propertyName}
-                                        onChange={e => setFormData({ ...formData, propertyName: e.target.value })}
-                                        className="host-input w-full rounded-2xl px-6 py-5"
-                                        placeholder="例：〇〇マンション 101号室"
-                                    />
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div>
-                                        <label className="block text-[11px] font-black text-slate-400 mb-2 uppercase tracking-widest leading-none">ご契約者様名</label>
-                                        <input
-                                            type="text"
-                                            value={formData.subscriberName}
-                                            onChange={e => setFormData({ ...formData, subscriberName: e.target.value })}
-                                            className="host-input w-full rounded-2xl px-6 py-5"
-                                            placeholder="個人名または会社名"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-[11px] font-black text-slate-400 mb-2 uppercase tracking-widest leading-none">担当者名</label>
-                                        <input
-                                            type="text"
-                                            value={formData.staffName}
-                                            onChange={e => setFormData({ ...formData, staffName: e.target.value })}
-                                            className="host-input w-full rounded-2xl px-6 py-5"
-                                            placeholder="ご担当者様名"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-[11px] font-black text-slate-400 mb-2 uppercase tracking-widest leading-none">連絡先メールアドレス</label>
-                                    <input
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                        className="host-input w-full rounded-2xl px-6 py-5"
-                                        placeholder="example@minpaku.com"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ── Steps & Tasks ── */}
-                        {[1, 2, 3].map(phase => (
-                            <div key={phase} className="space-y-6">
-                                <div className="flex items-center gap-5 px-2">
-                                    <span className="bg-[#d7f0ff] text-[#215387] px-4 py-1.5 rounded-full text-[10px] font-black tracking-[0.2em] shadow-sm border border-blue-50">
-                                        STEP 0{phase}
-                                    </span>
-                                    <h3 className="font-black-jp text-slate-700 text-xl tracking-tight">
-                                        {phaseLabels[phase]}
-                                    </h3>
-                                </div>
-
-                                <div className="grid grid-cols-1 gap-5">
-                                    {tasks.filter(t => t.phase === phase).map(task => (
-                                        <TaskCard
-                                            key={task.id}
-                                            task={task}
-                                            onToggle={() => toggleTask(task.id)}
-                                            onCopy={copyToClipboard}
-                                            onSendEmail={handleSendEmail}
-                                            isHostInfoFilled={!!(formData.propertyName.trim() && formData.subscriberName.trim() && formData.staffName.trim() && formData.email.trim())}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-
-                        {/* Reset */}
-                        <div className="flex justify-center pt-8">
-                            <button
-                                onClick={() => {
-                                    if (confirm('進捗をリセットしますか？')) {
-                                        setTasks(initialTasks);
-                                        localStorage.removeItem(STORAGE_KEY_TASKS);
-                                    }
-                                }}
-                                className="text-slate-300 hover:text-red-400 text-[10px] font-black tracking-[0.2em] flex items-center gap-2 transition-colors"
-                            >
-                                <Icon name="refresh-cw" size={14} /> RESET PROGRESS
-                            </button>
-                        </div>
-                    </main>
-
-                    {/* ── Fixed Footer Bar ── */}
-                    {isAllDone && (
-                        <div className="fixed bottom-0 left-0 right-0 p-8 sticky-report-bar z-40 border-t border-slate-100"
-                             style={{ animation: 'slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
-                            <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
-                                <p className="text-[11px] font-black text-slate-400 flex items-center gap-2">
-                                    <Icon name="info" size={16} className="text-[#215387]" /> 本文を編集せずにそのまま送信してください
-                                </p>
-                                <button
-                                    onClick={() => {
-                                        if (!isHostInfoFilled) {
-                                            alert('ホスト様情報（物件名・契約者名・担当者名・メールアドレス）をすべて入力してください。');
-                                            return;
-                                        }
-                                        setIsModalOpen(true);
-                                    }}
-                                    className="w-full deployment-btn py-6 flex items-center justify-center gap-4 text-xl tracking-tight shadow-2xl shadow-blue-900/20"
-                                >
-                                    <Icon name="send" size={24} /> 導入完了を報告する
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* ── Final Modal ── */}
-                    {isModalOpen && (
-                        <div className="fixed inset-0 z-50 modal-overlay flex items-end md:items-center justify-center p-4">
-                            <div className="bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl">
-                                <div className="bg-[#f8fafc] px-10 py-8 flex justify-between items-center border-b border-slate-100">
-                                    <h3 className="text-[#215387] font-black text-xl flex items-center gap-3 leading-none uppercase">
-                                        <Icon name="mail" /> Final Report
-                                    </h3>
-                                    <button onClick={() => setIsModalOpen(false)} className="text-slate-300 hover:text-slate-600">
-                                        <Icon name="x" size={32} />
-                                    </button>
-                                </div>
-                                <div className="p-10 space-y-8">
-                                    <div className="space-y-6">
-                                        <p className="text-[13px] font-bold text-slate-500">連携作業に必要なRemoteLOCKアカウント情報を入力してください。</p>
-                                        <div>
-                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Login ID (Email)</label>
-                                            <input
-                                                type="email"
-                                                value={formData.loginId}
-                                                onChange={e => setFormData({ ...formData, loginId: e.target.value })}
-                                                className="host-input w-full rounded-2xl px-6 py-4"
-                                                placeholder="example@gmail.com"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Password</label>
-                                            <input
-                                                type="text"
-                                                value={formData.password}
-                                                onChange={e => setFormData({ ...formData, password: e.target.value })}
-                                                className="host-input w-full rounded-2xl px-6 py-4"
-                                            />
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => handleSendEmail('final')}
-                                        disabled={!formData.propertyName || !formData.loginId || !formData.password}
-                                        className="w-full bg-[#215387] py-6 rounded-[28px] text-white font-black text-lg shadow-2xl shadow-blue-900/20 transition-all disabled:bg-slate-100 disabled:text-slate-300 active:scale-95"
-                                    >
-                                        メールアプリを起動
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* ── Toast ── */}
-                    {toastMsg && (
-                        <div className="fixed bottom-32 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-8 py-3 rounded-2xl text-xs font-black shadow-2xl z-50">
-                            {toastMsg}
-                        </div>
-                    )}
-                </div>
-            );
-        };
-
-        /* ─────────────────────────────────────────────────────────────────
-           TaskCard: 完了状態に応じてアクションエリアを確実に制御する
-           ───────────────────────────────────────────────────────────────── */
-        const TaskCard = ({ task, onToggle, onCopy, onSendEmail, isHostInfoFilled }) => {
-            const showAction = !task.completed;
-
-            return (
-                <div
-                    onClick={onToggle}
-                    className={`group p-8 md:p-10 transition-all duration-300 cursor-pointer flex gap-8 rounded-[32px] border card-shadow ${
-                        task.completed
-                            ? 'bg-[#f8fafc]/80 border-slate-100 opacity-60'
-                            : task.isCritical
-                                ? 'bg-[#fffcf0] border-amber-200'
-                                : 'bg-white border-slate-100 hover:border-[#215387] hover:translate-y-[-2px]'
-                    }`}
-                >
-                    {/* Checkbox */}
-                    <div className="shrink-0 mt-1">
-                        {task.completed
-                            ? (
-                                <div className="bg-[#10b981] rounded-full p-2.5 shadow-lg shadow-emerald-500/20 scale-110">
-                                    <Icon name="check" size={20} className="text-white" />
-                                </div>
-                            ) : (
-                                <div className="border-2 border-slate-200 w-10 h-10 rounded-2xl transition-all group-hover:border-[#215387] bg-slate-50"></div>
-                            )
-                        }
+            if (task.diagnosis) {
+                actionHtml += `
+                <div class="diagnosis-box">
+                    <div class="diagnosis-label">結果を選択してメール報告（タスク完了）</div>
+                    <div class="diagnosis-btns">
+                        <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)">設置可能</button>
+                        <button class="btn-diag-ng" onclick="event.stopPropagation(); sendDiagnosis(false)">設置不可</button>
                     </div>
+                </div>`;
+            }
 
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                        {/* Title row */}
-                        <div className="flex flex-wrap items-center gap-3 mb-3">
-                            <span className={`font-black-jp text-xl tracking-tight ${task.completed ? 'text-slate-300 line-through' : 'text-slate-800'}`}>
-                                {task.title}
-                            </span>
-                            {task.isCritical && !task.completed && (
-                                <span className="bg-[#ea4d3c] text-white text-[9px] px-2.5 py-1 rounded font-black tracking-widest shadow-sm">重要</span>
-                            )}
-                            {task.isOptional && !task.completed && (
-                                <span className="bg-slate-100 text-slate-400 text-[9px] px-2.5 py-1 rounded font-black tracking-widest">任意</span>
-                            )}
-                        </div>
-
-                        {/* Description */}
-                        <p className={`text-[14px] leading-relaxed ${task.completed ? 'text-slate-300' : 'text-slate-500 font-medium'}`}>
-                            {task.description}
-                        </p>
-
-                        {/* ── Action Area: max-height アニメーションで確実に折りたたむ ── */}
-                        <div
-                            className={`task-action-area ${showAction ? 'visible' : 'hidden-area'}`}
-                            style={{ marginTop: showAction ? '1.5rem' : 0 }}
-                        >
-                            <div onClick={e => e.stopPropagation()} className="space-y-6">
-
-                                {/* External Links */}
-                                {(task.links || task.inquiryLinks) && (
-                                    <div className="flex flex-wrap gap-4">
-                                        {(task.inquiryLinks || []).map((l, i) => (
-                                            <a key={i} href={l.url} target="_blank" rel="noreferrer"
-                                               className="flex items-center gap-3 px-6 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-[11px] text-slate-600 hover:border-[#215387] transition-all card-shadow">
-                                                <Icon name={l.icon} size={16} className="text-[#215387]" /> {l.label}
-                                            </a>
-                                        ))}
-                                        {(task.links || []).map((l, i) => (
-                                            <a key={i} href={l.url} target="_blank" rel="noreferrer"
-                                               className="inline-flex items-center gap-3 bg-[#215387] text-white text-[11px] px-8 py-4 rounded-2xl font-black hover:bg-[#1a4270] transition-all shadow-lg shadow-blue-900/10">
-                                                {l.label} <Icon name="external-link" size={14} />
-                                            </a>
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Diagnosis Buttons */}
-                                {task.showDiagnosisButtons && (
-                                    <div className="p-6 bg-slate-50 rounded-[24px] border border-slate-100">
-                                        <p className="text-[10px] font-black text-[#215387] uppercase tracking-widest mb-4">
-                                            結果を選択してメール報告（タスク完了）
-                                        </p>
-                                        {!isHostInfoFilled && (
-                                            <p className="text-[11px] font-bold text-[#ea4d3c] mb-3 flex items-center gap-2">
-                                                ⚠️ 上のホスト様情報をすべて入力してから報告してください
-                                            </p>
-                                        )}
-                                        <div className="flex gap-4">
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); onSendEmail('diagnosis', true); }}
-                                                disabled={!isHostInfoFilled}
-                                                className="flex-grow py-4 bg-white border border-blue-100 rounded-2xl text-xs font-black text-[#215387] hover:bg-[#215387] hover:text-white transition shadow-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#215387]"
-                                            >
-                                                設置可能
-                                            </button>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); onSendEmail('diagnosis', false); }}
-                                                disabled={!isHostInfoFilled}
-                                                className="flex-grow py-4 bg-white border border-red-100 rounded-2xl text-xs font-black text-red-500 hover:bg-red-500 hover:text-white transition shadow-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-red-500"
-                                            >
-                                                設置不可
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Invitation Guide */}
-                                {task.showInviteGuide && (
-                                    <div className="p-7 bg-white rounded-[24px] border border-slate-200 space-y-6">
-                                        <div className="space-y-4">
-                                            <div className="flex justify-between items-center">
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">招待用メールアドレス</p>
-                                                <button
-                                                    onClick={() => onCopy('customer@bizpato.com')}
-                                                    className="text-[10px] font-black text-[#215387] uppercase tracking-widest border border-blue-100 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition"
-                                                >
-                                                    Copy Address
-                                                </button>
-                                            </div>
-                                            <code className="block bg-slate-50 p-4 rounded-xl font-bold text-slate-700 text-sm border border-slate-100">
-                                                customer@bizpato.com
-                                            </code>
-                                        </div>
-                                        <div className="space-y-4 pt-2">
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">招待手順</p>
-                                            <ul className="space-y-3">
-                                                {[
-                                                    'RemoteLOCK Connect 画面右上のアイコンをクリック',
-                                                    '「管理者と権限タイプ」を選択してください',
-                                                    '画面右側の「管理者の招待」をクリック',
-                                                    '上記メールアドレスを入力し、権限タイプで「Owner」を選択',
-                                                    '「管理者の招待」をクリックして送信完了です'
-                                                ].map((step, idx) => (
-                                                    <li key={idx} className="flex gap-3 text-xs font-bold text-slate-600 leading-relaxed">
-                                                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 text-[#215387] flex items-center justify-center text-[10px]">
-                                                            {idx + 1}
-                                                        </span>
-                                                        {step}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+            if (task.invite) {
+                actionHtml += `
+                <div class="invite-box">
+                    <div>
+                        <div class="invite-section-label">招待用メールアドレス</div>
+                        <div class="invite-email-row">
+                            <code class="invite-email-code">customer@bizpato.com</code>
+                            <button class="btn-copy" onclick="event.stopPropagation(); copyText('customer@bizpato.com')">COPY ADDRESS</button>
                         </div>
                     </div>
-                </div>
-            );
-        };
+                    <div style="margin-top:16px">
+                        <div class="invite-section-label">招待手順</div>
+                        <ul class="invite-steps">
+                            <li><span class="step-num">1</span>RemoteLOCK Connect 画面右上のアイコンをクリック</li>
+                            <li><span class="step-num">2</span>「管理者と権限タイプ」を選択してください</li>
+                            <li><span class="step-num">3</span>画面右側の「管理者の招待」をクリック</li>
+                            <li><span class="step-num">4</span>上記メールアドレスを入力し、権限タイプで「Owner」を選択</li>
+                            <li><span class="step-num">5</span>「管理者の招待」をクリックして送信完了です</li>
+                        </ul>
+                    </div>
+                </div>`;
+            }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+            const actionOpen = (!done && actionHtml) ? 'open' : '';
+
+            html += `
+            <div class="task-item ${itemClass}" onclick="toggleTask(${task.id})">
+                <div class="task-checkbox">${checkHtml}</div>
+                <div class="task-content">
+                    <div class="task-title-row">
+                        <span class="task-title">${task.title}</span>${badges}
+                    </div>
+                    <div class="task-desc">${task.desc}</div>
+                    ${actionHtml ? `<div class="task-action ${actionOpen}">${actionHtml}</div>` : ''}
+                </div>
+            </div>`;
+        });
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+    updateProgress();
+    updateStickyBar();
+}
+
+// ===== TOGGLE =====
+function toggleTask(id) {
+    completed[id] = !completed[id];
+    saveState();
+    render();
+}
+
+// ===== PROGRESS =====
+function updateProgress() {
+    const total = TASKS.length;
+    const done  = TASKS.filter(t => completed[t.id]).length;
+    const pct   = Math.round(done / total * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent  = pct + '%';
+}
+
+// ===== FORM VALIDATION =====
+function isFormComplete() {
+    return !!(formData.property && formData.subscriber && formData.staff && formData.email);
+}
+
+function validateAndHighlight() {
+    const fields = [
+        { key: 'property',   id: 'f_property',   hint: 'hint_property' },
+        { key: 'subscriber', id: 'f_subscriber',  hint: 'hint_subscriber' },
+        { key: 'staff',      id: 'f_staff',       hint: 'hint_staff' },
+        { key: 'email',      id: 'f_email',       hint: 'hint_email' }
+    ];
+    const missing = [];
+    let firstEl = null;
+    fields.forEach(f => {
+        const el   = document.getElementById(f.id);
+        const hint = document.getElementById(f.hint);
+        if (!formData[f.key]) {
+            missing.push(f.key === 'property' ? '物件名' :
+                         f.key === 'subscriber' ? 'ご契約者様名' :
+                         f.key === 'staff' ? '担当者名' : '連絡先メールアドレス');
+            el.classList.add('invalid');
+            hint.classList.add('show');
+            if (!firstEl) firstEl = el;
+        } else {
+            el.classList.remove('invalid');
+            hint.classList.remove('show');
+        }
+    });
+    if (missing.length > 0) {
+        alert('以下のホスト様情報を入力してください。\n\n・' + missing.join('\n・'));
+        if (firstEl) firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+    }
+    return true;
+}
+
+// ===== STICKY BAR =====
+function updateStickyBar() {
+    const allDone = TASKS.every(t => completed[t.id]);
+    const bar = document.getElementById('stickyBar');
+    if (allDone) {
+        bar.classList.add('visible');
+    } else {
+        bar.classList.remove('visible');
+    }
+}
+
+// ===== FORM INPUTS =====
+function bindFormInputs() {
+    const fields = {
+        f_property:   'property',
+        f_subscriber: 'subscriber',
+        f_staff:      'staff',
+        f_email:      'email'
+    };
+    Object.entries(fields).forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        el.value = formData[key] || '';
+        el.addEventListener('input', () => {
+            formData[key] = el.value.trim();
+            if (formData[key]) {
+                el.classList.remove('invalid');
+                document.getElementById('hint_' + key).classList.remove('show');
+            }
+            saveState();
+        });
+    });
+}
+
+// ===== DIAGNOSIS EMAIL =====
+function sendDiagnosis(isOk) {
+    if (!validateAndHighlight()) return;
+    const res = isOk ? '設置可能' : '設置不可';
+    const subject = encodeURIComponent(`【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`);
+    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「${res}」との回答を受け取りました。\n\n`;
+    if (!isOk) {
+        body += `※設置不可のため、別途メールにて代替品等の今後の対応についてご案内させていただきます。\n`;
+    }
+    // Mark task 3 as done
+    completed[3] = true;
+    saveState();
+    window.location.href = `mailto:customer@bizpato.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+    render();
+}
+
+// ===== MODAL =====
+function openModal() {
+    if (!validateAndHighlight()) return;
+    const body = `
+    <div class="modal-section">
+        <div class="modal-section-label">Host &amp; Property Info</div>
+        <div class="modal-info-box">
+            <div class="modal-info-name">${formData.property}</div>
+            <div class="modal-info-sub">${formData.subscriber} / ${formData.staff}</div>
+        </div>
+    </div>
+    <div class="modal-section">
+        <div class="modal-section-label">RemoteLOCK Connect ログイン情報</div>
+        <div class="cred-box">
+            <div class="cred-item">
+                <label class="form-label">ログインID（メールアドレス）</label>
+                <input type="email" class="form-input" id="m_loginId" value="${formData.loginId || ''}" placeholder="example@gmail.com">
+            </div>
+            <div class="cred-item">
+                <label class="form-label">パスワード</label>
+                <input type="text" class="form-input" id="m_password" value="${formData.password || ''}">
+            </div>
+        </div>
+    </div>
+    <div class="modal-section">
+        <div class="final-msg"><p>全ての導入タスクが完了しました。<br>弊社へ完了報告メールを送信してください。</p></div>
+    </div>
+    <button class="btn-send" id="btnSend" onclick="sendFinalEmail()">報告メールを作成する</button>`;
+
+    document.getElementById('modalBody').innerHTML = body;
+    document.getElementById('modalOverlay').classList.add('open');
+
+    // Bind modal inputs
+    const loginEl = document.getElementById('m_loginId');
+    const passEl  = document.getElementById('m_password');
+    if (loginEl) loginEl.addEventListener('input', () => { formData.loginId = loginEl.value; saveState(); });
+    if (passEl)  passEl.addEventListener('input',  () => { formData.password = passEl.value; saveState(); });
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function closeModalOnBg(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function sendFinalEmail() {
+    const subject = encodeURIComponent(`【導入完了報告】RemoteLOCK 設定完了 (${formData.property})`);
+    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの導入状況についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■ログイン情報\nID: ${formData.loginId || '未入力'}\nPASS: ${formData.password || '未入力'}\n\nご確認と連携作業をお願いいたします。`;
+    window.location.href = `mailto:customer@bizpato.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+    closeModal();
+}
+
+// ===== COPY =====
+function copyText(text) {
+    navigator.clipboard.writeText(text).catch(() => {
+        const el = document.createElement('textarea');
+        el.value = text; document.body.appendChild(el); el.select();
+        document.execCommand('copy'); document.body.removeChild(el);
+    });
+    showToast('コピーしました');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// ===== RESET =====
+function resetProgress() {
+    if (!confirm('進捗をリセットしますか？')) return;
+    completed = {};
+    saveState();
+    render();
+}
+
+// ===== INIT =====
+loadState();
+render();
+bindFormInputs();
+</script>
 </body>
 </html>
