@@ -1250,9 +1250,11 @@ function render() {
                     </div>
                     <div class="wifi-date-row">
                         <input type="date" class="form-input" id="f_wifiDate" value="${formData.wifiDate || ''}"
-                            onclick="event.stopPropagation()"
+                            readonly
+                            onclick="event.stopPropagation(); openDatePicker(this)"
+                            onfocus="openDatePicker(this)"
                             onchange="event.stopPropagation(); onWifiDateInput(this.value)"
-                            style="max-width:220px">
+                            style="max-width:220px; cursor:pointer">
                         <span style="font-size:12px;font-weight:700;color:#64748b">
                             ${doneAlready ? '※ Wi-Fi開通日（任意）' : '※ ネット工事の予定日'}
                         </span>
@@ -1286,7 +1288,7 @@ function render() {
                     <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
                         <label class="form-label" style="margin-bottom:6px">RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
                         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                            <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation()" onchange="event.stopPropagation(); formData.constructionDate=this.value; saveState(); render()" style="max-width:220px">
+                            <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" readonly onclick="event.stopPropagation(); openDatePicker(this)" onfocus="openDatePicker(this)" onchange="event.stopPropagation(); onConstructionDateInput(this.value)" style="max-width:220px; cursor:pointer">
                             <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>メールを作成する →</button>
                         </div>
                         <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
@@ -1550,10 +1552,34 @@ function setWifiMode(alreadyDone) {
     render();
 }
 
+// 日付入力欄をクリック／フォーカスしたとき、カレンダーを強制的に開く。
+// 入力欄は readonly のため手入力はできず、カレンダー選択のみで値が入る。
+function openDatePicker(el) {
+    if (el && typeof el.showPicker === 'function') {
+        try { el.showPicker(); } catch (e) { /* 連続呼び出し等は無視 */ }
+    }
+}
+
+// 完全な日付（YYYY-MM-DD）かどうか。空文字（クリア）も許容する。
+function isCompleteDate(v) {
+    if (v === '') return true;
+    return /^\d{4}-\d{2}-\d{2}$/.test(v);
+}
+
 // Wi-Fi日付入力時の処理
 function onWifiDateInput(value) {
+    // 不完全な日付値（手入力途中など）は無視する
+    if (!isCompleteDate(value)) return;
     formData.wifiDate = value;
     updateWifiCompletion();
+    saveState();
+    render();
+}
+
+// RemoteLOCK工事予定日の入力時の処理
+function onConstructionDateInput(value) {
+    if (!isCompleteDate(value)) return;
+    formData.constructionDate = value;
     saveState();
     render();
 }
