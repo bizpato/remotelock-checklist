@@ -15,6 +15,7 @@
             --brand-base: #eef8ff;
             --brand-accent: #d7f0ff;
             --danger: #ea4d3c;
+            --warn: #d97706;
             --text: #1e293b;
         }
 
@@ -81,6 +82,169 @@
         .card-header-title svg { width: 18px; height: 18px; color: var(--brand); }
         .card-header-badge { font-size: 9px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.2em; }
         .card-body { padding: 28px; }
+
+        /* ── Notice (穴あけ警告) ── */
+        .notice {
+            display: flex; gap: 16px;
+            background: #fffbeb; border: 1px solid #fde68a;
+            border-radius: 22px; padding: 20px 24px; margin-bottom: 32px;
+        }
+        .notice-icon {
+            flex-shrink: 0; width: 38px; height: 38px; border-radius: 12px;
+            background: var(--warn); display: flex; align-items: center; justify-content: center;
+        }
+        .notice-icon svg { width: 20px; height: 20px; color: white; display: block; }
+        .notice-title { font-size: 14px; font-weight: 900; color: #92400e; margin-bottom: 8px; }
+        .notice-text { font-size: 13px; font-weight: 500; color: #78350f; line-height: 1.7; }
+        .notice-list { list-style: none; margin-top: 6px; }
+        .notice-list li {
+            position: relative; padding-left: 18px; margin-bottom: 7px;
+            font-size: 13px; font-weight: 500; color: #78350f; line-height: 1.7;
+        }
+        .notice-list li:last-child { margin-bottom: 0; }
+        .notice-list li::before {
+            content: ''; position: absolute; left: 2px; top: 8px;
+            width: 6px; height: 6px; border-radius: 50%; background: var(--warn);
+        }
+        .notice-list li strong { color: #92400e; font-weight: 900; }
+
+        /* ── 画面切り替え ── */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ── ダッシュボード上部 ── */
+        .dash-top { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+
+        /* ── 入力ページ：戻るボタン ── */
+        .btn-back-screen {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: white; color: #475569;
+            padding: 10px 18px; border-radius: 14px;
+            font-size: 12px; font-weight: 700; cursor: pointer;
+            border: 1px solid #e2e8f0; font-family: inherit;
+            margin-bottom: 20px; transition: border-color 0.2s;
+        }
+        .btn-back-screen:hover { border-color: var(--brand); }
+        .btn-back-screen svg { width: 14px; height: 14px; display: block; }
+
+        /* ── 入力ページ：確定ナビ ── */
+        .input-nav { margin: 24px 0 8px; }
+        .input-nav-hint {
+            text-align: center; font-size: 11px; font-weight: 700;
+            color: #94a3b8; margin-top: 10px;
+        }
+
+        /* ── 確認事項チェックリスト ── */
+        .confirm-card {
+            background: white; border-radius: 28px; border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+            overflow: hidden; margin-bottom: 32px;
+        }
+        .confirm-intro {
+            font-size: 13px; font-weight: 500; color: #64748b;
+            line-height: 1.7; padding: 0 28px 4px;
+        }
+        .confirm-list { padding: 8px 20px 20px; }
+        .confirm-item {
+            display: flex; gap: 16px; cursor: pointer;
+            padding: 18px 16px; border-radius: 20px;
+            border: 1px solid #e2e8f0; margin-bottom: 12px;
+            transition: border-color 0.2s, background 0.2s;
+            -webkit-tap-highlight-color: transparent; user-select: none;
+        }
+        .confirm-item:last-child { margin-bottom: 0; }
+        .confirm-item:hover { border-color: var(--brand); }
+        .confirm-item.checked { background: #f0f9ff; border-color: #bfdbfe; }
+        .confirm-check {
+            flex-shrink: 0; width: 28px; height: 28px; border-radius: 9px;
+            border: 2px solid #e2e8f0; background: #f8fafc; margin-top: 1px;
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .confirm-item:hover .confirm-check { border-color: var(--brand); }
+        .confirm-item.checked .confirm-check { background: #10b981; border-color: #10b981; }
+        .confirm-check svg { width: 15px; height: 15px; color: white; display: none; }
+        .confirm-item.checked .confirm-check svg { display: block; }
+        .confirm-body { flex: 1; min-width: 0; }
+        .confirm-body-title { font-size: 14px; font-weight: 900; color: #1e293b; margin-bottom: 5px; }
+        .confirm-body-text { font-size: 12px; font-weight: 500; color: #64748b; line-height: 1.7; }
+        .confirm-item.checked .confirm-body-text { color: #94a3b8; }
+
+        /* ── 物件情報カード：未入力アラート ── */
+        .host-alert {
+            display: flex; gap: 16px; align-items: center;
+            background: #fff4f4; border: 1px solid #fee2e2;
+            border-left: 4px solid var(--danger);
+            border-radius: 0 18px 18px 0;
+            margin: 0 24px 24px; padding: 18px 22px;
+        }
+        .host-alert-icon {
+            flex-shrink: 0; width: 36px; height: 36px; border-radius: 11px;
+            background: var(--danger); display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(234,77,60,0.25);
+        }
+        .host-alert-icon svg { width: 19px; height: 19px; color: white; display: block; }
+        .host-alert-body { flex: 1; min-width: 0; }
+        .host-alert-title { font-size: 14px; font-weight: 900; color: #7f1d1d; margin-bottom: 3px; }
+        .host-alert-text { font-size: 12px; font-weight: 500; color: #b91c1c; line-height: 1.6; }
+        .btn-host-input {
+            flex-shrink: 0; padding: 12px 20px; border-radius: 14px;
+            background: var(--danger); color: white; border: none;
+            font-size: 13px; font-weight: 900; cursor: pointer; font-family: inherit;
+            box-shadow: 0 4px 12px rgba(234,77,60,0.25); transition: opacity 0.2s;
+        }
+        .btn-host-input:hover { opacity: 0.9; }
+
+        /* ── 物件情報カード：入力完了サマリー ── */
+        .host-summary { padding: 20px 28px 24px; }
+        .host-summary-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        }
+        .host-summary-item {
+            background: #f8fafc; border: 1px solid #f1f5f9;
+            border-radius: 14px; padding: 12px 16px;
+        }
+        .host-summary-label {
+            font-size: 10px; font-weight: 900; color: #94a3b8;
+            text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px;
+        }
+        .host-summary-value { font-size: 14px; font-weight: 800; color: #1e293b; word-break: break-all; }
+        .card-edit-btn {
+            background: white; border: 1px solid #bfdbfe; color: var(--brand);
+            border-radius: 10px; padding: 6px 16px;
+            font-size: 11px; font-weight: 900; cursor: pointer; font-family: inherit;
+            transition: background 0.2s;
+        }
+        .card-edit-btn:hover { background: var(--brand-base); }
+        .btn-host-save {
+            width: 100%; padding: 18px; border-radius: 18px;
+            background: var(--brand); color: white; border: none;
+            font-size: 15px; font-weight: 900; cursor: pointer; font-family: inherit;
+            box-shadow: 0 8px 24px rgba(33,83,135,0.25); transition: opacity 0.2s;
+        }
+        .btn-host-save:hover:not(:disabled) { opacity: 0.92; }
+        .btn-host-save:disabled {
+            background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none;
+        }
+
+        /* ── STEPロック（物件情報・確認事項が未完了の間） ── */
+        .lock-banner {
+            display: flex; gap: 12px; align-items: center;
+            background: #f8fafc; border: 1px dashed #cbd5e1;
+            border-radius: 18px; padding: 16px 20px; margin-bottom: 18px;
+        }
+        .lock-banner svg { flex-shrink: 0; width: 18px; height: 18px; color: #94a3b8; }
+        .lock-banner-text { font-size: 12px; font-weight: 700; color: #64748b; line-height: 1.6; }
+        .step-section.locked { opacity: 0.5; pointer-events: none; filter: grayscale(0.4); }
+
+        /* ── Phase Note (STEP内の現地作業の注意) ── */
+        .phase-note {
+            display: flex; gap: 12px; align-items: flex-start;
+            background: var(--brand-base); border: 1px solid #bfdbfe;
+            border-radius: 18px; padding: 14px 18px; margin-bottom: 14px;
+        }
+        .phase-note svg { flex-shrink: 0; width: 18px; height: 18px; color: var(--brand); margin-top: 1px; }
+        .phase-note-text { font-size: 12px; font-weight: 700; color: var(--brand); line-height: 1.7; }
 
         /* ── Form ── */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -162,7 +326,7 @@
             pointer-events: none;
         }
         .task-action.open {
-            max-height: 700px;
+            max-height: 800px;
             opacity: 1;
             margin-top: 16px;
             pointer-events: auto;
@@ -214,6 +378,66 @@
             font-family: inherit;
         }
         .btn-diag-ng:hover { background: var(--danger); color: white; }
+
+        /* ── Wi-Fi工事日 入力ボックス ── */
+        .wifi-box {
+            background: #f8fafc; border-radius: 20px; border: 1px solid #f1f5f9;
+            padding: 20px 24px;
+        }
+        .wifi-label { font-size: 10px; font-weight: 900; color: var(--brand); text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 12px; }
+        .wifi-toggle { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+        .wifi-toggle-btn {
+            flex: 1; min-width: 140px; padding: 12px; border-radius: 14px;
+            background: white; border: 2px solid #e2e8f0;
+            font-size: 12px; font-weight: 900; color: #64748b;
+            cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s;
+            font-family: inherit;
+        }
+        .wifi-toggle-btn.active { border-color: var(--brand); background: var(--brand-base); color: var(--brand); }
+        .wifi-date-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .wifi-saved {
+            display: flex; align-items: center; gap: 8px; margin-top: 12px;
+            font-size: 12px; font-weight: 700; color: #047857;
+        }
+        .wifi-saved svg { width: 15px; height: 15px; }
+
+        /* ── 日付アラート ── */
+        .date-alert {
+            display: flex; gap: 12px; align-items: flex-start;
+            background: #fff5f5; border: 1px solid #fecaca;
+            border-radius: 16px; padding: 14px 18px; margin-top: 12px;
+        }
+        .date-alert svg { flex-shrink: 0; width: 18px; height: 18px; color: var(--danger); margin-top: 1px; }
+        .date-alert-text { font-size: 12px; font-weight: 700; color: #b91c1c; line-height: 1.7; }
+
+        /* ── 課金注意ボックス ── */
+        .billing-box {
+            display: flex; gap: 12px; align-items: flex-start;
+            background: #fffbeb; border: 1px solid #fde68a;
+            border-radius: 18px; padding: 16px 20px; margin-bottom: 14px;
+        }
+        .billing-box svg { flex-shrink: 0; width: 19px; height: 19px; color: var(--warn); margin-top: 1px; }
+        .billing-box-title { font-size: 13px; font-weight: 900; color: #92400e; margin-bottom: 4px; }
+        .billing-box-text { font-size: 12px; font-weight: 600; color: #78350f; line-height: 1.7; }
+
+        /* ── 設置不可 案内ボックス ── */
+        .ng-result-box {
+            background: #fff5f5; border: 1px solid #fecaca;
+            border-radius: 20px; padding: 22px 24px;
+        }
+        .ng-result-title {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; font-weight: 900; color: var(--danger); margin-bottom: 10px;
+        }
+        .ng-result-title svg { width: 16px; height: 16px; }
+        .ng-result-text { font-size: 13px; font-weight: 500; color: #7f1d1d; line-height: 1.8; }
+        .btn-diag-redo {
+            margin-top: 16px; padding: 11px 20px; border-radius: 14px;
+            background: white; border: 1px solid #fca5a5; color: var(--danger);
+            font-size: 12px; font-weight: 900; cursor: pointer; font-family: inherit;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn-diag-redo:hover { background: var(--danger); color: white; }
 
         /* ── Invite Guide ── */
         .invite-box {
@@ -384,48 +608,111 @@
 <!-- Main -->
 <div class="main">
 
-    <!-- Host Info Card -->
-    <div class="card">
-        <div class="card-header">
-            <div class="card-header-title">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                ホスト様情報
-            </div>
-            <div class="card-header-badge">Required Info</div>
+    <!-- ========== 画面1：ダッシュボード ========== -->
+    <div class="screen active" id="screenDash">
+
+        <!-- リセット -->
+        <div class="dash-top">
+            <button class="btn-reset" onclick="resetProgress()">🗑️ すべてリセット</button>
         </div>
-        <div class="card-body">
-            <div class="form-grid">
-                <div class="form-full">
-                    <label class="form-label">物件名<span class="required">*</span></label>
-                    <input type="text" class="form-input" id="f_property" placeholder="例：〇〇マンション 101号室">
-                    <div class="form-hint" id="hint_property">物件名を入力してください</div>
+
+        <!-- 物件情報カード -->
+        <div class="card" id="hostCard">
+            <div class="card-header">
+                <div class="card-header-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    ホスト様情報
                 </div>
-                <div>
-                    <label class="form-label">ご契約者様名<span class="required">*</span></label>
-                    <input type="text" class="form-input" id="f_subscriber" placeholder="個人名または会社名">
-                    <div class="form-hint" id="hint_subscriber">ご契約者様名を入力してください</div>
-                </div>
-                <div>
-                    <label class="form-label">担当者名<span class="required">*</span></label>
-                    <input type="text" class="form-input" id="f_staff" placeholder="ご担当者様名">
-                    <div class="form-hint" id="hint_staff">担当者名を入力してください</div>
-                </div>
-                <div class="form-full">
-                    <label class="form-label">連絡先メールアドレス<span class="required">*</span></label>
-                    <input type="email" class="form-input" id="f_email" placeholder="example@minpaku.com">
-                    <div class="form-hint" id="hint_email">メールアドレスを入力してください</div>
-                </div>
+                <button class="card-edit-btn" id="hostEditBtn" onclick="openInputScreen()" style="display:none">編集</button>
             </div>
+
+            <!-- 未入力アラート（入力完了で非表示） -->
+            <div class="host-alert" id="hostAlert">
+                <div class="host-alert-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div class="host-alert-body">
+                    <div class="host-alert-title">ホスト様情報が未入力です</div>
+                    <div class="host-alert-text">導入を始めるには、まずホスト様情報の入力と確認事項のご確認をお願いします。</div>
+                </div>
+                <button class="btn-host-input" onclick="openInputScreen()">入力する →</button>
+            </div>
+
+            <!-- 入力完了サマリー（入力完了時のみ表示） -->
+            <div class="host-summary" id="hostSummary" style="display:none"></div>
         </div>
+
+        <!-- 導入チェックリスト（ロック制御対象） -->
+        <div id="tasksContainer"></div>
+
     </div>
 
-    <!-- Tasks -->
-    <div id="tasksContainer"></div>
+    <!-- ========== 画面2：入力ページ ========== -->
+    <div class="screen" id="screenInput">
 
-    <!-- Footer -->
-    <div class="footer">
-        <button class="btn-reset" onclick="resetProgress()">RESET PROGRESS</button>
+        <div class="btn-back-screen" onclick="backToDash()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            ダッシュボードにもどる
+        </div>
+
+        <!-- 物件情報フォーム -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    ホスト様情報
+                </div>
+                <div class="card-header-badge">Required Info</div>
+            </div>
+            <div class="card-body">
+                <div class="form-grid">
+                    <div class="form-full">
+                        <label class="form-label">物件名<span class="required">*</span></label>
+                        <input type="text" class="form-input" id="f_property" placeholder="例：〇〇マンション 101号室">
+                        <div class="form-hint" id="hint_property">物件名を入力してください</div>
+                    </div>
+                    <div>
+                        <label class="form-label">ご契約者様名<span class="required">*</span></label>
+                        <input type="text" class="form-input" id="f_subscriber" placeholder="個人名または会社名">
+                        <div class="form-hint" id="hint_subscriber">ご契約者様名を入力してください</div>
+                    </div>
+                    <div>
+                        <label class="form-label">担当者名<span class="required">*</span></label>
+                        <input type="text" class="form-input" id="f_staff" placeholder="ご担当者様名">
+                        <div class="form-hint" id="hint_staff">担当者名を入力してください</div>
+                    </div>
+                    <div class="form-full">
+                        <label class="form-label">連絡先メールアドレス<span class="required">*</span></label>
+                        <input type="email" class="form-input" id="f_email" placeholder="example@minpaku.com">
+                        <div class="form-hint" id="hint_email">メールアドレスを入力してください</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 確認事項カード -->
+        <div class="confirm-card" id="confirmCard">
+            <div class="card-header">
+                <div class="card-header-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    導入前の確認事項
+                </div>
+                <div class="card-header-badge" id="confirmBadge">Required Check</div>
+            </div>
+            <div style="padding:20px 0 0">
+                <div class="confirm-intro">RemoteLOCKの導入には、以下の点をあらかじめご了承いただく必要があります。各項目をご確認のうえ、チェックを入れてください。</div>
+                <div class="confirm-list" id="confirmList"></div>
+            </div>
+        </div>
+
+        <!-- 確定ボタン -->
+        <div class="input-nav">
+            <button class="btn-host-save" id="btnHostSave" onclick="saveInputScreen()">この内容で確定して進む</button>
+            <div class="input-nav-hint" id="inputNavHint"></div>
+        </div>
+
     </div>
+
 </div>
 
 <!-- Sticky Bar -->
@@ -433,7 +720,7 @@
     <div class="sticky-bar-inner">
         <div class="sticky-bar-hint">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            本文を編集せずにそのまま送信してください
+            自動作成されるメールは、本文を編集せずにそのまま送信してください
         </div>
         <button class="btn-report" id="btnReport" onclick="openModal()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -463,24 +750,69 @@
 
 <script>
 // ===== CONSTANTS =====
-const STORAGE_KEY = 'remotelock_checklist_v2';
+const STORAGE_KEY = 'remotelock_checklist_v6';
+const CS_EMAIL = 'customer@bizpato.com';
+
+// 導入前の確認事項（各項目に個別チェックが必要）
+const CONFIRM_ITEMS = [
+    {
+        id: 'hole',
+        title: 'ドアへの穴あけ加工が前提です',
+        text: 'RemoteLOCKの取り付けには、原則としてドアへの穴あけ加工が必要です。賃貸物件の場合は、施工前に物件所有者・管理会社へ加工の可否を必ずご確認ください。'
+    },
+    {
+        id: 'attend',
+        title: '取り付け工事にはホスト様の立ち会いが必要です',
+        text: '工事当日は、物件にてホスト様（またはご担当者様）の立ち会いをお願いします。'
+    },
+    {
+        id: 'scope',
+        title: '施工会社の作業は本体の取り付けのみです',
+        text: '取り付け後のデバイス初期設定・Wi-Fi設定・RemoteLOCKアカウントの登録は、ホスト様ご自身で実施していただく必要があります。'
+    },
+    {
+        id: 'onsite',
+        title: '同梱物の確認から現地での初期設定までは、物件で行う作業です',
+        text: 'これらは物件に居る時でないと作業ができません。あらかじめ訪問のご予定を確保してください。'
+    },
+    {
+        id: 'billing',
+        title: 'デバイス登録の時点から月額利用料が発生します',
+        text: '民泊運営の開始前であっても、準備段階で必要となる費用であり、ホスト様のご負担となります。アカウント作成時にクレジットカード情報の登録が必要です（登録のみでは課金されず、デバイス登録時から引き落としが開始されます）。'
+    }
+];
 
 const PHASE_NAMES = {
     1: '事前確認・取付診断',
-    2: 'クラウド設定・権限共有'
+    2: '現地での設置・初期設定',
+    3: 'クラウド設定・権限共有'
+};
+const PHASE_SUBTITLES = {
+    2: '取付診断「設置可能」後の作業',
+    3: 'デバイス初期設定の完了後'
 };
 
+// 公式「カンタン！はじめの5ステップ」に沿った順序：
+// 現地設定（デバイス初期設定・Wi-Fi設定）→ アカウント発行 → デバイス追加 の順
 const TASKS = [
+    // ── STEP01 事前確認・取付診断 ──
     {
         id: 1, phase: 1,
         title: '事前確認チェックリスト(PDF)の確認',
-        desc: '設置環境のセルフチェックシートです。公式PDFをご確認ください。',
+        desc: '設置環境のセルフチェックシートです。穴あけ加工の可否を含め、公式PDFでご確認ください。',
         links: [{ label: '公式チェックリストを確認', url: 'https://remotelock.kke.co.jp/hubfs/manuals/Checklist_RemoteLOCK500i.pdf' }]
+    },
+    {
+        id: 10, phase: 1,
+        title: 'Wi-Fi工事日（開通日）の確認・入力',
+        desc: 'RemoteLOCKのクラウド連携には2.4GHz帯のWi-Fiが必須です。<strong>取り付け工事当日にWi-Fiが使えないと、現地でのデバイス初期設定が完了できません。</strong>RemoteLOCK工事日は<strong>Wi-Fi開通日の翌日以降</strong>に設定する必要があります。次の「取り付け診断の申し込み」で取り付け希望スケジュールを入力する前に、必ずWi-Fi工事日を確定・入力してください。',
+        critical: true,
+        wifi: true
     },
     {
         id: 2, phase: 1,
         title: '取り付け診断の申し込み',
-        desc: '公式フォームより写真または図面を送付し、設置診断を受けてください。<br><br>■フォーム入力のポイント<br>・ <strong>希望製品</strong>：<span style="color:#ea4d3c;font-weight:700">RemoteLOCK500i</span> を選択してください<br>・ <strong>施工パートナーの手配</strong>：「施工パートナーの手配をお願いしたい」または「自分で施工パートナーに連絡する」を選択<br>・ <strong>Wi-Fiの準備状況</strong>：現在のWi-Fi状況を選択',
+        desc: '公式フォームより写真または図面を送付し、設置診断を受けてください。<br><br>■フォーム入力のポイント<br>・ <strong>希望製品</strong>：<span style="color:#ea4d3c;font-weight:700">RemoteLOCK500i</span> を選択してください<br>・ <strong>施工パートナーの手配</strong>：「施工パートナーの手配をお願いしたい」または「自分で施工パートナーに連絡する」を選択<br>・ <strong>取り付け希望スケジュール</strong>：上で入力したWi-Fi工事日の<strong>翌日以降</strong>の日付を指定してください<br>・ <strong>Wi-Fiの準備状況</strong>：現在のWi-Fi状況を選択',
         inquiry: [
             { label: '写真で診断を依頼', url: 'https://app.jibun-apps.jp/form/db74c406-5cc5-4d03-ab68-89e0b54a4257/new?hsCtaAttrib=198854275741' },
             { label: '図面で診断を依頼', url: 'https://app.jibun-apps.jp/form/3271354b-5cea-4f30-becc-a796a9a2cc8a/new?hsCtaAttrib=198814329651' }
@@ -490,38 +822,74 @@ const TASKS = [
     {
         id: 3, phase: 1,
         title: '取付診断結果の報告',
-        desc: '公式診断の結果（設置可能・不可）を民泊管理バンクへ報告してください。報告後にタスク完了となります。',
+        desc: '公式診断の結果（設置可能・設置不可）を民泊管理バンクへ報告してください。報告後にタスク完了となります。',
         critical: true,
         diagnosis: true
     },
+    // ── STEP02 現地での設置・初期設定（取付診断「設置可能」後のみ表示） ──
     {
-        id: 7, phase: 2,
-        title: 'RemoteLOCKアカウントの作成',
-        desc: 'Connect へアクセスしアカウントを作成します。',
-        links: [{ label: 'Connectログイン', url: 'https://connect.remotelock.jp/sign-in' }]
-    },
-    {
-        id: 8, phase: 2,
-        title: 'ビジネススタンダードプランの選択',
-        desc: '外部システム連携にはビジネススタンダードプランが必須となります。',
+        id: 4, phase: 2,
+        title: 'シリアルNo.と物理鍵の保管',
+        desc: 'RemoteLOCK本体のシリアル番号・MacIDを控え、同梱の物理鍵を紛失しないよう保管してください。クラウド登録時に必要です。<strong>同梱物の確認は物件での作業となるため、本体到着後、物件にて行ってください。</strong>',
         critical: true
     },
     {
-        id: 9, phase: 2,
-        title: '弊社アカウントを管理者に招待',
-        desc: '民泊管理バンクによる設定代行・サポートのため、招待が必要です。',
-        invite: true
+        id: 5, phase: 2,
+        title: '取り付け工事の立ち会い・現地でのデバイス初期設定',
+        desc: '取り付け工事当日は、物件にてホスト様（またはご担当者様）の立ち会いが必要です。<strong>施工会社が行うのは本体の取り付けのみ</strong>です。取り付け後のデバイス初期設定は、本体同梱の「導入ガイド」に沿って<strong>ホスト様ご自身が物件で実施</strong>してください。<br><br>■防犯上、必ず実施してください<br>・ <strong>初期ローカルPIN（初期値4321）を削除</strong>し、新しいPINを作成<br>・ <strong>プログラミングコード（初期値123456）を変更</strong>（未変更の場合、一定期間後にランダムな値へ自動変更されます）',
+        links: [{ label: '導入ガイド（公式）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/36058695529753' }]
+    },
+    {
+        id: 6, phase: 2,
+        title: 'Wi-Fi接続設定',
+        desc: 'クラウド連携には2.4GHz帯のWi-Fi接続が必須です。導入ガイドに沿って本体のWi-Fi設定を完了してください。この設定も物件での作業となり、ホスト様ご自身で実施していただく必要があります。<strong>RemoteLOCKはWi-Fi未接続のままだと電池を著しく消耗します。</strong>取り付け後はできるだけ早くWi-Fi接続を完了してください。',
+        critical: true
+    },
+    // ── STEP03 クラウド設定・権限共有（デバイス初期設定の完了後） ──
+    {
+        id: 7, phase: 3,
+        title: 'RemoteLOCKアカウントの作成',
+        desc: 'クラウド管理システム「Connect」へアクセスし、ホスト様ご自身でアカウントを作成します。デバイス初期設定・Wi-Fi設定の完了後に行ってください。<strong>アカウント作成時にクレジットカード情報の登録が必要です</strong>が、この時点ではまだ課金されません（後続のデバイス登録時から引き落としが開始されます）。',
+        links: [{ label: 'Connectログイン', url: 'https://connect.remotelock.jp/sign-in' }]
+    },
+    {
+        id: 8, phase: 3,
+        title: 'ビジネススタンダードプランの選択',
+        desc: '外部システム連携にはビジネススタンダードプランが必須となります。アカウント作成時の料金プラン選択で「ビジネススタンダード」を選んでください。',
+        critical: true
+    },
+    {
+        id: 9, phase: 3,
+        title: 'デバイスの追加・弊社アカウントの管理者招待',
+        desc: 'Connectで設置場所を登録（タイムゾーンは「Japan」または「Asia/Tokyo」）し、デバイスを追加します。その後、民泊管理バンクによる設定代行・サポートのため、弊社アカウントを管理者として招待してください。<br><br><strong>※ デバイスを登録した時点から、RemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担となります。',
+        invite: true,
+        billing: true
     }
 ];
 
 // ===== STATE =====
 let completed = {};
-let formData = { property: '', subscriber: '', staff: '', email: '', loginId: '', password: '', constructionDate: '', showDateInput: false };
+let formData = {
+    property: '', subscriber: '', staff: '', email: '',
+    loginId: '', password: '',
+    wifiAlreadyDone: false,  // Wi-Fiがすでに開通済みか
+    wifiDate: '',            // Wi-Fi工事日（開通日）
+    constructionDate: '',    // RemoteLOCK工事予定日
+    showDateInput: false
+};
+// 取付診断の結果： null=未報告 / 'ok'=設置可能 / 'ng'=設置不可
+let diagnosisResult = null;
+// 導入前の確認事項のチェック状態（id → true/false）
+let confirmChecks = {};
+// ホスト様情報を確定済みか（入力ページで「確定して進む」を押した）
+let hostConfirmed = false;
+// 現在の画面： 'dash'=ダッシュボード / 'input'=入力ページ
+let currentScreen = 'dash';
 
 // ===== STORAGE =====
 function saveState() {
     try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ completed, formData }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ completed, formData, diagnosisResult, confirmChecks, hostConfirmed }));
     } catch(e) {}
 }
 
@@ -532,6 +900,9 @@ function loadState() {
             const parsed = JSON.parse(raw);
             if (parsed.completed) completed = parsed.completed;
             if (parsed.formData)  formData  = { ...formData, ...parsed.formData, showDateInput: false };
+            if (parsed.diagnosisResult) diagnosisResult = parsed.diagnosisResult;
+            if (parsed.confirmChecks) confirmChecks = parsed.confirmChecks;
+            if (parsed.hostConfirmed) hostConfirmed = parsed.hostConfirmed;
         }
     } catch(e) {}
 }
@@ -539,21 +910,217 @@ function loadState() {
 // ===== SVG =====
 const SVG = {
     check: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
-    extLink: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
+    extLink: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+    info: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+    checkSm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
 };
+
+// ===== 設置不可時はSTEP02/03を除外したタスク一覧を返す =====
+function getActiveTasks() {
+    if (diagnosisResult === 'ng') {
+        return TASKS.filter(t => t.phase === 1);
+    }
+    return TASKS;
+}
+
+// ===== EMAIL VALIDATION =====
+function isValidEmail(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
+
+// ===== ダッシュボード：確認事項・物件情報・ロック制御 =====
+
+// すべての確認事項にチェックが入っているか
+function allConfirmChecked() {
+    return CONFIRM_ITEMS.every(item => confirmChecks[item.id]);
+}
+
+// STEPのロックを解除できる状態か（物件情報の確定＋確認事項の全チェック）
+function isUnlocked() {
+    return hostConfirmed && allConfirmChecked();
+}
+
+// 確認事項のチェックをトグル
+function toggleConfirm(id) {
+    confirmChecks[id] = !confirmChecks[id];
+    saveState();
+    renderConfirmList();
+    updateInputNav();
+    render();
+}
+
+// 確認事項リストを描画
+function renderConfirmList() {
+    const el = document.getElementById('confirmList');
+    if (!el) return;
+    el.innerHTML = CONFIRM_ITEMS.map(item => {
+        const checked = !!confirmChecks[item.id];
+        return `
+        <div class="confirm-item ${checked ? 'checked' : ''}" onclick="toggleConfirm('${item.id}')">
+            <div class="confirm-check">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="confirm-body">
+                <div class="confirm-body-title">${item.title}</div>
+                <div class="confirm-body-text">${item.text}</div>
+            </div>
+        </div>`;
+    }).join('');
+    // 確認事項カードのバッジ更新
+    const badge = document.getElementById('confirmBadge');
+    if (badge) {
+        const remain = CONFIRM_ITEMS.filter(i => !confirmChecks[i.id]).length;
+        badge.textContent = remain === 0 ? '確認済み' : `残り${remain}項目`;
+    }
+}
+
+// 物件情報カード（ダッシュボード側）の表示状態を更新
+function renderHostCard() {
+    const alertEl   = document.getElementById('hostAlert');
+    const summaryEl = document.getElementById('hostSummary');
+    const editBtn   = document.getElementById('hostEditBtn');
+    if (!alertEl || !summaryEl || !editBtn) return;
+
+    if (hostConfirmed) {
+        // 確定済みサマリーを表示
+        alertEl.style.display = 'none';
+        summaryEl.style.display = 'block';
+        editBtn.style.display = 'inline-block';
+        summaryEl.innerHTML = `
+        <div class="host-summary-grid">
+            <div class="host-summary-item" style="grid-column:1/-1">
+                <div class="host-summary-label">物件名</div>
+                <div class="host-summary-value">${escapeHtml(formData.property)}</div>
+            </div>
+            <div class="host-summary-item">
+                <div class="host-summary-label">ご契約者様名</div>
+                <div class="host-summary-value">${escapeHtml(formData.subscriber)}</div>
+            </div>
+            <div class="host-summary-item">
+                <div class="host-summary-label">担当者名</div>
+                <div class="host-summary-value">${escapeHtml(formData.staff)}</div>
+            </div>
+            <div class="host-summary-item" style="grid-column:1/-1">
+                <div class="host-summary-label">連絡先メールアドレス</div>
+                <div class="host-summary-value">${escapeHtml(formData.email)}</div>
+            </div>
+        </div>`;
+    } else {
+        // 未入力アラートを表示
+        alertEl.style.display = 'flex';
+        summaryEl.style.display = 'none';
+        editBtn.style.display = 'none';
+    }
+}
+
+// HTMLエスケープ
+function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+}
+
+// 画面を切り替え
+function showScreen(name) {
+    currentScreen = name;
+    const dash  = document.getElementById('screenDash');
+    const input = document.getElementById('screenInput');
+    if (dash)  dash.classList.toggle('active', name === 'dash');
+    if (input) input.classList.toggle('active', name === 'input');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateStickyBar();
+}
+
+// 「入力する」「編集」→ 入力ページへ
+function openInputScreen() {
+    showScreen('input');
+    updateInputNav();
+    const el = document.getElementById('f_property');
+    if (el) el.focus();
+}
+
+// 入力ページ「確定して進む」→ 検証してダッシュボードへ
+function saveInputScreen() {
+    if (!validateAndHighlight()) return;
+    if (!allConfirmChecked()) {
+        alert('すべての確認事項にチェックを入れてください。');
+        return;
+    }
+    hostConfirmed = true;
+    saveState();
+    renderHostCard();
+    render();
+    showScreen('dash');
+}
+
+// 入力ページ「ダッシュボードにもどる」
+function backToDash() {
+    // 確定前に戻る場合、入力途中の内容はformDataに保持されるが確定はしない
+    showScreen('dash');
+}
+
+// 入力ページの「確定して進む」ボタンの有効/無効とヒント文を更新
+function updateInputNav() {
+    const btn = document.getElementById('btnHostSave');
+    const hint = document.getElementById('inputNavHint');
+    if (!btn || !hint) return;
+    const formOk = isFormComplete();
+    const checkOk = allConfirmChecked();
+    btn.disabled = !(formOk && checkOk);
+    if (formOk && checkOk) {
+        hint.textContent = '';
+    } else if (!formOk && !checkOk) {
+        hint.textContent = 'ホスト様情報の入力と、すべての確認事項のチェックが必要です';
+    } else if (!formOk) {
+        hint.textContent = 'ホスト様情報をすべて入力してください';
+    } else {
+        const remain = CONFIRM_ITEMS.filter(i => !confirmChecks[i.id]).length;
+        hint.textContent = `確認事項をすべてチェックしてください（残り${remain}項目）`;
+    }
+}
 
 // ===== RENDER =====
 function render() {
     const container = document.getElementById('tasksContainer');
     let html = '';
 
-    [1, 2].forEach(phase => {
-        const phaseSubtitle = phase === 2 ? '<span class="step-subtitle">取り付け完了後の作業</span>' : '';
-        html += `<div class="step-section">
+    // 物件情報の確定＋確認事項の全チェックが済むまでSTEPをロック
+    const unlocked = isUnlocked();
+    if (!unlocked) {
+        let reason;
+        if (!hostConfirmed && !allConfirmChecked()) {
+            reason = 'ホスト様情報のご入力と、導入前の確認事項すべてのチェックが必要です。';
+        } else if (!hostConfirmed) {
+            reason = 'ホスト様情報をご入力ください。';
+        } else {
+            const remain = CONFIRM_ITEMS.filter(i => !confirmChecks[i.id]).length;
+            reason = `導入前の確認事項にチェックを入れてください（残り${remain}項目）。`;
+        }
+        html += `<div class="lock-banner">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <div class="lock-banner-text">下記のチェックリストはまだご利用いただけません。${reason}</div>
+        </div>`;
+    }
+
+    // 設置不可の場合は STEP01 のみ、それ以外は全フェーズ
+    const phases = diagnosisResult === 'ng' ? [1] : [1, 2, 3];
+
+    phases.forEach(phase => {
+        const sub = PHASE_SUBTITLES[phase] ? `<span class="step-subtitle">${PHASE_SUBTITLES[phase]}</span>` : '';
+        const stepNo = String(phase).padStart(2, '0');
+        html += `<div class="step-section${unlocked ? '' : ' locked'}">
             <div class="step-header">
-                <span class="step-badge">STEP 0${phase}</span>
-                <span class="step-title">${PHASE_NAMES[phase]}</span>${phaseSubtitle}
+                <span class="step-badge">STEP ${stepNo}</span>
+                <span class="step-title">${PHASE_NAMES[phase]}</span>${sub}
             </div>`;
+
+        // STEP02：現地での作業であることを明記
+        if (phase === 2) {
+            html += `<div class="phase-note">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <div class="phase-note-text">このSTEPは物件での作業です。同梱物の確認から現地でのデバイス初期設定・Wi-Fi設定までは、物件に居る時でないと進められません。取り付け工事当日はホスト様の立ち会いが必要で、施工会社は本体の取り付けのみを行います。初期設定はホスト様ご自身で実施してください。</div>
+            </div>`;
+        }
 
         TASKS.filter(t => t.phase === phase).forEach(task => {
             const done = !!completed[task.id];
@@ -567,7 +1134,6 @@ function render() {
                 task.optional  ? `<span class="badge badge-optional">任意</span>`  : ''
             ].join('') : '';
 
-            // Action area (only shown when NOT done)
             let actionHtml = '';
 
             if (task.inquiry) {
@@ -584,23 +1150,89 @@ function render() {
                 actionHtml += `<div class="btn-group">${btns}</div>`;
             }
 
-            if (task.diagnosis) {
-                const dateInputHtml = formData.showDateInput ? `
-                <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
-                    <label class="form-label" style="margin-bottom:6px">工事予定日 <span style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:none;letter-spacing:0">（任意）</span></label>
-                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                        <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation()" oninput="event.stopPropagation(); formData.constructionDate=this.value; saveState()" style="max-width:220px">
-                        <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0">メールを作成する →</button>
-                    </div>
-                </div>` : '';
+            if (task.wifi) {
+                const doneAlready = formData.wifiAlreadyDone;
+                const savedHtml = formData.wifiDate ? `
+                    <div class="wifi-saved">${SVG.checkSm}
+                        ${doneAlready
+                            ? `Wi-Fi開通日として ${formData.wifiDate} を登録しました`
+                            : `Wi-Fi工事日として ${formData.wifiDate} を登録しました`}
+                    </div>` : '';
                 actionHtml += `
-                <div class="diagnosis-box">
-                    <div class="diagnosis-label">結果を選択してメール報告（タスク完了）</div>
-                    <div class="diagnosis-btns">
-                        <button class="btn-diag-ok" onclick="event.stopPropagation(); showDateInput()">設置可能</button>
-                        <button class="btn-diag-ng" onclick="event.stopPropagation(); sendDiagnosis(false)">設置不可</button>
+                <div class="wifi-box" onclick="event.stopPropagation()">
+                    <div class="wifi-label">Wi-Fiの状況を選択し、日付を入力してください</div>
+                    <div class="wifi-toggle">
+                        <button class="wifi-toggle-btn ${!doneAlready ? 'active' : ''}" onclick="event.stopPropagation(); setWifiMode(false)">これから工事する</button>
+                        <button class="wifi-toggle-btn ${doneAlready ? 'active' : ''}" onclick="event.stopPropagation(); setWifiMode(true)">すでに開通済み</button>
                     </div>
-                    ${dateInputHtml}
+                    <div class="wifi-date-row">
+                        <input type="date" class="form-input" id="f_wifiDate" value="${formData.wifiDate || ''}"
+                            onclick="event.stopPropagation()"
+                            oninput="event.stopPropagation(); onWifiDateInput(this.value)"
+                            style="max-width:220px">
+                        <span style="font-size:12px;font-weight:700;color:#64748b">
+                            ${doneAlready ? '※ Wi-Fiが開通した日' : '※ ネット工事の予定日'}
+                        </span>
+                    </div>
+                    ${savedHtml}
+                </div>`;
+            }
+
+            if (task.diagnosis) {
+                // 設置不可が選択済みなら案内ボックスを表示
+                if (diagnosisResult === 'ng') {
+                    actionHtml += `
+                    <div class="ng-result-box">
+                        <div class="ng-result-title">${SVG.info} 取付診断の結果：設置不可</div>
+                        <div class="ng-result-text">
+                            この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロックをご用意</strong>します。代替品の設置および初期設定まで、弊社現地スタッフが対応いたしますので、ホスト様による追加作業は不要です。<br>
+                            民泊管理バンク カスタマーサポート宛に設置不可の報告メールが作成されています。本文を編集せず、そのまま送信してください。
+                        </div>
+                        <button class="btn-diag-redo" onclick="event.stopPropagation(); clearDiagnosis()">取付診断の結果を選び直す</button>
+                    </div>`;
+                } else {
+                    // RemoteLOCK工事日とWi-Fi工事日の前後関係チェック
+                    const dateProblem = checkConstructionDate();
+                    const alertHtml = (formData.showDateInput && dateProblem) ? `
+                    <div class="date-alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <div class="date-alert-text">${dateProblem}</div>
+                    </div>` : '';
+                    const canSend = formData.showDateInput && formData.constructionDate && !dateProblem;
+                    const dateInputHtml = formData.showDateInput ? `
+                    <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
+                        <label class="form-label" style="margin-bottom:6px">RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
+                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                            <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation()" oninput="event.stopPropagation(); formData.constructionDate=this.value; saveState(); render()" style="max-width:220px">
+                            <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>メールを作成する →</button>
+                        </div>
+                        <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
+                            ${formData.wifiDate
+                                ? `Wi-Fi${formData.wifiAlreadyDone ? '開通' : '工事'}日（${formData.wifiDate}）の翌日以降の日付を指定してください`
+                                : 'まず上の「Wi-Fi工事日（開通日）の確認・入力」を完了してください'}
+                        </div>
+                        ${alertHtml}
+                    </div>` : '';
+                    actionHtml += `
+                    <div class="diagnosis-box">
+                        <div class="diagnosis-label">結果を選択してメール報告（タスク完了）</div>
+                        <div class="diagnosis-btns">
+                            <button class="btn-diag-ok" onclick="event.stopPropagation(); showDateInput()">設置可能</button>
+                            <button class="btn-diag-ng" onclick="event.stopPropagation(); sendDiagnosis(false)">設置不可</button>
+                        </div>
+                        ${dateInputHtml}
+                    </div>`;
+                }
+            }
+
+            if (task.billing) {
+                actionHtml += `
+                <div class="billing-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    <div>
+                        <div class="billing-box-title">月額利用料の課金開始タイミング</div>
+                        <div class="billing-box-text">下記の手順でデバイスを登録すると、<strong>その時点からRemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担です。登録のタイミングにご留意ください。</div>
+                    </div>
                 </div>`;
             }
 
@@ -610,8 +1242,8 @@ function render() {
                     <div>
                         <div class="invite-section-label">招待用メールアドレス</div>
                         <div class="invite-email-row">
-                            <code class="invite-email-code">customer@bizpato.com</code>
-                            <button class="btn-copy" onclick="event.stopPropagation(); copyText('customer@bizpato.com')">COPY ADDRESS</button>
+                            <code class="invite-email-code">${CS_EMAIL}</code>
+                            <button class="btn-copy" onclick="event.stopPropagation(); copyText('${CS_EMAIL}')">COPY ADDRESS</button>
                         </div>
                     </div>
                     <div style="margin-top:16px">
@@ -661,34 +1293,43 @@ function toggleTask(id) {
 
 // ===== PROGRESS =====
 function updateProgress() {
-    const total = TASKS.length;
-    const done  = TASKS.filter(t => completed[t.id]).length;
-    const pct   = Math.round(done / total * 100);
+    const active = getActiveTasks();
+    const total = active.length;
+    const done  = active.filter(t => completed[t.id]).length;
+    const pct   = total ? Math.round(done / total * 100) : 0;
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressPct').textContent  = pct + '%';
 }
 
 // ===== FORM VALIDATION =====
 function isFormComplete() {
-    return !!(formData.property && formData.subscriber && formData.staff && formData.email);
+    return !!(formData.property && formData.subscriber && formData.staff && isValidEmail(formData.email));
 }
 
 function validateAndHighlight() {
     const fields = [
-        { key: 'property',   id: 'f_property',   hint: 'hint_property' },
-        { key: 'subscriber', id: 'f_subscriber',  hint: 'hint_subscriber' },
-        { key: 'staff',      id: 'f_staff',       hint: 'hint_staff' },
-        { key: 'email',      id: 'f_email',       hint: 'hint_email' }
+        { key: 'property',   id: 'f_property',   hint: 'hint_property',   label: '物件名' },
+        { key: 'subscriber', id: 'f_subscriber', hint: 'hint_subscriber', label: 'ご契約者様名' },
+        { key: 'staff',      id: 'f_staff',      hint: 'hint_staff',      label: '担当者名' },
+        { key: 'email',      id: 'f_email',      hint: 'hint_email',      label: '連絡先メールアドレス' }
     ];
     const missing = [];
     let firstEl = null;
     fields.forEach(f => {
         const el   = document.getElementById(f.id);
         const hint = document.getElementById(f.hint);
+        let invalid = false;
         if (!formData[f.key]) {
-            missing.push(f.key === 'property' ? '物件名' :
-                         f.key === 'subscriber' ? 'ご契約者様名' :
-                         f.key === 'staff' ? '担当者名' : '連絡先メールアドレス');
+            invalid = true;
+            hint.textContent = f.label + 'を入力してください';
+        } else if (f.key === 'email' && !isValidEmail(formData.email)) {
+            invalid = true;
+            hint.textContent = '正しい形式のメールアドレスを入力してください';
+        }
+        if (invalid) {
+            missing.push(f.key === 'email' && formData.email
+                ? 'メールアドレス（形式が正しくありません）'
+                : f.label);
             el.classList.add('invalid');
             hint.classList.add('show');
             if (!firstEl) firstEl = el;
@@ -698,7 +1339,7 @@ function validateAndHighlight() {
         }
     });
     if (missing.length > 0) {
-        alert('以下のホスト様情報を入力してください。\n\n・' + missing.join('\n・'));
+        alert('以下のホスト様情報をご確認ください。\n\n・' + missing.join('\n・'));
         if (firstEl) firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return false;
     }
@@ -707,8 +1348,18 @@ function validateAndHighlight() {
 
 // ===== STICKY BAR =====
 function updateStickyBar() {
-    const allDone = TASKS.every(t => completed[t.id]);
     const bar = document.getElementById('stickyBar');
+    // STEPがロック中（物件情報・確認事項が未完了）はスティッキーバーを出さない
+    if (!isUnlocked()) {
+        bar.classList.remove('visible');
+        return;
+    }
+    // 設置不可の場合は完了報告フロー（STEP03のクラウド報告）は不要のため非表示
+    if (diagnosisResult === 'ng') {
+        bar.classList.remove('visible');
+        return;
+    }
+    const allDone = getActiveTasks().every(t => completed[t.id]);
     if (allDone) {
         bar.classList.add('visible');
     } else {
@@ -729,34 +1380,134 @@ function bindFormInputs() {
         el.value = formData[key] || '';
         el.addEventListener('input', () => {
             formData[key] = el.value.trim();
-            if (formData[key]) {
+            const hint = document.getElementById('hint_' + key);
+            if (key === 'email') {
+                if (formData.email && isValidEmail(formData.email)) {
+                    el.classList.remove('invalid');
+                    hint.classList.remove('show');
+                }
+            } else if (formData[key]) {
                 el.classList.remove('invalid');
-                document.getElementById('hint_' + key).classList.remove('show');
+                hint.classList.remove('show');
             }
+            updateInputNav();
             saveState();
         });
     });
 }
 
+// ===== WI-FI 工事日 =====
+function setWifiMode(alreadyDone) {
+    formData.wifiAlreadyDone = !!alreadyDone;
+    saveState();
+    render();
+}
+
+// Wi-Fi工事日が入力されたら、タスク10を自動で完了／未完了に切り替える
+function onWifiDateInput(value) {
+    formData.wifiDate = value;
+    completed[10] = !!value;
+    saveState();
+    render();
+}
+
+// Wi-Fi工事日が入力済みかどうか
+function isWifiDateSet() {
+    return !!formData.wifiDate;
+}
+
+// RemoteLOCK工事日とWi-Fi工事日の前後関係チェック。
+// 問題があれば警告メッセージ（文字列）、問題なければ '' を返す。
+function checkConstructionDate() {
+    if (!formData.wifiDate) {
+        return 'Wi-Fi工事日（開通日）がまだ入力されていません。先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。';
+    }
+    if (!formData.constructionDate) return '';
+    const wifi = new Date(formData.wifiDate + 'T00:00:00');
+    const remote = new Date(formData.constructionDate + 'T00:00:00');
+    if (isNaN(wifi) || isNaN(remote)) return '';
+    // RemoteLOCK工事日は Wi-Fi工事日の翌日以降である必要がある
+    if (remote <= wifi) {
+        const wLabel = formData.wifiAlreadyDone ? 'Wi-Fi開通日' : 'Wi-Fi工事日';
+        return `RemoteLOCK工事予定日が${wLabel}（${formData.wifiDate}）以前になっています。Wi-Fi開通前に工事を行うと、当日中にデバイス初期設定が完了できません。RemoteLOCK工事日は${wLabel}の翌日以降に設定してください。`;
+    }
+    return '';
+}
+
 // ===== SHOW DATE INPUT =====
 function showDateInput() {
     if (!validateAndHighlight()) return;
+    // Wi-Fi工事日が未入力なら、設置可能の報告に進めない
+    if (!isWifiDateSet()) {
+        alert('先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。\n\nRemoteLOCKの取り付け工事日は、Wi-Fi工事日の翌日以降に設定する必要があります。');
+        const el = document.getElementById('f_wifiDate');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
     formData.showDateInput = true;
     render();
+}
+
+// ===== メール作成画面を開く =====
+// location.href の書き換えはページ遷移の副作用でその後の操作が
+// 効かなくなる場合があるため、一時的な <a> 要素のクリックで開く。
+function openMailClient(subject, body) {
+    const url = `mailto:${CS_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 // ===== DIAGNOSIS EMAIL =====
 function sendDiagnosis(isOk) {
     if (!validateAndHighlight()) return;
-    const res = isOk ? '設置可能' : '設置不可';
-    const subject = encodeURIComponent(`【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`);
-    const dateStr = (isOk && formData.constructionDate) ? `\n工事予定日: ${formData.constructionDate}` : '';
-    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「${res}」との回答を受け取りました。${dateStr}\n\n`;
-    // Mark task 3 as done
+
+    let subject, body;
+    if (isOk) {
+        // 設置可能の報告には、Wi-Fi工事日とRemoteLOCK工事日の整合が必須
+        if (!isWifiDateSet()) {
+            alert('先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。');
+            return;
+        }
+        if (!formData.constructionDate) {
+            alert('RemoteLOCK工事予定日を入力してください。');
+            return;
+        }
+        const problem = checkConstructionDate();
+        if (problem) {
+            alert('日程をご確認ください。\n\n' + problem);
+            return;
+        }
+        diagnosisResult = 'ok';
+        const wLabel = formData.wifiAlreadyDone ? 'Wi-Fi開通日' : 'Wi-Fi工事日';
+        subject = `【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`;
+        body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■日程\n${wLabel}: ${formData.wifiDate}\nRemoteLOCK工事予定日: ${formData.constructionDate}\n\n取付診断の結果、公式診断フォームより「設置可能」との回答を受け取りました。\n\n引き続き、現地での設置・初期設定を進めてまいります。\n`;
+    } else {
+        diagnosisResult = 'ng';
+        subject = `【診断報告】RemoteLOCK 設置不可・代替品手配のご依頼 (${formData.property})`;
+        body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「設置不可」との回答を受け取りました。\nつきましては、代替のスマートロックの手配・設置・初期設定の対応をお願いいたします。\n`;
+    }
+
+    // 取付診断タスク（id:3）を完了に
     completed[3] = true;
     formData.showDateInput = false;
     saveState();
-    window.location.href = `mailto:customer@bizpato.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+    // 先に画面を更新してからメール作成画面を開く
+    render();
+    openMailClient(subject, body);
+}
+
+// 取付診断の結果（設置可能／不可）だけをやり直す
+function clearDiagnosis() {
+    if (!confirm('取付診断の結果をリセットして選び直しますか？')) return;
+    diagnosisResult = null;
+    completed[3] = false;
+    formData.showDateInput = false;
+    formData.constructionDate = '';
+    saveState();
     render();
 }
 
@@ -777,6 +1528,7 @@ function openModal() {
                 <div class="cred-item">
                     <label class="form-label">ログインID（メールアドレス）<span class="required">*</span></label>
                     <input type="email" class="form-input" id="m_loginId" value="${formData.loginId || ''}" placeholder="example@gmail.com">
+                    <div class="form-hint" id="hint_m_loginId">正しい形式のメールアドレスを入力してください</div>
                 </div>
                 <div class="cred-item">
                     <label class="form-label">パスワード<span class="required">*</span></label>
@@ -792,10 +1544,16 @@ function openModal() {
     document.getElementById('modalBody').innerHTML = body;
     document.getElementById('modalOverlay').classList.add('open');
 
-    // Bind modal inputs
     const loginEl = document.getElementById('m_loginId');
     const passEl  = document.getElementById('m_password');
-    if (loginEl) loginEl.addEventListener('input', () => { formData.loginId = loginEl.value; saveState(); });
+    if (loginEl) loginEl.addEventListener('input', () => {
+        formData.loginId = loginEl.value.trim();
+        if (isValidEmail(formData.loginId)) {
+            loginEl.classList.remove('invalid');
+            document.getElementById('hint_m_loginId').classList.remove('show');
+        }
+        saveState();
+    });
     if (passEl)  passEl.addEventListener('input',  () => { formData.password = passEl.value; saveState(); });
 }
 
@@ -808,20 +1566,26 @@ function closeModalOnBg(e) {
 }
 
 function sendFinalEmail() {
-    // Validate login credentials
     const missingCred = [];
-    if (!formData.loginId) missingCred.push('ログインID（メールアドレス）');
+    if (!isValidEmail(formData.loginId)) missingCred.push('ログインID（正しい形式のメールアドレス）');
     if (!formData.password) missingCred.push('パスワード');
     if (missingCred.length > 0) {
-        alert('以下のログイン情報を入力してください。\n\n・' + missingCred.join('\n・'));
-        if (!formData.loginId) { const el = document.getElementById('m_loginId'); if (el) { el.classList.add('invalid'); el.focus(); } }
-        else if (!formData.password) { const el = document.getElementById('m_password'); if (el) { el.classList.add('invalid'); el.focus(); } }
+        alert('以下のログイン情報をご確認ください。\n\n・' + missingCred.join('\n・'));
+        if (!isValidEmail(formData.loginId)) {
+            const el = document.getElementById('m_loginId');
+            if (el) { el.classList.add('invalid'); el.focus(); }
+            const h = document.getElementById('hint_m_loginId');
+            if (h) h.classList.add('show');
+        } else if (!formData.password) {
+            const el = document.getElementById('m_password');
+            if (el) { el.classList.add('invalid'); el.focus(); }
+        }
         return;
     }
-    const subject = encodeURIComponent(`【導入完了報告】RemoteLOCK 設定完了 (${formData.property})`);
-    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの導入状況についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■ログイン情報\nID: ${formData.loginId || '未入力'}\nPASS: ${formData.password || '未入力'}\n\nご確認と連携作業をお願いいたします。`;
-    window.location.href = `mailto:customer@bizpato.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+    const subject = `【導入完了報告】RemoteLOCK 設定完了 (${formData.property})`;
+    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの導入状況についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■ログイン情報\nID: ${formData.loginId}\nPASS: ${formData.password}\n\nご確認と連携作業をお願いいたします。`;
     closeModal();
+    openMailClient(subject, body);
 }
 
 // ===== COPY =====
@@ -844,16 +1608,39 @@ function showToast(msg) {
 
 // ===== RESET =====
 function resetProgress() {
-    if (!confirm('進捗をリセットしますか？')) return;
+    if (!confirm('進捗をリセットしますか？\nホスト様情報・確認事項・チェック状況がすべて消去されます。')) return;
     completed = {};
+    diagnosisResult = null;
+    confirmChecks = {};
+    hostConfirmed = false;
+    formData = {
+        property: '', subscriber: '', staff: '', email: '',
+        loginId: '', password: '',
+        wifiAlreadyDone: false, wifiDate: '', constructionDate: '',
+        showDateInput: false
+    };
     saveState();
+    // 入力欄を空に戻す
+    ['f_property','f_subscriber','f_staff','f_email'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.value = ''; el.classList.remove('invalid'); }
+    });
+    document.querySelectorAll('.form-hint').forEach(h => h.classList.remove('show'));
+    renderConfirmList();
+    renderHostCard();
+    updateInputNav();
     render();
+    showScreen('dash');
 }
 
 // ===== INIT =====
 loadState();
+renderConfirmList();
+renderHostCard();
+updateInputNav();
 render();
 bindFormInputs();
+showScreen('dash');
 </script>
 </body>
 </html>
