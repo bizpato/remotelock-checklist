@@ -1250,11 +1250,9 @@ function render() {
                     </div>
                     <div class="wifi-date-row">
                         <input type="date" class="form-input" id="f_wifiDate" value="${formData.wifiDate || ''}"
-                            readonly
                             onclick="event.stopPropagation(); openDatePicker(this)"
-                            onfocus="openDatePicker(this)"
                             onchange="event.stopPropagation(); onWifiDateInput(this.value)"
-                            style="max-width:220px; cursor:pointer">
+                            style="max-width:220px">
                         <span style="font-size:12px;font-weight:700;color:#64748b">
                             ${doneAlready ? '※ Wi-Fi開通日（任意）' : '※ ネット工事の予定日'}
                         </span>
@@ -1288,7 +1286,7 @@ function render() {
                     <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
                         <label class="form-label" style="margin-bottom:6px">RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
                         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                            <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" readonly onclick="event.stopPropagation(); openDatePicker(this)" onfocus="openDatePicker(this)" onchange="event.stopPropagation(); onConstructionDateInput(this.value)" style="max-width:220px; cursor:pointer">
+                            <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation(); openDatePicker(this)" onchange="event.stopPropagation(); onConstructionDateInput(this.value)" style="max-width:220px">
                             <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>メールを作成する →</button>
                         </div>
                         <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
@@ -1552,11 +1550,13 @@ function setWifiMode(alreadyDone) {
     render();
 }
 
-// 日付入力欄をクリック／フォーカスしたとき、カレンダーを強制的に開く。
-// 入力欄は readonly のため手入力はできず、カレンダー選択のみで値が入る。
+// 日付入力欄をクリックしたとき、可能ならカレンダーを開く。
+// showPicker非対応のブラウザでも、入力欄自体のカレンダーアイコンや
+// 手入力は使えるため、ここで例外が出ても無視してよい。
+// 手入力での途中確定は、値の受け取り側 isCompleteDate() で防いでいる。
 function openDatePicker(el) {
     if (el && typeof el.showPicker === 'function') {
-        try { el.showPicker(); } catch (e) { /* 連続呼び出し等は無視 */ }
+        try { el.showPicker(); } catch (e) { /* readonly不可・連続呼び出し等は無視 */ }
     }
 }
 
