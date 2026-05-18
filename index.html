@@ -263,6 +263,20 @@
         .form-hint { font-size: 11px; font-weight: 700; color: var(--danger); margin-top: 6px; display: none; }
         .form-hint.show { display: block; }
 
+        /* ── 「契約者と同じ」チェック ── */
+        .same-check {
+            display: flex; align-items: center; gap: 10px;
+            padding: 13px 16px; background: #f8fafc;
+            border: 1px solid #e2e8f0; border-radius: 14px;
+            cursor: pointer; user-select: none;
+        }
+        .same-check input {
+            width: 18px; height: 18px; cursor: pointer;
+            accent-color: var(--brand); flex-shrink: 0;
+        }
+        .same-check span { font-size: 13px; font-weight: 700; color: #475569; }
+        #staffField.hidden { display: none; }
+
         /* ── Step ── */
         .step-section { margin-bottom: 32px; }
         .step-header { display: flex; align-items: center; gap: 14px; padding: 0 4px; margin-bottom: 16px; }
@@ -680,15 +694,21 @@
                         <input type="text" class="form-input" id="f_property" placeholder="例：〇〇マンション 101号室">
                         <div class="form-hint" id="hint_property">物件名を入力してください</div>
                     </div>
-                    <div>
+                    <div class="form-full">
                         <label class="form-label">ご契約者様名<span class="required">*</span></label>
                         <input type="text" class="form-input" id="f_subscriber" placeholder="個人名または会社名">
                         <div class="form-hint" id="hint_subscriber">ご契約者様名を入力してください</div>
                     </div>
-                    <div>
-                        <label class="form-label">担当者名<span class="required">*</span></label>
+                    <div class="form-full">
+                        <label class="same-check" id="sameCheckLabel">
+                            <input type="checkbox" id="f_staffSame">
+                            <span>ご担当者様はご契約者様と同じ</span>
+                        </label>
+                    </div>
+                    <div class="form-full" id="staffField">
+                        <label class="form-label">ご担当者様名<span class="required">*</span></label>
                         <input type="text" class="form-input" id="f_staff" placeholder="ご担当者様名">
-                        <div class="form-hint" id="hint_staff">担当者名を入力してください</div>
+                        <div class="form-hint" id="hint_staff">ご担当者様名を入力してください</div>
                     </div>
                     <div class="form-full">
                         <label class="form-label">連絡先メールアドレス<span class="required">*</span></label>
@@ -759,7 +779,7 @@
 
 <script>
 // ===== CONSTANTS =====
-const STORAGE_KEY = 'remotelock_checklist_v6';
+const STORAGE_KEY = 'remotelock_checklist_v7';
 const CS_EMAIL = 'customer@bizpato.com';
 
 // 導入前の確認事項（各項目に個別チェックが必要）
@@ -880,6 +900,7 @@ const TASKS = [
 let completed = {};
 let formData = {
     property: '', subscriber: '', staff: '', email: '',
+    staffSame: false,        // ご担当者様がご契約者様と同じか
     loginId: '', password: '',
     wifiAlreadyDone: false,  // Wi-Fiがすでに開通済みか
     wifiDate: '',            // Wi-Fi工事日（開通日）
@@ -1050,6 +1071,8 @@ function openInputScreen() {
 
 // 入力ページ「確定して進む」→ 検証してダッシュボードへ
 function saveInputScreen() {
+    // ご担当者様が契約者様と同じ場合、担当者名に契約者名を反映
+    if (formData.staffSame) formData.staff = formData.subscriber;
     if (!validateAndHighlight()) return;
     if (!allConfirmChecked()) {
         alert('すべての確認事項にチェックを入れてください。');
@@ -1161,15 +1184,21 @@ function render() {
 
             if (task.wifi) {
                 const doneAlready = formData.wifiAlreadyDone;
-                const savedHtml = formData.wifiDate ? `
+                let savedHtml = '';
+                if (doneAlready) {
+                    savedHtml = `
                     <div class="wifi-saved">${SVG.checkSm}
-                        ${doneAlready
-                            ? `Wi-Fi開通日として ${formData.wifiDate} を登録しました`
-                            : `Wi-Fi工事日として ${formData.wifiDate} を登録しました`}
-                    </div>` : '';
+                        Wi-Fiは開通済みとして登録しました${formData.wifiDate ? `（開通日：${formData.wifiDate}）` : ''}
+                    </div>`;
+                } else if (formData.wifiDate) {
+                    savedHtml = `
+                    <div class="wifi-saved">${SVG.checkSm}
+                        Wi-Fi工事日として ${formData.wifiDate} を登録しました
+                    </div>`;
+                }
                 actionHtml += `
                 <div class="wifi-box" onclick="event.stopPropagation()">
-                    <div class="wifi-label">Wi-Fiの状況を選択し、日付を入力してください</div>
+                    <div class="wifi-label">Wi-Fiの状況を選択してください</div>
                     <div class="wifi-toggle">
                         <button class="wifi-toggle-btn ${!doneAlready ? 'active' : ''}" onclick="event.stopPropagation(); setWifiMode(false)">これから工事する</button>
                         <button class="wifi-toggle-btn ${doneAlready ? 'active' : ''}" onclick="event.stopPropagation(); setWifiMode(true)">すでに開通済み</button>
@@ -1180,7 +1209,7 @@ function render() {
                             oninput="event.stopPropagation(); onWifiDateInput(this.value)"
                             style="max-width:220px">
                         <span style="font-size:12px;font-weight:700;color:#64748b">
-                            ${doneAlready ? '※ Wi-Fiが開通した日' : '※ ネット工事の予定日'}
+                            ${doneAlready ? '※ Wi-Fi開通日（任意）' : '※ ネット工事の予定日'}
                         </span>
                     </div>
                     ${savedHtml}
@@ -1216,9 +1245,11 @@ function render() {
                             <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>メールを作成する →</button>
                         </div>
                         <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
-                            ${formData.wifiDate
-                                ? `Wi-Fi${formData.wifiAlreadyDone ? '開通' : '工事'}日（${formData.wifiDate}）の翌日以降の日付を指定してください`
-                                : 'まず上の「Wi-Fi工事日（開通日）の確認・入力」を完了してください'}
+                            ${formData.wifiAlreadyDone
+                                ? 'Wi-Fiは開通済みのため、工事予定日に制約はありません'
+                                : formData.wifiDate
+                                    ? `Wi-Fi工事日（${formData.wifiDate}）の翌日以降の日付を指定してください`
+                                    : 'まず上の「Wi-Fi工事日（開通日）の確認・入力」を完了してください'}
                         </div>
                         ${alertHtml}
                     </div>` : '';
@@ -1324,19 +1355,23 @@ function updateProgress() {
 
 // ===== FORM VALIDATION =====
 function isFormComplete() {
-    return !!(formData.property && formData.subscriber && formData.staff && isValidEmail(formData.email));
+    // ご担当者様が契約者様と同じ場合は契約者名で代替する
+    const staffOk = formData.staffSame ? !!formData.subscriber : !!formData.staff;
+    return !!(formData.property && formData.subscriber && staffOk && isValidEmail(formData.email));
 }
 
 function validateAndHighlight() {
     const fields = [
         { key: 'property',   id: 'f_property',   hint: 'hint_property',   label: '物件名' },
         { key: 'subscriber', id: 'f_subscriber', hint: 'hint_subscriber', label: 'ご契約者様名' },
-        { key: 'staff',      id: 'f_staff',      hint: 'hint_staff',      label: '担当者名' },
+        { key: 'staff',      id: 'f_staff',      hint: 'hint_staff',      label: 'ご担当者様名' },
         { key: 'email',      id: 'f_email',      hint: 'hint_email',      label: '連絡先メールアドレス' }
     ];
     const missing = [];
     let firstEl = null;
     fields.forEach(f => {
+        // ご担当者様が契約者様と同じ場合、担当者名欄は非表示のため検証スキップ
+        if (f.key === 'staff' && formData.staffSame) return;
         const el   = document.getElementById(f.id);
         const hint = document.getElementById(f.hint);
         let invalid = false;
@@ -1411,37 +1446,86 @@ function bindFormInputs() {
                 el.classList.remove('invalid');
                 hint.classList.remove('show');
             }
+            // 契約者名の変更時、「担当者は契約者と同じ」なら担当者名も追従
+            if (key === 'subscriber' && formData.staffSame) {
+                formData.staff = formData.subscriber;
+            }
             updateInputNav();
             saveState();
         });
     });
+
+    // 「ご担当者様はご契約者様と同じ」チェックボックス
+    const sameEl = document.getElementById('f_staffSame');
+    if (sameEl) {
+        sameEl.checked = !!formData.staffSame;
+        sameEl.addEventListener('change', () => {
+            formData.staffSame = sameEl.checked;
+            if (sameEl.checked) {
+                // 担当者名を契約者名に揃え、入力欄を隠す
+                formData.staff = formData.subscriber;
+            }
+            applyStaffSameUI();
+            updateInputNav();
+            saveState();
+        });
+    }
+    applyStaffSameUI();
+}
+
+// 「担当者は契約者と同じ」の状態に応じて担当者名欄の表示/非表示を切り替え
+function applyStaffSameUI() {
+    const field = document.getElementById('staffField');
+    const staffEl = document.getElementById('f_staff');
+    if (!field || !staffEl) return;
+    if (formData.staffSame) {
+        field.classList.add('hidden');
+        staffEl.classList.remove('invalid');
+        const hint = document.getElementById('hint_staff');
+        if (hint) hint.classList.remove('show');
+    } else {
+        field.classList.remove('hidden');
+        staffEl.value = formData.staff || '';
+    }
 }
 
 // ===== WI-FI 工事日 =====
+
+// Wi-Fi工事日タスク(id:10)の完了状態を更新。
+// 「すでに開通済み」を選択 ＝ 日付なしで完了。
+// 「これから工事する」＝ 工事日を入力したら完了。
+function updateWifiCompletion() {
+    completed[10] = formData.wifiAlreadyDone || !!formData.wifiDate;
+}
+
 function setWifiMode(alreadyDone) {
     formData.wifiAlreadyDone = !!alreadyDone;
+    updateWifiCompletion();
     saveState();
     render();
 }
 
-// Wi-Fi工事日が入力されたら、タスク10を自動で完了／未完了に切り替える
+// Wi-Fi日付入力時の処理
 function onWifiDateInput(value) {
     formData.wifiDate = value;
-    completed[10] = !!value;
+    updateWifiCompletion();
     saveState();
     render();
 }
 
-// Wi-Fi工事日が入力済みかどうか
-function isWifiDateSet() {
-    return !!formData.wifiDate;
+// 取付診断に進む前提として、Wi-Fiの状況が確定しているか
+// （開通済みを選択、または工事日を入力済み）
+function isWifiReady() {
+    return formData.wifiAlreadyDone || !!formData.wifiDate;
 }
 
 // RemoteLOCK工事日とWi-Fi工事日の前後関係チェック。
 // 問題があれば警告メッセージ（文字列）、問題なければ '' を返す。
 function checkConstructionDate() {
+    // 「すでに開通済み」を選んでいれば、Wi-Fiは既に使えるため日付チェック不要
+    if (formData.wifiAlreadyDone) return '';
     if (!formData.wifiDate) {
-        return 'Wi-Fi工事日（開通日）がまだ入力されていません。先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。';
+        return 'Wi-Fi工事日がまだ入力されていません。先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。';
     }
     if (!formData.constructionDate) return '';
     const wifi = new Date(formData.wifiDate + 'T00:00:00');
@@ -1449,8 +1533,7 @@ function checkConstructionDate() {
     if (isNaN(wifi) || isNaN(remote)) return '';
     // RemoteLOCK工事日は Wi-Fi工事日の翌日以降である必要がある
     if (remote <= wifi) {
-        const wLabel = formData.wifiAlreadyDone ? 'Wi-Fi開通日' : 'Wi-Fi工事日';
-        return `RemoteLOCK工事予定日が${wLabel}（${formData.wifiDate}）以前になっています。Wi-Fi開通前に工事を行うと、当日中にデバイス初期設定が完了できません。RemoteLOCK工事日は${wLabel}の翌日以降に設定してください。`;
+        return `RemoteLOCK工事予定日がWi-Fi工事日（${formData.wifiDate}）以前になっています。Wi-Fi開通前に工事を行うと、当日中にデバイス初期設定が完了できません。RemoteLOCK工事日はWi-Fi工事日の翌日以降に設定してください。`;
     }
     return '';
 }
@@ -1458,9 +1541,9 @@ function checkConstructionDate() {
 // ===== SHOW DATE INPUT =====
 function showDateInput() {
     if (!validateAndHighlight()) return;
-    // Wi-Fi工事日が未入力なら、設置可能の報告に進めない
-    if (!isWifiDateSet()) {
-        alert('先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。\n\nRemoteLOCKの取り付け工事日は、Wi-Fi工事日の翌日以降に設定する必要があります。');
+    // Wi-Fiの状況が未確定なら、設置可能の報告に進めない
+    if (!isWifiReady()) {
+        alert('先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。\n\nWi-Fiの状況（これから工事する／すでに開通済み）を選択してください。');
         const el = document.getElementById('f_wifiDate');
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
@@ -1488,8 +1571,8 @@ function sendDiagnosis(isOk) {
 
     let subject, body;
     if (isOk) {
-        // 設置可能の報告には、Wi-Fi工事日とRemoteLOCK工事日の整合が必須
-        if (!isWifiDateSet()) {
+        // 設置可能の報告には、Wi-Fiの状況とRemoteLOCK工事日の整合が必須
+        if (!isWifiReady()) {
             alert('先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。');
             return;
         }
@@ -1503,9 +1586,11 @@ function sendDiagnosis(isOk) {
             return;
         }
         diagnosisResult = 'ok';
-        const wLabel = formData.wifiAlreadyDone ? 'Wi-Fi開通日' : 'Wi-Fi工事日';
+        const wifiLine = formData.wifiAlreadyDone
+            ? `Wi-Fi: 開通済み${formData.wifiDate ? `（開通日：${formData.wifiDate}）` : ''}`
+            : `Wi-Fi工事日: ${formData.wifiDate}`;
         subject = `【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`;
-        body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■日程\n${wLabel}: ${formData.wifiDate}\nRemoteLOCK工事予定日: ${formData.constructionDate}\n\n取付診断の結果、公式診断フォームより「設置可能」との回答を受け取りました。\n\n引き続き、現地での設置・初期設定を進めてまいります。\n`;
+        body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■日程\n${wifiLine}\nRemoteLOCK工事予定日: ${formData.constructionDate}\n\n取付診断の結果、公式診断フォームより「設置可能」との回答を受け取りました。\n\n引き続き、現地での設置・初期設定を進めてまいります。\n`;
     } else {
         diagnosisResult = 'ng';
         subject = `【診断報告】RemoteLOCK 設置不可・代替品手配のご依頼 (${formData.property})`;
@@ -1636,6 +1721,7 @@ function resetProgress() {
     hostConfirmed = false;
     formData = {
         property: '', subscriber: '', staff: '', email: '',
+        staffSame: false,
         loginId: '', password: '',
         wifiAlreadyDone: false, wifiDate: '', constructionDate: '',
         showDateInput: false
@@ -1646,7 +1732,10 @@ function resetProgress() {
         const el = document.getElementById(id);
         if (el) { el.value = ''; el.classList.remove('invalid'); }
     });
+    const sameEl = document.getElementById('f_staffSame');
+    if (sameEl) sameEl.checked = false;
     document.querySelectorAll('.form-hint').forEach(h => h.classList.remove('show'));
+    applyStaffSameUI();
     renderConfirmList();
     renderHostCard();
     updateInputNav();
@@ -1656,6 +1745,7 @@ function resetProgress() {
 
 // ===== INIT =====
 loadState();
+updateWifiCompletion();
 renderConfirmList();
 renderHostCard();
 updateInputNav();
