@@ -291,6 +291,15 @@
         .task-item.critical { background: #fffcf0; border-color: #fde68a; }
         .task-item.done.critical { background: #f0f9ff; border-color: #bfdbfe; }
 
+        /* 入力UIタスク（Wi-Fi工事日・取付診断）：完了後も明瞭に表示、ホバー演出なし */
+        .task-item.auto-task { cursor: default; }
+        .task-item.auto-task:hover { transform: none; box-shadow: 0 1px 4px rgba(0,0,0,0.03); border-color: #e2e8f0; }
+        .task-item.auto-task.critical:hover { border-color: #fde68a; }
+        .task-item.auto-task.done { opacity: 1; }
+        .task-item.auto-task.done .task-title { color: #1e293b; text-decoration: none; }
+        .task-item.auto-task.done .task-desc { color: #64748b; }
+        .task-item.auto-task:hover .checkbox-empty { border-color: #e2e8f0; }
+
         .task-checkbox { flex-shrink: 0; margin-top: 2px; }
         .checkbox-empty {
             width: 32px; height: 32px; border-radius: 12px;
@@ -1261,10 +1270,18 @@ function render() {
                 </div>`;
             }
 
-            const actionOpen = (!done && actionHtml) ? 'open' : '';
+            // Wi-Fi工事日(wifi)・取付診断(diagnosis)は入力／操作で完了が決まるため、
+            // カードクリックでの手動トグルは無効にする
+            const autoTask = task.wifi || task.diagnosis;
+            const cardOnclick = autoTask ? '' : `onclick="toggleTask(${task.id})"`;
+            const cardCursor = autoTask ? ' style="cursor:default"' : '';
+
+            // 通常タスクは未完了時のみアクションを開く。
+            // 入力UIタスク(autoTask)は完了後も入力内容を見せるため常に開く。
+            const actionOpen = (actionHtml && (autoTask || !done)) ? 'open' : '';
 
             html += `
-            <div class="task-item ${itemClass}" onclick="toggleTask(${task.id})">
+            <div class="task-item ${itemClass}${autoTask ? ' auto-task' : ''}" ${cardOnclick}${cardCursor}>
                 <div class="task-checkbox">${checkHtml}</div>
                 <div class="task-content">
                     <div class="task-title-row">
@@ -1286,6 +1303,10 @@ function render() {
 
 // ===== TOGGLE =====
 function toggleTask(id) {
+    // 入力UIタスク（Wi-Fi工事日・取付診断）は専用操作でのみ完了が決まるため、
+    // カードクリックによる手動トグルは受け付けない
+    const task = TASKS.find(t => t.id === id);
+    if (task && (task.wifi || task.diagnosis)) return;
     completed[id] = !completed[id];
     saveState();
     render();
