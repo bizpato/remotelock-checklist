@@ -596,11 +596,56 @@
         }
 
         @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
+            body { padding-bottom: 150px; }
+            .main { padding: 20px 12px 100px; }
+
+            /* ヘッダー：ロゴとプログレスを縦に */
+            .header-inner { padding: 14px 14px; gap: 10px; }
+            .logo-title { font-size: 16px; }
+            .logo-sub { font-size: 10px; }
+            .logo-icon { padding: 9px; border-radius: 14px; }
+            .logo-icon svg { width: 20px; height: 20px; }
+            .progress-pill { width: 100%; min-width: 0; padding: 9px 16px; justify-content: space-between; }
+
+            /* カード・フォーム */
+            .form-grid { grid-template-columns: 1fr; gap: 16px; }
             .form-full { grid-column: 1; }
-            .logo-title { font-size: 17px; }
-            .card-body { padding: 20px; }
-            .task-item { padding: 18px 20px; }
+            .card-header { padding: 16px 18px; }
+            .card-body { padding: 18px; }
+            .form-input { padding: 14px 16px; font-size: 16px; }
+
+            /* 未入力アラート：縦積みにしてボタンを全幅に */
+            .host-alert {
+                flex-direction: column; align-items: stretch;
+                gap: 12px; margin: 0 16px 20px; padding: 16px 18px;
+            }
+            .host-alert-icon { width: 32px; height: 32px; }
+            .btn-host-input { width: 100%; padding: 14px; }
+
+            /* 入力完了サマリー：1カラムに */
+            .host-summary { padding: 16px 18px 20px; }
+            .host-summary-grid { grid-template-columns: 1fr; }
+            .host-summary-item[style*="grid-column"] { grid-column: 1 / -1; }
+
+            /* タスク */
+            .task-item { padding: 16px 16px; gap: 14px; }
+            .task-title { font-size: 15px; }
+            .step-header { flex-wrap: wrap; }
+            .step-subtitle { margin-left: 0; }
+
+            /* 確認事項 */
+            .confirm-list { padding: 8px 14px 16px; }
+            .confirm-item { padding: 16px 14px; gap: 12px; }
+            .confirm-intro { padding: 0 18px 4px; }
+
+            /* Wi-Fi切替・診断ボタン：縦並びに */
+            .wifi-toggle { flex-direction: column; }
+            .wifi-toggle-btn { min-width: 0; }
+            .diagnosis-btns { flex-direction: column; }
+
+            /* モーダル */
+            .modal-header { padding: 18px 20px; }
+            .modal-body { padding: 20px; }
         }
     </style>
 </head>
