@@ -1206,7 +1206,7 @@ function render() {
                     <div class="wifi-date-row">
                         <input type="date" class="form-input" id="f_wifiDate" value="${formData.wifiDate || ''}"
                             onclick="event.stopPropagation()"
-                            oninput="event.stopPropagation(); onWifiDateInput(this.value)"
+                            onchange="event.stopPropagation(); onWifiDateInput(this.value)"
                             style="max-width:220px">
                         <span style="font-size:12px;font-weight:700;color:#64748b">
                             ${doneAlready ? '※ Wi-Fi開通日（任意）' : '※ ネット工事の予定日'}
@@ -1241,7 +1241,7 @@ function render() {
                     <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
                         <label class="form-label" style="margin-bottom:6px">RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
                         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                            <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation()" oninput="event.stopPropagation(); formData.constructionDate=this.value; saveState(); render()" style="max-width:220px">
+                            <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation()" onchange="event.stopPropagation(); formData.constructionDate=this.value; saveState(); render()" style="max-width:220px">
                             <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>メールを作成する →</button>
                         </div>
                         <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
