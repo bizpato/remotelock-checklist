@@ -1260,7 +1260,7 @@ const PHASE_GUIDE = {
     },
     2: {
         place: '物件での作業（取り付け工事当日）',
-        summary: 'ここから先は、取り付け工事の当日に物件で行う作業です。工事に立ち会い、RemoteLOCK本体の初期設定とWi-Fi接続をホスト様ご自身で行います。施工会社が行うのは本体の取り付けのみで、初期設定はホスト様ご自身での対応となります。',
+        summary: 'ここから先は、取り付け工事の当日に物件で行う作業です。工事に立ち会い、RemoteLOCK本体の初期設定とWi-Fi接続をホスト様ご自身で行います。',
         prepare: ['物件への訪問予定（工事の立ち会い）', 'RemoteLOCK本体・同梱の保証書・物理鍵', 'Wi-FiのSSIDとパスワード', 'スマホ（本体の設定に使用）']
     },
     3: {
@@ -1283,14 +1283,14 @@ const TASKS = [
     {
         id: 10, phase: 1,
         title: 'Wi-Fi工事日（開通日）の確認・入力',
-        desc: 'RemoteLOCKをインターネットにつなぐには、物件にWi-Fiが必要です。<strong>取り付け工事の当日にWi-Fiが使えないと、その場での初期設定が終わりません。</strong>そのため、RemoteLOCKの工事日は<strong>Wi-Fi開通日の翌日以降</strong>にしてください。下でWi-Fiの状況を選び、日付を入力してください。',
+        desc: '<strong>RemoteLOCKの使用には、インターネット接続が必要です。</strong>そのため物件にWi-Fiが要ります。取り付け工事の当日にWi-Fiが使えないと、その場での初期設定が終わりません。そのため、RemoteLOCKの工事日は<strong>Wi-Fi開通日の翌日以降</strong>にしてください。下でWi-Fiの状況を選び、日付を入力してください。',
         critical: true,
         wifi: true
     },
     {
         id: 2, phase: 1,
         title: '取り付け診断の申し込み',
-        desc: '公式フォームから、ドアの写真または図面を送って設置診断を受けます。下のボタンからフォームを開いてください。<br><br><strong>■ フォームで選ぶ内容</strong><br>・ 希望製品：<span style="color:#ea4d3c;font-weight:700">RemoteLOCK500i</span><br>・ 施工パートナーの手配：「手配をお願いしたい」または「自分で連絡する」<br>・ 取り付け希望日：上で入力したWi-Fi工事日の<strong>翌日以降</strong><br>・ Wi-Fiの準備状況：今のWi-Fiの状況を選択',
+        desc: '公式フォームから、ドアの写真または図面を送って設置診断を受けます。下のボタンからフォームを開いてください。<br><br><strong>■ フォームで選ぶ内容</strong><br>・ 希望製品：<span style="color:#ea4d3c;font-weight:700">RemoteLOCK500i</span><br>・ 施工パートナーの手配：「手配をお願いしたい」または「自分で連絡する」<br>・ 取り付け希望日：前のタスクで確認したWi-Fi開通日の<strong>翌日以降</strong><br>・ Wi-Fiの準備状況：今のWi-Fiの状況を選択',
         inquiry: [
             { label: '写真で診断を依頼する', url: 'https://app.jibun-apps.jp/form/db74c406-5cc5-4d03-ab68-89e0b54a4257/new?hsCtaAttrib=198854275741' },
             { label: '図面で診断を依頼する', url: 'https://app.jibun-apps.jp/form/3271354b-5cea-4f30-becc-a796a9a2cc8a/new?hsCtaAttrib=198814329651' }
@@ -1988,7 +1988,7 @@ function renderWizard() {
     if (currentTaskIndex > tasks.length) currentTaskIndex = tasks.length;
 
     let html = '<div class="wiz">';
-    html += `<button class="wiz-back-ov" onclick="closeWizard()">${SVG.arrowL} スケジュールに戻る</button>`;
+    html += `<button class="wiz-back-ov" onclick="closeWizard()">${SVG.arrowL} STEP一覧に戻る</button>`;
 
     if (currentTaskIndex >= tasks.length) {
         const phaseDone = tasks.every(t => completed[t.id]);
@@ -2048,12 +2048,12 @@ function renderWizard() {
     const taskDone = !!completed[task.id];
     const canNext = isAuto ? taskDone : true;
     const isLast = currentTaskIndex === tasks.length - 1;
-    const nextLabel = isLast ? 'STEPの完了へ' : '次のタスクへ';
+    const nextLabel = isLast ? 'STEPを完了して一覧へ' : '次のタスクへ';
     html += `
     <div class="wiz-nav">
         ${currentTaskIndex > 0
             ? `<button class="wiz-btn-prev" onclick="wizPrev()">${SVG.arrowL} もどる</button>`
-            : `<button class="wiz-btn-prev" onclick="closeWizard()">${SVG.arrowL} 一覧</button>`}
+            : `<button class="wiz-btn-prev" onclick="closeWizard()">${SVG.arrowL} STEP一覧</button>`}
         <button class="wiz-btn-next" onclick="wizNext()" ${canNext ? '' : 'disabled'}>${nextLabel} ${SVG.arrowR}</button>
     </div>
     ${!canNext ? `<div class="wiz-nav-hint">このタスクを完了すると次に進めます</div>` : ''}`;
@@ -2130,7 +2130,12 @@ function wizNext() {
         const isAuto = task.wifi || task.diagnosis;
         if (isAuto && !completed[task.id]) return;
     }
-    if (currentTaskIndex < tasks.length) currentTaskIndex++;
+    // 最後のタスクで「次へ」を押したら、完了画面をはさまずスケジュール俯瞰画面へ戻る
+    if (currentTaskIndex >= tasks.length - 1) {
+        closeWizard();
+        return;
+    }
+    currentTaskIndex++;
     saveState();
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
