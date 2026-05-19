@@ -195,6 +195,25 @@
         }
         .btn-host-input:hover { opacity: 0.9; }
 
+        /* ── 物件情報バー（確定後の最小表示） ── */
+        .host-bar {
+            display: flex; align-items: center; gap: 10px;
+            background: white; border: 1px solid #e2e8f0;
+            border-radius: 14px; padding: 12px 14px; margin-bottom: 16px;
+        }
+        .host-bar-icon { flex-shrink: 0; width: 18px; height: 18px; color: var(--brand); }
+        .host-bar-name {
+            flex: 1; min-width: 0;
+            font-size: 13px; font-weight: 900; color: #334155;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .host-bar-edit {
+            flex-shrink: 0; background: white; border: 1px solid #cbd5e1;
+            color: #64748b; border-radius: 9px; padding: 7px 14px;
+            font-size: 11px; font-weight: 900; cursor: pointer; font-family: inherit;
+        }
+        .host-bar-edit:active { background: #f1f5f9; }
+
         /* ── 物件情報カード：入力完了サマリー ── */
         .host-summary { padding: 20px 28px 24px; }
         .host-summary-grid {
@@ -237,15 +256,6 @@
         .lock-banner-text { font-size: 12px; font-weight: 700; color: #64748b; line-height: 1.6; }
         .step-section.locked { opacity: 0.5; pointer-events: none; filter: grayscale(0.4); }
 
-        /* ── Phase Note (STEP内の現地作業の注意) ── */
-        .phase-note {
-            display: flex; gap: 12px; align-items: flex-start;
-            background: var(--brand-base); border: 1px solid #bfdbfe;
-            border-radius: 18px; padding: 14px 18px; margin-bottom: 14px;
-        }
-        .phase-note svg { flex-shrink: 0; width: 18px; height: 18px; color: var(--brand); margin-top: 1px; }
-        .phase-note-text { font-size: 12px; font-weight: 700; color: var(--brand); line-height: 1.7; }
-
         /* ── Form ── */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-full { grid-column: 1 / -1; }
@@ -279,6 +289,47 @@
 
         /* ── Step ── */
         .step-section { margin-bottom: 32px; }
+
+        /* ── STEP冒頭の導入ガイド ── */
+        .step-intro {
+            background: var(--brand-base); border: 1px solid #bfdbfe;
+            border-radius: 18px; padding: 16px 18px; margin-bottom: 16px;
+        }
+        .step-intro-place {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 900; color: var(--brand);
+            background: white; border: 1px solid #bfdbfe;
+            border-radius: 99px; padding: 5px 12px; margin-bottom: 10px;
+        }
+        .step-intro-place svg { width: 14px; height: 14px; }
+        .step-intro-summary {
+            font-size: 13px; font-weight: 700; color: #1e3a5f; line-height: 1.75;
+        }
+        .step-intro-prep-label {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 11px; font-weight: 900; color: var(--brand);
+            margin-top: 12px; margin-bottom: 6px;
+        }
+        .step-intro-prep-label svg { width: 15px; height: 15px; }
+        .step-intro-prep { list-style: none; margin: 0; padding: 0; }
+        .step-intro-prep li {
+            position: relative; padding-left: 16px; margin-bottom: 4px;
+            font-size: 12px; font-weight: 600; color: #334155; line-height: 1.6;
+        }
+        .step-intro-prep li::before {
+            content: ''; position: absolute; left: 3px; top: 7px;
+            width: 5px; height: 5px; border-radius: 50%; background: var(--brand);
+        }
+        /* STEP02：現地作業は注意を引くオレンジ系で強調 */
+        .step-intro-onsite {
+            background: #fff7ed; border-color: #fed7aa;
+        }
+        .step-intro-onsite .step-intro-place {
+            color: #c2570c; border-color: #fed7aa; background: white;
+        }
+        .step-intro-onsite .step-intro-summary { color: #7c3a06; }
+        .step-intro-onsite .step-intro-prep-label { color: #c2570c; }
+        .step-intro-onsite .step-intro-prep li::before { background: #ea7317; }
         .step-header { display: flex; align-items: center; gap: 14px; padding: 0 4px; margin-bottom: 16px; }
         .step-badge {
             background: var(--brand-accent); color: var(--brand);
@@ -461,6 +512,332 @@
             transition: background 0.2s, color 0.2s;
         }
         .btn-diag-redo:hover { background: var(--danger); color: white; }
+
+        /* ── 取付診断：送信確認ボックス ── */
+        .diag-confirm-box {
+            background: #fffbeb; border: 1px solid #fde68a;
+            border-radius: 18px; padding: 20px; margin-top: 14px;
+        }
+        .diag-confirm-title {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 14px; font-weight: 900; color: #92660a; margin-bottom: 10px;
+        }
+        .diag-confirm-title svg { width: 17px; height: 17px; flex-shrink: 0; }
+        .diag-confirm-text {
+            font-size: 13px; font-weight: 500; color: #78540a;
+            line-height: 1.85; margin-bottom: 16px;
+        }
+        .diag-confirm-text strong { font-weight: 900; }
+        .btn-diag-sent {
+            width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 16px; border-radius: 14px; border: none;
+            background: #10b981; color: white;
+            font-size: 14px; font-weight: 900; cursor: pointer; font-family: inherit;
+            box-shadow: 0 6px 16px rgba(16,185,129,0.25);
+        }
+        .btn-diag-sent:active { opacity: 0.9; }
+        .btn-diag-sent svg { width: 16px; height: 16px; }
+        .btn-link-sub {
+            display: block; width: 100%; margin-top: 10px;
+            background: none; border: none; color: #94a3b8;
+            font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+            text-decoration: underline; text-underline-offset: 2px;
+        }
+
+        /* ── 取付診断：報告完了ボックス ── */
+        .diag-done-box {
+            background: #f0f9ff; border: 1px solid #bae6fd;
+            border-radius: 18px; padding: 20px; margin-top: 14px;
+        }
+        .diag-done-title {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 14px; font-weight: 900; color: #047857;
+        }
+        .diag-done-title svg { width: 17px; height: 17px; flex-shrink: 0; }
+        .diag-done-text {
+            font-size: 13px; font-weight: 500; color: #475569;
+            line-height: 1.85; margin-top: 10px;
+        }
+        .diag-done-text strong { font-weight: 900; color: #1e293b; }
+        .diag-done-box .btn-link-sub { margin-top: 14px; }
+
+        /* ── 折りたたみ手順ガイド ── */
+        .guide-box {
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 16px; overflow: hidden; margin-top: 4px;
+        }
+        .guide-toggle {
+            width: 100%; display: flex; align-items: center; justify-content: space-between;
+            gap: 10px; padding: 15px 18px; background: white; border: none;
+            cursor: pointer; font-family: inherit; text-align: left;
+        }
+        .guide-toggle-label {
+            display: flex; align-items: center; gap: 9px;
+            font-size: 13px; font-weight: 900; color: var(--brand);
+        }
+        .guide-toggle-label svg { width: 17px; height: 17px; flex-shrink: 0; }
+        .guide-toggle-chevron { display: flex; color: var(--brand); transition: transform 0.2s; }
+        .guide-toggle-chevron svg { width: 18px; height: 18px; }
+        .guide-items { padding: 6px 12px 12px; }
+        .guide-link {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 10px; padding: 14px 14px; margin-top: 8px;
+            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+            text-decoration: none; color: #334155;
+            font-size: 13px; font-weight: 700; line-height: 1.5;
+        }
+        .guide-link:active { background: var(--brand-base); }
+        .guide-link svg { width: 15px; height: 15px; color: var(--brand); flex-shrink: 0; }
+
+        /* ── 困ったときのサポート窓口カード（折りたたみ式・控えめに） ── */
+        .support-card {
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            border-radius: 16px; margin-top: 20px; overflow: hidden;
+        }
+        .support-toggle {
+            width: 100%; display: flex; align-items: center; justify-content: space-between;
+            background: none; border: none; cursor: pointer; font-family: inherit;
+            padding: 14px 16px;
+        }
+        .support-toggle-label {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; font-weight: 900; color: #64748b;
+        }
+        .support-toggle-label svg { width: 17px; height: 17px; }
+        .support-toggle-chevron {
+            color: #94a3b8; display: flex; transition: transform 0.2s ease;
+        }
+        .support-toggle-chevron svg { width: 18px; height: 18px; }
+        .support-toggle-chevron.open { transform: rotate(180deg); }
+        .support-body { padding: 0 16px 16px; }
+        .support-card-body {
+            font-size: 12px; font-weight: 500; color: #94a3b8;
+            line-height: 1.7; margin-bottom: 12px;
+        }
+        .support-card-rows { display: flex; flex-direction: column; gap: 10px; }
+        .support-row {
+            display: flex; flex-direction: column; gap: 10px;
+            background: white; border: 1px solid #e2e8f0;
+            border-radius: 14px; padding: 14px 16px;
+        }
+        .support-row-label { font-size: 12px; font-weight: 900; color: #475569; line-height: 1.6; }
+        .support-row-sub { font-size: 11px; font-weight: 600; color: #94a3b8; }
+        .support-row-action {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px; border-radius: 11px;
+            background: white; border: 1px solid #cbd5e1; color: #475569;
+            text-decoration: none; font-size: 13px; font-weight: 900;
+        }
+        .support-row-action:active { background: #f1f5f9; }
+        .support-row-action svg { width: 16px; height: 16px; color: #94a3b8; }
+
+        /* ── スケジュール俯瞰画面 ── */
+        .ov-head { margin-bottom: 16px; }
+        .ov-head-title { font-size: 19px; font-weight: 900; color: #1e293b; }
+        .ov-head-sub { font-size: 12px; font-weight: 600; color: #94a3b8; margin-top: 4px; line-height: 1.6; }
+
+        /* RemoteLOCK工事日の変更欄（STEP間に表示） */
+        .ov-workdate {
+            background: white; border: 1px dashed #cbd5e1; border-radius: 18px;
+            padding: 16px 18px; margin-bottom: 14px;
+        }
+        .ov-workdate-label {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 12px; font-weight: 900; color: var(--brand); margin-bottom: 8px;
+        }
+        .ov-workdate-label svg { width: 16px; height: 16px; }
+        .ov-date-input { padding: 12px 14px; font-size: 16px; max-width: 220px; }
+        .ov-date-hint { font-size: 11px; font-weight: 600; color: #94a3b8; line-height: 1.6; margin-top: 8px; }
+
+        /* STEPカード */
+        .ov-step {
+            background: white; border: 1px solid #e2e8f0; border-radius: 18px;
+            padding: 18px; margin-bottom: 14px; position: relative;
+        }
+        .ov-step-locked { background: #f8fafc; }
+        .ov-step-done { border-color: #bbf7d0; background: #f0fdf4; }
+        .ov-step-top {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .ov-step-no { font-size: 11px; font-weight: 900; color: #94a3b8; letter-spacing: 0.08em; }
+        .ov-step-status {
+            font-size: 10px; font-weight: 900; border-radius: 99px; padding: 4px 11px;
+        }
+        .ov-status-todo   { background: var(--brand-base); color: var(--brand); }
+        .ov-status-doing  { background: #fff7ed; color: #c2570c; }
+        .ov-status-done   { background: #dcfce7; color: #047857; }
+        .ov-status-locked { background: #e2e8f0; color: #94a3b8; }
+        .ov-step-name { font-size: 17px; font-weight: 900; color: #1e293b; }
+        .ov-step-locked .ov-step-name { color: #94a3b8; }
+        .ov-step-sub { font-size: 12px; font-weight: 600; color: #64748b; margin-top: 2px; }
+        .ov-step-when {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 700; color: #94a3b8; margin-top: 8px;
+        }
+        .ov-step-when svg { width: 13px; height: 13px; }
+        .ov-step-bar {
+            height: 6px; background: #e8eef4; border-radius: 99px;
+            overflow: hidden; margin-top: 12px;
+        }
+        .ov-step-bar-fill {
+            height: 100%; border-radius: 99px;
+            background: linear-gradient(90deg, var(--brand), var(--brand-light));
+            transition: width 0.4s ease;
+        }
+        .ov-step-done .ov-step-bar-fill { background: #10b981; }
+        .ov-step-count { font-size: 11px; font-weight: 800; color: #94a3b8; margin-top: 6px; }
+        .ov-step-locknote {
+            display: flex; align-items: flex-start; gap: 7px;
+            font-size: 11px; font-weight: 700; color: #94a3b8;
+            background: #f1f5f9; border-radius: 11px; padding: 10px 12px; margin-top: 12px;
+            line-height: 1.6;
+        }
+        .ov-step-locknote svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+        .ov-step-btn {
+            width: 100%; margin-top: 14px; padding: 14px; border-radius: 14px;
+            border: none; font-size: 14px; font-weight: 900;
+            cursor: pointer; font-family: inherit;
+            display: flex; align-items: center; justify-content: center; gap: 7px;
+            background: linear-gradient(90deg, var(--brand), var(--brand-light));
+            color: white; box-shadow: 0 6px 16px rgba(33,83,135,0.22);
+        }
+        .ov-step-btn svg { width: 16px; height: 16px; }
+        .ov-step-btn.ghost {
+            background: white; color: var(--brand);
+            border: 1px solid #bfdbfe; box-shadow: none;
+        }
+        .ov-step-btn.disabled {
+            background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none;
+        }
+        .ov-ng-note {
+            background: #fff5f5; border: 1px solid #fecaca;
+            border-radius: 18px; padding: 18px; margin-top: 4px;
+        }
+        .ov-ng-title {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 13px; font-weight: 900; color: var(--danger); margin-bottom: 8px;
+        }
+        .ov-ng-title svg { width: 16px; height: 16px; }
+        .ov-ng-text { font-size: 12px; font-weight: 500; color: #7f1d1d; line-height: 1.8; }
+
+        /* ウィザード：スケジュールに戻る */
+        .wiz-back-ov {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: white; border: 1px solid #e2e8f0; color: #475569;
+            border-radius: 12px; padding: 9px 16px; margin-bottom: 14px;
+            font-size: 12px; font-weight: 900; cursor: pointer; font-family: inherit;
+        }
+        .wiz-back-ov svg { width: 14px; height: 14px; }
+
+        /* ── ウィザード：進捗バー ── */
+        .wiz-progress { margin-bottom: 18px; }
+        .wiz-progress-info {
+            display: flex; justify-content: space-between; align-items: baseline;
+            margin-bottom: 8px;
+        }
+        .wiz-progress-step { font-size: 12px; font-weight: 900; color: var(--brand); }
+        .wiz-progress-count { font-size: 12px; font-weight: 900; color: #94a3b8; }
+        .wiz-progress-bar {
+            height: 8px; background: #e8eef4; border-radius: 99px; overflow: hidden;
+        }
+        .wiz-progress-fill {
+            height: 100%; border-radius: 99px;
+            background: linear-gradient(90deg, var(--brand), var(--brand-light));
+            transition: width 0.5s ease;
+        }
+
+        /* ── ウィザード：タスクカード ── */
+        .wiz-task {
+            background: white; border: 1px solid #e2e8f0; border-radius: 22px;
+            padding: 24px 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .wiz-task-title {
+            font-size: 19px; font-weight: 900; color: #1e293b;
+            line-height: 1.5; margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+        .wiz-task-desc {
+            font-size: 14px; font-weight: 500; color: #475569;
+            line-height: 1.85; margin-bottom: 16px;
+        }
+        .wiz-task-desc strong { color: #1e293b; font-weight: 900; }
+        .wiz-task > .btn-group,
+        .wiz-task > .guide-box,
+        .wiz-task > .wifi-box,
+        .wiz-task > .diagnosis-box,
+        .wiz-task > .ng-result-box,
+        .wiz-task > .billing-box,
+        .wiz-task > .invite-box { margin-top: 14px; }
+
+        /* ── ウィザード：完了チェック ── */
+        .wiz-check {
+            display: flex; align-items: center; gap: 12px;
+            margin-top: 18px; padding: 16px 18px;
+            background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px;
+            cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+        }
+        .wiz-check.checked { background: #f0f9ff; border-color: #10b981; }
+        .wiz-check-box {
+            flex-shrink: 0; width: 30px; height: 30px; border-radius: 9px;
+            border: 2px solid #cbd5e1; background: white;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .wiz-check.checked .wiz-check-box { background: #10b981; border-color: #10b981; }
+        .wiz-check-box svg { width: 17px; height: 17px; color: white; }
+        .wiz-check-label { font-size: 14px; font-weight: 900; color: #475569; }
+        .wiz-check.checked .wiz-check-label { color: #047857; }
+
+        /* ── ウィザード：ナビゲーション ── */
+        .wiz-nav {
+            display: flex; gap: 12px; align-items: stretch;
+            margin-top: 18px;
+        }
+        .wiz-btn-prev {
+            flex: 0 0 auto; display: flex; align-items: center; gap: 6px;
+            padding: 16px 20px; border-radius: 16px;
+            background: white; border: 1px solid #cbd5e1; color: #475569;
+            font-size: 14px; font-weight: 900; cursor: pointer; font-family: inherit;
+        }
+        .wiz-btn-prev svg { width: 16px; height: 16px; }
+        .wiz-btn-next {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 16px; border-radius: 16px; border: none;
+            background: linear-gradient(90deg, var(--brand), var(--brand-light));
+            color: white; font-size: 15px; font-weight: 900;
+            cursor: pointer; font-family: inherit;
+            box-shadow: 0 6px 18px rgba(33,83,135,0.25);
+        }
+        .wiz-btn-next svg { width: 17px; height: 17px; }
+        .wiz-btn-next:disabled {
+            background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none;
+        }
+        .wiz-nav-hint {
+            text-align: center; font-size: 12px; font-weight: 700;
+            color: #94a3b8; margin-top: 10px;
+        }
+
+        /* ── ウィザード：完了画面 ── */
+        .wiz-done {
+            background: white; border: 1px solid #bfdbfe; border-radius: 22px;
+            padding: 32px 24px; text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .wiz-done-icon {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: #10b981; margin: 0 auto 16px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .wiz-done-icon svg { width: 28px; height: 28px; color: white; }
+        .wiz-done-title { font-size: 18px; font-weight: 900; color: #1e293b; margin-bottom: 10px; }
+        .wiz-done-text { font-size: 13px; font-weight: 500; color: #64748b; line-height: 1.8; margin-bottom: 18px; }
+        .wiz-btn-back {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 13px 22px; border-radius: 14px;
+            background: white; border: 1px solid #cbd5e1; color: #475569;
+            font-size: 13px; font-weight: 900; cursor: pointer; font-family: inherit;
+        }
+        .wiz-btn-back svg { width: 15px; height: 15px; }
 
         /* ── Invite Guide ── */
         .invite-box {
@@ -684,17 +1061,16 @@
             <button class="btn-reset" onclick="resetProgress()">🗑️ すべてリセット</button>
         </div>
 
-        <!-- 物件情報カード -->
+        <!-- 物件情報カード（未入力時のアラート表示用） -->
         <div class="card" id="hostCard">
             <div class="card-header">
                 <div class="card-header-title">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     ホスト様情報
                 </div>
-                <button class="card-edit-btn" id="hostEditBtn" onclick="openInputScreen()" style="display:none">編集</button>
             </div>
 
-            <!-- 未入力アラート（入力完了で非表示） -->
+            <!-- 未入力アラート -->
             <div class="host-alert" id="hostAlert">
                 <div class="host-alert-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -705,9 +1081,13 @@
                 </div>
                 <button class="btn-host-input" onclick="openInputScreen()">入力する →</button>
             </div>
+        </div>
 
-            <!-- 入力完了サマリー（入力完了時のみ表示） -->
-            <div class="host-summary" id="hostSummary" style="display:none"></div>
+        <!-- 物件情報バー（確定後の最小表示。物件名＋編集） -->
+        <div class="host-bar" id="hostBar" style="display:none">
+            <svg class="host-bar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <div class="host-bar-name" id="hostBarName"></div>
+            <button class="host-bar-edit" onclick="openInputScreen()">編集</button>
         </div>
 
         <!-- 導入チェックリスト（ロック制御対象） -->
@@ -824,7 +1204,7 @@
 
 <script>
 // ===== CONSTANTS =====
-const STORAGE_KEY = 'remotelock_checklist_v7';
+const STORAGE_KEY = 'remotelock_checklist_v11';
 const CS_EMAIL = 'customer@bizpato.com';
 
 // 導入前の確認事項（各項目に個別チェックが必要）
@@ -853,6 +1233,11 @@ const CONFIRM_ITEMS = [
         id: 'billing',
         title: '本体代金・施工料金・クラウド月額料金はホスト様のご負担です',
         text: 'RemoteLOCKの本体代金、取り付けの施工料金、およびクラウドサービスの月額利用料は、いずれもホスト様のご負担となります。本体代金はRemoteLOCK500iの製品ページ、施工料金は施工会社へ、それぞれご確認ください。クラウド月額利用料は、アカウント作成時にクレジットカード情報の登録が必要で（登録のみでは課金されません）、デバイス登録の時点から引き落としが開始されます。民泊運営の開始前であっても、準備段階で必要となる費用です。'
+    },
+    {
+        id: 'deadline',
+        title: '導入完了の目安は、契約締結後14営業日以内です',
+        text: '物件の公開予定日に間に合わせるためには、契約締結日から14営業日以内（土日を除く）に、このチェックリストのすべての作業を完了させる必要があります。スケジュールにご留意のうえ、お進めください。'
     }
 ];
 
@@ -866,6 +1251,25 @@ const PHASE_SUBTITLES = {
     3: 'デバイス初期設定の完了後'
 };
 
+// 各STEPの冒頭に表示する導入ガイド（このSTEPですること・用意するもの）
+const PHASE_GUIDE = {
+    1: {
+        place: 'オンラインでの手続き',
+        summary: 'RemoteLOCKが取り付けられるドアかを確認し、取り付け工事を申し込むステップです。',
+        prepare: ['ドア・玄関まわりの写真（または図面）', '物件のWi-Fiの開通予定日（未開通の場合）']
+    },
+    2: {
+        place: '物件での作業（取り付け工事当日）',
+        summary: 'ここから先は、取り付け工事の当日に物件で行う作業です。工事に立ち会い、RemoteLOCK本体の初期設定とWi-Fi接続をホスト様ご自身で行います。施工会社が行うのは本体の取り付けのみで、初期設定はホスト様ご自身での対応となります。',
+        prepare: ['物件への訪問予定（工事の立ち会い）', 'RemoteLOCK本体・同梱の保証書・物理鍵', 'Wi-FiのSSIDとパスワード', 'スマホ（本体の設定に使用）']
+    },
+    3: {
+        place: 'オンラインでの手続き',
+        summary: 'RemoteLOCKのクラウド管理システム「Connect」で、アカウント作成・プラン選択・デバイス登録を行うステップです。',
+        prepare: ['クレジットカード', 'RemoteLOCK本体のシリアル番号（STEP02で控えたもの）']
+    }
+};
+
 // 公式「カンタン！はじめの5ステップ」に沿った順序：
 // 現地設定（デバイス初期設定・Wi-Fi設定）→ アカウント発行 → デバイス追加 の順
 const TASKS = [
@@ -873,30 +1277,30 @@ const TASKS = [
     {
         id: 1, phase: 1,
         title: '事前確認チェックリスト(PDF)の確認',
-        desc: '設置環境のセルフチェックシートです。穴あけ加工の可否を含め、公式PDFでご確認ください。',
-        links: [{ label: '公式チェックリストを確認', url: 'https://remotelock.kke.co.jp/hubfs/manuals/Checklist_RemoteLOCK500i.pdf' }]
+        desc: 'RemoteLOCKが設置できるドアか、事前にセルフチェックするためのシートです。下のボタンから公式PDFを開いてご確認ください。',
+        links: [{ label: '公式チェックリスト(PDF)を開く', url: 'https://remotelock.kke.co.jp/hubfs/manuals/Checklist_RemoteLOCK500i.pdf' }]
     },
     {
         id: 10, phase: 1,
         title: 'Wi-Fi工事日（開通日）の確認・入力',
-        desc: 'RemoteLOCKのクラウド連携には2.4GHz帯のWi-Fiが必須です。<strong>取り付け工事当日にWi-Fiが使えないと、現地でのデバイス初期設定が完了できません。</strong>RemoteLOCK工事日は<strong>Wi-Fi開通日の翌日以降</strong>に設定する必要があります。次の「取り付け診断の申し込み」で取り付け希望スケジュールを入力する前に、必ずWi-Fi工事日を確定・入力してください。',
+        desc: 'RemoteLOCKをインターネットにつなぐには、物件にWi-Fiが必要です。<strong>取り付け工事の当日にWi-Fiが使えないと、その場での初期設定が終わりません。</strong>そのため、RemoteLOCKの工事日は<strong>Wi-Fi開通日の翌日以降</strong>にしてください。下でWi-Fiの状況を選び、日付を入力してください。',
         critical: true,
         wifi: true
     },
     {
         id: 2, phase: 1,
         title: '取り付け診断の申し込み',
-        desc: '公式フォームより写真または図面を送付し、設置診断を受けてください。<br><br>■フォーム入力のポイント<br>・ <strong>希望製品</strong>：<span style="color:#ea4d3c;font-weight:700">RemoteLOCK500i</span> を選択してください<br>・ <strong>施工パートナーの手配</strong>：「施工パートナーの手配をお願いしたい」または「自分で施工パートナーに連絡する」を選択<br>・ <strong>取り付け希望スケジュール</strong>：上で入力したWi-Fi工事日の<strong>翌日以降</strong>の日付を指定してください<br>・ <strong>Wi-Fiの準備状況</strong>：現在のWi-Fi状況を選択',
+        desc: '公式フォームから、ドアの写真または図面を送って設置診断を受けます。下のボタンからフォームを開いてください。<br><br><strong>■ フォームで選ぶ内容</strong><br>・ 希望製品：<span style="color:#ea4d3c;font-weight:700">RemoteLOCK500i</span><br>・ 施工パートナーの手配：「手配をお願いしたい」または「自分で連絡する」<br>・ 取り付け希望日：上で入力したWi-Fi工事日の<strong>翌日以降</strong><br>・ Wi-Fiの準備状況：今のWi-Fiの状況を選択',
         inquiry: [
-            { label: '写真で診断を依頼', url: 'https://app.jibun-apps.jp/form/db74c406-5cc5-4d03-ab68-89e0b54a4257/new?hsCtaAttrib=198854275741' },
-            { label: '図面で診断を依頼', url: 'https://app.jibun-apps.jp/form/3271354b-5cea-4f30-becc-a796a9a2cc8a/new?hsCtaAttrib=198814329651' }
+            { label: '写真で診断を依頼する', url: 'https://app.jibun-apps.jp/form/db74c406-5cc5-4d03-ab68-89e0b54a4257/new?hsCtaAttrib=198854275741' },
+            { label: '図面で診断を依頼する', url: 'https://app.jibun-apps.jp/form/3271354b-5cea-4f30-becc-a796a9a2cc8a/new?hsCtaAttrib=198814329651' }
         ],
         links: [{ label: 'RemoteLOCK500i 製品ページ', url: 'https://remotelock.kke.co.jp/products/remotelock-500i/' }]
     },
     {
         id: 3, phase: 1,
         title: '取付診断結果の報告',
-        desc: '公式診断の結果（設置可能・設置不可）を民泊管理バンクへ報告してください。報告後にタスク完了となります。',
+        desc: '公式診断の結果（設置可能・設置不可）を民泊管理バンクへ報告します。下のボタンで結果を選ぶと、報告メールが自動で作成されます。報告するとこのタスクは完了です。',
         critical: true,
         diagnosis: true
     },
@@ -904,40 +1308,72 @@ const TASKS = [
     {
         id: 4, phase: 2,
         title: 'シリアルNo.と物理鍵の保管',
-        desc: 'RemoteLOCK本体のシリアル番号・MacIDを控え、同梱の物理鍵を紛失しないよう保管してください。クラウド登録時に必要です。<strong>同梱物の確認は物件での作業となるため、本体到着後、物件にて行ってください。</strong>',
-        critical: true
+        desc: 'RemoteLOCK本体のシリアル番号とMacID（本体や保証書に記載の英数字）を控え、同梱の物理鍵をなくさないよう保管してください。あとでクラウドに登録するときに必要です。<strong>本体が届いたら、物件で同梱物を確認してください。</strong>',
+        critical: true,
+        guide: {
+            label: 'シリアルNo.と物理鍵の保管 手順',
+            items: [
+                { label: '同梱物の確認（公式手順）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360034691052' },
+                { label: 'シリアルNo.と物理鍵の保管（公式手順）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360035068551' }
+            ]
+        }
     },
     {
         id: 5, phase: 2,
         title: '取り付け工事の立ち会い・現地でのデバイス初期設定',
-        desc: '取り付け工事当日は、物件にてホスト様（またはご担当者様）の立ち会いが必要です。<strong>施工会社が行うのは本体の取り付けのみ</strong>です。取り付け後のデバイス初期設定は、本体同梱の「導入ガイド」に沿って<strong>ホスト様ご自身が物件で実施</strong>してください。<br><br>■防犯上、必ず実施してください<br>・ <strong>初期ローカルPIN（初期値4321）を削除</strong>し、新しいPINを作成<br>・ <strong>プログラミングコード（初期値123456）を変更</strong>（未変更の場合、一定期間後にランダムな値へ自動変更されます）',
-        links: [{ label: '導入ガイド（公式）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/36058695529753' }]
+        desc: '取り付け工事の当日は、物件でホスト様（またはご担当者様）の立ち会いが必要です。<strong>施工会社が行うのは本体の取り付けのみ</strong>です。取り付け後のデバイス初期設定は、下の公式手順に沿って<strong>ホスト様ご自身が物件で行ってください。</strong><br><br><strong>■ 防犯のため、必ず行ってください</strong><br>・ 初期ローカルPIN（初期値4321）を削除し、新しいPINを作成<br>・ プログラミングコード（初期値123456）を変更<br><span style="color:#64748b">※プログラミングコードとは、本体の設定を変更するための管理用の番号です。変更しないと、一定期間後に自動でランダムな番号に変わります。</span>',
+        guide: {
+            label: 'デバイス初期設定の手順を見る',
+            items: [
+                { label: '現地での設定（公式手順）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360034691332' },
+                { label: 'RemoteLOCK 5i 導入ガイド(PDF)', url: 'https://remotelock.kke.co.jp/hubfs/manuals/RemoteLOCK%205i_%E5%B0%8E%E5%85%A5%E3%82%AC%E3%82%A4%E3%83%89%20.pdf' }
+            ]
+        }
     },
     {
         id: 6, phase: 2,
         title: 'Wi-Fi接続設定',
-        desc: 'クラウド連携には2.4GHz帯のWi-Fi接続が必須です。導入ガイドに沿って本体のWi-Fi設定を完了してください。この設定も物件での作業となり、ホスト様ご自身で実施していただく必要があります。<strong>RemoteLOCKはWi-Fi未接続のままだと電池を著しく消耗します。</strong>取り付け後はできるだけ早くWi-Fi接続を完了してください。',
-        critical: true
+        desc: 'RemoteLOCK本体をWi-Fiにつなぐ設定です。物件での作業で、ホスト様ご自身に行っていただきます。<strong>下の動画マニュアルを見ながら進めるのがおすすめです。</strong><br><br><strong>RemoteLOCKはWi-Fiにつながっていないと電池の減りが非常に早くなります。</strong>取り付け後は、できるだけ早くWi-Fi接続を済ませてください。',
+        critical: true,
+        guide: {
+            label: 'Wi-Fi設定の手順・動画を見る',
+            items: [
+                { label: '【動画】RemoteLOCK 5i Wi-Fi設定の流れ', url: 'https://youtu.be/DvAmNeOAZ10' },
+                { label: 'Wi-Fi・ネットワークの要件（公式）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360023901112' }
+            ]
+        }
     },
     // ── STEP03 クラウド設定・権限共有（デバイス初期設定の完了後） ──
     {
         id: 7, phase: 3,
         title: 'RemoteLOCKアカウントの作成',
-        desc: 'クラウド管理システム「Connect」へアクセスし、ホスト様ご自身でアカウントを作成します。デバイス初期設定・Wi-Fi設定の完了後に行ってください。<strong>アカウント作成時にクレジットカード情報の登録が必要です</strong>が、この時点ではまだ課金されません（後続のデバイス登録時から引き落としが開始されます）。',
-        links: [{ label: 'Connectログイン', url: 'https://connect.remotelock.jp/sign-in' }]
+        desc: 'RemoteLOCKのクラウド管理システム「Connect」のアカウントを、ホスト様ご自身で作成します。デバイス初期設定・Wi-Fi設定が終わってから行ってください。<strong>アカウント作成時にクレジットカード情報の登録が必要です</strong>が、この時点ではまだ料金はかかりません（あとのデバイス登録時から引き落としが始まります）。',
+        links: [{ label: 'Connect ログイン画面を開く', url: 'https://connect.remotelock.jp/sign-in' }],
+        guide: {
+            label: 'アカウント作成の手順を見る',
+            items: [
+                { label: 'アカウントの発行（公式手順）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360034691612' }
+            ]
+        }
     },
     {
         id: 8, phase: 3,
         title: 'ビジネススタンダードプランの選択',
-        desc: '外部システム連携にはビジネススタンダードプランが必須となります。アカウント作成時の料金プラン選択で「ビジネススタンダード」を選んでください。',
+        desc: '予約サイトなどの外部システムと連携するには「ビジネススタンダード」プランが必須です。アカウント作成のプラン選択画面で、必ず「ビジネススタンダード」を選んでください。',
         critical: true
     },
     {
         id: 9, phase: 3,
         title: 'デバイスの追加・弊社アカウントの管理者招待',
-        desc: 'Connectで設置場所を登録（タイムゾーンは「Japan」または「Asia/Tokyo」）し、デバイスを追加します。その後、民泊管理バンクによる設定代行・サポートのため、弊社アカウントを管理者として招待してください。<br><br><strong>※ デバイスを登録した時点から、RemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担となります。',
+        desc: 'Connectに設置場所を登録し（タイムゾーンは「Japan」または「Asia/Tokyo」）、デバイスを追加します。そのあと、民泊管理バンクが設定代行・サポートを行うため、弊社アカウントを管理者として招待してください。<br><br><strong>※ デバイスを登録した時点から、RemoteLOCKの月額利用料の引き落としが始まります。</strong>この費用はホスト様のご負担です。',
         invite: true,
-        billing: true
+        billing: true,
+        guide: {
+            label: 'デバイス追加の手順を見る',
+            items: [
+                { label: 'デバイスの追加・設定（公式手順）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360034692592' }
+            ]
+        }
     }
 ];
 
@@ -954,17 +1390,27 @@ let formData = {
 };
 // 取付診断の結果： null=未報告 / 'ok'=設置可能 / 'ng'=設置不可
 let diagnosisResult = null;
+// 取付診断の報告メール作成画面を起動したか（送信確認ボタン表示のトリガー）
+let diagnosisReported = false;
 // 導入前の確認事項のチェック状態（id → true/false）
 let confirmChecks = {};
 // ホスト様情報を確定済みか（入力ページで「確定して進む」を押した）
 let hostConfirmed = false;
 // 現在の画面： 'dash'=ダッシュボード / 'input'=入力ページ
 let currentScreen = 'dash';
+// メイン表示モード： 'overview'=スケジュール俯瞰 / 'wizard'=ウィザード
+let viewMode = 'overview';
+// 「困ったときは」を開いているか（既定は閉じる。保存しない）
+let supportOpen = false;
+// ウィザードで進行中のSTEP（phase: 1/2/3）
+let wizardPhase = 1;
+// ウィザードで現在表示中の、STEP内タスクのインデックス（0始まり）
+let currentTaskIndex = 0;
 
 // ===== STORAGE =====
 function saveState() {
     try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ completed, formData, diagnosisResult, confirmChecks, hostConfirmed }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ completed, formData, diagnosisResult, diagnosisReported, confirmChecks, hostConfirmed, viewMode, wizardPhase, currentTaskIndex }));
     } catch(e) {}
 }
 
@@ -976,8 +1422,12 @@ function loadState() {
             if (parsed.completed) completed = parsed.completed;
             if (parsed.formData)  formData  = { ...formData, ...parsed.formData, showDateInput: false };
             if (parsed.diagnosisResult) diagnosisResult = parsed.diagnosisResult;
+            if (parsed.diagnosisReported) diagnosisReported = parsed.diagnosisReported;
             if (parsed.confirmChecks) confirmChecks = parsed.confirmChecks;
             if (parsed.hostConfirmed) hostConfirmed = parsed.hostConfirmed;
+            if (parsed.viewMode) viewMode = parsed.viewMode;
+            if (typeof parsed.wizardPhase === 'number') wizardPhase = parsed.wizardPhase;
+            if (typeof parsed.currentTaskIndex === 'number') currentTaskIndex = parsed.currentTaskIndex;
         }
     } catch(e) {}
 }
@@ -987,7 +1437,18 @@ const SVG = {
     check: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
     extLink: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
     info: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
-    checkSm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+    checkSm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    book: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+    chevron: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
+    help: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    mail: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>`,
+    phone: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+    arrowL: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`,
+    arrowR: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+    pin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+    monitor: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+    calendar: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+    lock: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`
 };
 
 // ===== 設置不可時はSTEP02/03を除外したタスク一覧を返す =====
@@ -996,6 +1457,72 @@ function getActiveTasks() {
         return TASKS.filter(t => t.phase === 1);
     }
     return TASKS;
+}
+
+// 指定フェーズ（STEP）のタスク一覧
+function getPhaseTasks(phase) {
+    return getActiveTasks().filter(t => t.phase === phase);
+}
+
+// 表示対象のフェーズ番号一覧（設置不可ならSTEP01のみ）
+function getActivePhases() {
+    return diagnosisResult === 'ng' ? [1] : [1, 2, 3];
+}
+
+// 指定フェーズが完了しているか（そのSTEPの全タスクが完了）
+function isPhaseComplete(phase) {
+    const ts = getPhaseTasks(phase);
+    return ts.length > 0 && ts.every(t => completed[t.id]);
+}
+
+// 指定フェーズが着手済みか（1つ以上完了）
+function isPhaseStarted(phase) {
+    return getPhaseTasks(phase).some(t => completed[t.id]);
+}
+
+// 今日の日付（時刻を0にしたDate）
+function today0() {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
+// 'YYYY-MM-DD' を時刻0のDateに（不正なら null）
+function parseDate0(s) {
+    if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+    const d = new Date(s + 'T00:00:00');
+    return isNaN(d) ? null : d;
+}
+
+// STEP02を解錠してよいか。RemoteLOCK工事日が未定なら待機、当日以降なら解錠。
+function isOnsiteUnlocked() {
+    const d = parseDate0(formData.constructionDate);
+    if (!d) return false;          // 工事日未定 → まだ待機
+    return today0() >= d;          // 工事日当日以降 → 解錠
+}
+
+// STEPの状態を返す： 'locked'（施錠中）/ 'todo'（未着手・着手可）/ 'doing'（進行中）/ 'done'（完了）
+function getPhaseStatus(phase) {
+    if (isPhaseComplete(phase)) return 'done';
+    if (phase === 1) {
+        return isPhaseStarted(1) ? 'doing' : 'todo';
+    }
+    if (phase === 2) {
+        // STEP01完了かつ工事日到来で解錠
+        if (!isPhaseComplete(1)) return 'locked';
+        if (!isOnsiteUnlocked()) return 'locked';
+        return isPhaseStarted(2) ? 'doing' : 'todo';
+    }
+    if (phase === 3) {
+        if (!isPhaseComplete(2)) return 'locked';
+        return isPhaseStarted(3) ? 'doing' : 'todo';
+    }
+    return 'locked';
+}
+
+// 日付を「M月D日」表記に
+function formatJpDate(d) {
+    return `${d.getMonth() + 1}月${d.getDate()}日`;
 }
 
 // ===== EMAIL VALIDATION =====
@@ -1049,42 +1576,23 @@ function renderConfirmList() {
     }
 }
 
-// 物件情報カード（ダッシュボード側）の表示状態を更新
+// 物件情報の表示状態を更新。
+// 未入力時：カード（アラート）を表示。確定後：細い1行バーに切り替え。
 function renderHostCard() {
-    const alertEl   = document.getElementById('hostAlert');
-    const summaryEl = document.getElementById('hostSummary');
-    const editBtn   = document.getElementById('hostEditBtn');
-    if (!alertEl || !summaryEl || !editBtn) return;
+    const cardEl = document.getElementById('hostCard');
+    const barEl  = document.getElementById('hostBar');
+    const barName = document.getElementById('hostBarName');
+    if (!cardEl || !barEl) return;
 
     if (hostConfirmed) {
-        // 確定済みサマリーを表示
-        alertEl.style.display = 'none';
-        summaryEl.style.display = 'block';
-        editBtn.style.display = 'inline-block';
-        summaryEl.innerHTML = `
-        <div class="host-summary-grid">
-            <div class="host-summary-item" style="grid-column:1/-1">
-                <div class="host-summary-label">物件名</div>
-                <div class="host-summary-value">${escapeHtml(formData.property)}</div>
-            </div>
-            <div class="host-summary-item">
-                <div class="host-summary-label">ご契約者様名</div>
-                <div class="host-summary-value">${escapeHtml(formData.subscriber)}</div>
-            </div>
-            <div class="host-summary-item">
-                <div class="host-summary-label">担当者名</div>
-                <div class="host-summary-value">${escapeHtml(formData.staff)}</div>
-            </div>
-            <div class="host-summary-item" style="grid-column:1/-1">
-                <div class="host-summary-label">連絡先メールアドレス</div>
-                <div class="host-summary-value">${escapeHtml(formData.email)}</div>
-            </div>
-        </div>`;
+        // 確定後：カードを隠し、物件名だけの細いバーを表示
+        cardEl.style.display = 'none';
+        barEl.style.display = 'flex';
+        if (barName) barName.textContent = formData.property || '（物件名未設定）';
     } else {
-        // 未入力アラートを表示
-        alertEl.style.display = 'flex';
-        summaryEl.style.display = 'none';
-        editBtn.style.display = 'none';
+        // 未入力：アラートカードを表示、バーは隠す
+        cardEl.style.display = 'block';
+        barEl.style.display = 'none';
     }
 }
 
@@ -1124,6 +1632,7 @@ function saveInputScreen() {
         return;
     }
     hostConfirmed = true;
+    viewMode = 'overview';
     saveState();
     renderHostCard();
     render();
@@ -1157,225 +1666,492 @@ function updateInputNav() {
 }
 
 // ===== RENDER =====
+// 1タスク分のカードHTMLを生成（ウィザードで1件ずつ表示）
+function renderTaskCard(task) {
+    const done = !!completed[task.id];
+    let actionHtml = '';
+
+    if (task.inquiry) {
+        let btns = task.inquiry.map(l =>
+            `<a href="${l.url}" target="_blank" class="btn-outline" onclick="event.stopPropagation()">${l.label} ${SVG.extLink}</a>`
+        ).join('');
+        actionHtml += `<div class="btn-group">${btns}</div>`;
+    }
+
+    if (task.links) {
+        let btns = task.links.map(l =>
+            `<a href="${l.url}" target="_blank" class="btn-primary" onclick="event.stopPropagation()">${l.label} ${SVG.extLink}</a>`
+        ).join('');
+        actionHtml += `<div class="btn-group">${btns}</div>`;
+    }
+
+    if (task.guide) {
+        const gItems = task.guide.items.map(l =>
+            `<a href="${l.url}" target="_blank" class="guide-link" onclick="event.stopPropagation()">
+                <span>${l.label}</span>${SVG.extLink}
+            </a>`
+        ).join('');
+        actionHtml += `
+        <div class="guide-box" onclick="event.stopPropagation()">
+            <button class="guide-toggle" onclick="event.stopPropagation(); toggleGuide(${task.id})">
+                <span class="guide-toggle-label">${SVG.book} ${task.guide.label}</span>
+                <span class="guide-toggle-chevron" id="guideChevron${task.id}">${SVG.chevron}</span>
+            </button>
+            <div class="guide-items" id="guideItems${task.id}" style="display:none">${gItems}</div>
+        </div>`;
+    }
+
+    if (task.wifi) {
+        const doneAlready = formData.wifiAlreadyDone;
+        let savedHtml = '';
+        if (doneAlready) {
+            savedHtml = `<div class="wifi-saved">${SVG.checkSm} Wi-Fiは開通済みとして登録しました${formData.wifiDate ? `（開通日：${formData.wifiDate}）` : ''}</div>`;
+        } else if (formData.wifiDate) {
+            savedHtml = `<div class="wifi-saved">${SVG.checkSm} Wi-Fi工事日として ${formData.wifiDate} を登録しました</div>`;
+        }
+        actionHtml += `
+        <div class="wifi-box" onclick="event.stopPropagation()">
+            <div class="wifi-label">Wi-Fiの状況を選択してください</div>
+            <div class="wifi-toggle">
+                <button class="wifi-toggle-btn ${!doneAlready ? 'active' : ''}" onclick="event.stopPropagation(); setWifiMode(false)">これから工事する</button>
+                <button class="wifi-toggle-btn ${doneAlready ? 'active' : ''}" onclick="event.stopPropagation(); setWifiMode(true)">すでに開通済み</button>
+            </div>
+            <div class="wifi-date-row">
+                <input type="date" class="form-input" id="f_wifiDate" value="${formData.wifiDate || ''}"
+                    onclick="event.stopPropagation(); openDatePicker(this)"
+                    onchange="event.stopPropagation(); onWifiDateInput(this.value)"
+                    style="max-width:220px">
+                <span style="font-size:12px;font-weight:700;color:#64748b">
+                    ${doneAlready ? '※ Wi-Fi開通日（任意）' : '※ ネット工事の予定日'}
+                </span>
+            </div>
+            ${savedHtml}
+        </div>`;
+    }
+
+    if (task.diagnosis) {
+        if (!diagnosisReported) {
+            // ── 未報告：結果を選んでメール作成 ──
+            const dateProblem = checkConstructionDate();
+            const alertHtml = (formData.showDateInput && dateProblem) ? `
+            <div class="date-alert">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <div class="date-alert-text">${dateProblem}</div>
+            </div>` : '';
+            const canSend = formData.showDateInput && formData.constructionDate && !dateProblem;
+            const dateInputHtml = formData.showDateInput ? `
+            <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
+                <label class="form-label" style="margin-bottom:6px">RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                    <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation(); openDatePicker(this)" onchange="event.stopPropagation(); onConstructionDateInput(this.value)" style="max-width:220px">
+                    <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>報告メールを作成する →</button>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
+                    ${formData.wifiAlreadyDone
+                        ? 'Wi-Fiは開通済みのため、工事予定日に制約はありません'
+                        : formData.wifiDate
+                            ? `Wi-Fi工事日（${formData.wifiDate}）の翌日以降の日付を指定してください`
+                            : 'まず「Wi-Fi工事日（開通日）の確認・入力」を完了してください'}
+                </div>
+                ${alertHtml}
+            </div>` : '';
+            actionHtml += `
+            <div class="diagnosis-box">
+                <div class="diagnosis-label">公式診断の結果を選んでください</div>
+                <div class="diagnosis-btns">
+                    <button class="btn-diag-ok" onclick="event.stopPropagation(); showDateInput()">設置可能</button>
+                    <button class="btn-diag-ng" onclick="event.stopPropagation(); sendDiagnosis(false)">設置不可</button>
+                </div>
+                ${dateInputHtml}
+            </div>`;
+        } else if (!completed[task.id]) {
+            // ── 報告メール作成済み・送信確認待ち ──
+            const resultLabel = diagnosisResult === 'ng' ? '設置不可' : '設置可能';
+            actionHtml += `
+            <div class="diag-confirm-box">
+                <div class="diag-confirm-title">${SVG.mail} 報告メールを作成しました（結果：${resultLabel}）</div>
+                <div class="diag-confirm-text">
+                    メールアプリで作成された<strong>報告メールを、内容を変更せずそのまま送信してください。</strong><br>
+                    送信が終わったら、下のボタンを押してこのタスクを完了にしてください。
+                </div>
+                <button class="btn-diag-sent" onclick="event.stopPropagation(); confirmDiagnosisSent()">${SVG.checkSm} 報告メールを送信しました（タスク完了）</button>
+                <button class="btn-link-sub" onclick="event.stopPropagation(); reopenDiagnosisMail()">メールアプリが開かなかった場合はこちら</button>
+                <button class="btn-link-sub" onclick="event.stopPropagation(); clearDiagnosis()">取付診断の結果を選び直す</button>
+            </div>`;
+        } else {
+            // ── 報告完了 ──
+            const resultLabel = diagnosisResult === 'ng' ? '設置不可' : '設置可能';
+            actionHtml += `
+            <div class="diag-done-box">
+                <div class="diag-done-title">${SVG.checkSm} 取付診断の結果（${resultLabel}）を報告しました</div>
+                ${diagnosisResult === 'ng' ? `
+                <div class="diag-done-text">
+                    この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。設置・初期設定まで弊社現地スタッフが対応しますので、ホスト様による追加作業は不要です。
+                </div>` : ''}
+                <button class="btn-link-sub" onclick="event.stopPropagation(); clearDiagnosis()">取付診断の結果を選び直す</button>
+            </div>`;
+        }
+    }
+
+    if (task.billing) {
+        actionHtml += `
+        <div class="billing-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <div>
+                <div class="billing-box-title">月額利用料の課金開始タイミング</div>
+                <div class="billing-box-text">下記の手順でデバイスを登録すると、<strong>その時点からRemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担です。登録のタイミングにご留意ください。</div>
+            </div>
+        </div>`;
+    }
+
+    if (task.invite) {
+        actionHtml += `
+        <div class="invite-box">
+            <div>
+                <div class="invite-section-label">招待用メールアドレス</div>
+                <div class="invite-email-row">
+                    <code class="invite-email-code">${CS_EMAIL}</code>
+                    <button class="btn-copy" onclick="event.stopPropagation(); copyText('${CS_EMAIL}')">COPY ADDRESS</button>
+                </div>
+            </div>
+            <div style="margin-top:16px">
+                <div class="invite-section-label">招待手順</div>
+                <ul class="invite-steps">
+                    <li><span class="step-num">1</span>RemoteLOCK Connect 画面右上のアイコンをクリック</li>
+                    <li><span class="step-num">2</span>「管理者と権限タイプ」を選択</li>
+                    <li><span class="step-num">3</span>画面右側の「管理者の招待」をクリック</li>
+                    <li><span class="step-num">4</span>「アカウント共有」ボタンを押す</li>
+                    <li><span class="step-num">5</span>上記メールアドレスを入力し、権限タイプで「Owner」を選択</li>
+                    <li><span class="step-num">6</span>「全てのデバイス」にチェックを入れる</li>
+                    <li><span class="step-num">7</span>「管理者の招待」をクリックして送信完了です</li>
+                </ul>
+            </div>
+        </div>`;
+    }
+
+    // 入力UIタスク（Wi-Fi工事日・取付診断）以外は、完了チェックを手動で操作できる
+    const autoTask = task.wifi || task.diagnosis;
+    let checkRow = '';
+    if (!autoTask) {
+        checkRow = `
+        <div class="wiz-check ${done ? 'checked' : ''}" onclick="toggleTask(${task.id})">
+            <div class="wiz-check-box">${done ? SVG.check : ''}</div>
+            <div class="wiz-check-label">${done ? 'このタスクは完了しました' : 'できたらタップして完了にする'}</div>
+        </div>`;
+    }
+
+    return `
+    <div class="wiz-task">
+        <div class="wiz-task-title">${task.title}${task.critical ? '<span class="badge badge-critical">重要</span>' : ''}</div>
+        <div class="wiz-task-desc">${task.desc}</div>
+        ${actionHtml}
+        ${checkRow}
+    </div>`;
+}
+
+// ===== RENDER（viewModeで俯瞰画面／ウィザードを切り替え） =====
 function render() {
     const container = document.getElementById('tasksContainer');
-    let html = '';
 
-    // 物件情報の確定＋確認事項の全チェックが済むまでSTEPをロック
-    const unlocked = isUnlocked();
-    if (!unlocked) {
+    // ロック中（物件情報・確認事項が未完了）は何も進められない
+    if (!isUnlocked()) {
         let reason;
         if (!hostConfirmed && !allConfirmChecked()) {
-            reason = 'ホスト様情報のご入力と、導入前の確認事項すべてのチェックが必要です。';
+            reason = 'ホスト様情報のご入力と、導入前の確認事項すべてのチェックをお願いします。';
         } else if (!hostConfirmed) {
             reason = 'ホスト様情報をご入力ください。';
         } else {
             const remain = CONFIRM_ITEMS.filter(i => !confirmChecks[i.id]).length;
             reason = `導入前の確認事項にチェックを入れてください（残り${remain}項目）。`;
         }
-        html += `<div class="lock-banner">
+        container.innerHTML = `
+        <div class="lock-banner">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <div class="lock-banner-text">下記のチェックリストはまだご利用いただけません。${reason}</div>
-        </div>`;
+            <div class="lock-banner-text">導入チェックリストはまだ始められません。${reason}</div>
+        </div>` + supportCardHtml();
+        updateProgress();
+        updateStickyBar();
+        return;
     }
 
-    // 設置不可の場合は STEP01 のみ、それ以外は全フェーズ
-    const phases = diagnosisResult === 'ng' ? [1] : [1, 2, 3];
-
-    phases.forEach(phase => {
-        const sub = PHASE_SUBTITLES[phase] ? `<span class="step-subtitle">${PHASE_SUBTITLES[phase]}</span>` : '';
-        const stepNo = String(phase).padStart(2, '0');
-        html += `<div class="step-section${unlocked ? '' : ' locked'}">
-            <div class="step-header">
-                <span class="step-badge">STEP ${stepNo}</span>
-                <span class="step-title">${PHASE_NAMES[phase]}</span>${sub}
-            </div>`;
-
-        // STEP02：現地での作業であることを明記
-        if (phase === 2) {
-            html += `<div class="phase-note">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                <div class="phase-note-text">このSTEPは物件での作業です。同梱物の確認から現地でのデバイス初期設定・Wi-Fi設定までは、物件に居る時でないと進められません。取り付け工事当日はホスト様の立ち会いが必要で、施工会社は本体の取り付けのみを行います。初期設定はホスト様ご自身で実施してください。</div>
-            </div>`;
-        }
-
-        TASKS.filter(t => t.phase === phase).forEach(task => {
-            const done = !!completed[task.id];
-            const itemClass = done ? 'done' : (task.critical ? 'critical' : '');
-            const checkHtml = done
-                ? `<div class="checkbox-done">${SVG.check}</div>`
-                : `<div class="checkbox-empty"></div>`;
-
-            const badges = !done ? [
-                task.critical  ? `<span class="badge badge-critical">重要</span>` : '',
-                task.optional  ? `<span class="badge badge-optional">任意</span>`  : ''
-            ].join('') : '';
-
-            let actionHtml = '';
-
-            if (task.inquiry) {
-                let btns = task.inquiry.map(l =>
-                    `<a href="${l.url}" target="_blank" class="btn-outline" onclick="event.stopPropagation()">${l.label} ${SVG.extLink}</a>`
-                ).join('');
-                actionHtml += `<div class="btn-group">${btns}</div>`;
-            }
-
-            if (task.links) {
-                let btns = task.links.map(l =>
-                    `<a href="${l.url}" target="_blank" class="btn-primary" onclick="event.stopPropagation()">${l.label} ${SVG.extLink}</a>`
-                ).join('');
-                actionHtml += `<div class="btn-group">${btns}</div>`;
-            }
-
-            if (task.wifi) {
-                const doneAlready = formData.wifiAlreadyDone;
-                let savedHtml = '';
-                if (doneAlready) {
-                    savedHtml = `
-                    <div class="wifi-saved">${SVG.checkSm}
-                        Wi-Fiは開通済みとして登録しました${formData.wifiDate ? `（開通日：${formData.wifiDate}）` : ''}
-                    </div>`;
-                } else if (formData.wifiDate) {
-                    savedHtml = `
-                    <div class="wifi-saved">${SVG.checkSm}
-                        Wi-Fi工事日として ${formData.wifiDate} を登録しました
-                    </div>`;
-                }
-                actionHtml += `
-                <div class="wifi-box" onclick="event.stopPropagation()">
-                    <div class="wifi-label">Wi-Fiの状況を選択してください</div>
-                    <div class="wifi-toggle">
-                        <button class="wifi-toggle-btn ${!doneAlready ? 'active' : ''}" onclick="event.stopPropagation(); setWifiMode(false)">これから工事する</button>
-                        <button class="wifi-toggle-btn ${doneAlready ? 'active' : ''}" onclick="event.stopPropagation(); setWifiMode(true)">すでに開通済み</button>
-                    </div>
-                    <div class="wifi-date-row">
-                        <input type="date" class="form-input" id="f_wifiDate" value="${formData.wifiDate || ''}"
-                            onclick="event.stopPropagation(); openDatePicker(this)"
-                            onchange="event.stopPropagation(); onWifiDateInput(this.value)"
-                            style="max-width:220px">
-                        <span style="font-size:12px;font-weight:700;color:#64748b">
-                            ${doneAlready ? '※ Wi-Fi開通日（任意）' : '※ ネット工事の予定日'}
-                        </span>
-                    </div>
-                    ${savedHtml}
-                </div>`;
-            }
-
-            if (task.diagnosis) {
-                // 設置不可が選択済みなら案内ボックスを表示
-                if (diagnosisResult === 'ng') {
-                    actionHtml += `
-                    <div class="ng-result-box">
-                        <div class="ng-result-title">${SVG.info} 取付診断の結果：設置不可</div>
-                        <div class="ng-result-text">
-                            この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロックをご用意</strong>します。代替品の設置および初期設定まで、弊社現地スタッフが対応いたしますので、ホスト様による追加作業は不要です。<br>
-                            民泊管理バンク カスタマーサポート宛に設置不可の報告メールが作成されています。本文を編集せず、そのまま送信してください。
-                        </div>
-                        <button class="btn-diag-redo" onclick="event.stopPropagation(); clearDiagnosis()">取付診断の結果を選び直す</button>
-                    </div>`;
-                } else {
-                    // RemoteLOCK工事日とWi-Fi工事日の前後関係チェック
-                    const dateProblem = checkConstructionDate();
-                    const alertHtml = (formData.showDateInput && dateProblem) ? `
-                    <div class="date-alert">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        <div class="date-alert-text">${dateProblem}</div>
-                    </div>` : '';
-                    const canSend = formData.showDateInput && formData.constructionDate && !dateProblem;
-                    const dateInputHtml = formData.showDateInput ? `
-                    <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
-                        <label class="form-label" style="margin-bottom:6px">RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
-                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                            <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation(); openDatePicker(this)" onchange="event.stopPropagation(); onConstructionDateInput(this.value)" style="max-width:220px">
-                            <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>メールを作成する →</button>
-                        </div>
-                        <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
-                            ${formData.wifiAlreadyDone
-                                ? 'Wi-Fiは開通済みのため、工事予定日に制約はありません'
-                                : formData.wifiDate
-                                    ? `Wi-Fi工事日（${formData.wifiDate}）の翌日以降の日付を指定してください`
-                                    : 'まず上の「Wi-Fi工事日（開通日）の確認・入力」を完了してください'}
-                        </div>
-                        ${alertHtml}
-                    </div>` : '';
-                    actionHtml += `
-                    <div class="diagnosis-box">
-                        <div class="diagnosis-label">結果を選択してメール報告（タスク完了）</div>
-                        <div class="diagnosis-btns">
-                            <button class="btn-diag-ok" onclick="event.stopPropagation(); showDateInput()">設置可能</button>
-                            <button class="btn-diag-ng" onclick="event.stopPropagation(); sendDiagnosis(false)">設置不可</button>
-                        </div>
-                        ${dateInputHtml}
-                    </div>`;
-                }
-            }
-
-            if (task.billing) {
-                actionHtml += `
-                <div class="billing-box">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                    <div>
-                        <div class="billing-box-title">月額利用料の課金開始タイミング</div>
-                        <div class="billing-box-text">下記の手順でデバイスを登録すると、<strong>その時点からRemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担です。登録のタイミングにご留意ください。</div>
-                    </div>
-                </div>`;
-            }
-
-            if (task.invite) {
-                actionHtml += `
-                <div class="invite-box">
-                    <div>
-                        <div class="invite-section-label">招待用メールアドレス</div>
-                        <div class="invite-email-row">
-                            <code class="invite-email-code">${CS_EMAIL}</code>
-                            <button class="btn-copy" onclick="event.stopPropagation(); copyText('${CS_EMAIL}')">COPY ADDRESS</button>
-                        </div>
-                    </div>
-                    <div style="margin-top:16px">
-                        <div class="invite-section-label">招待手順</div>
-                        <ul class="invite-steps">
-                            <li><span class="step-num">1</span>RemoteLOCK Connect 画面右上のアイコンをクリック</li>
-                            <li><span class="step-num">2</span>「管理者と権限タイプ」を選択</li>
-                            <li><span class="step-num">3</span>画面右側の「管理者の招待」をクリック</li>
-                            <li><span class="step-num">4</span>「アカウント共有」ボタンを押す</li>
-                            <li><span class="step-num">5</span>上記メールアドレスを入力し、権限タイプで「Owner」を選択</li>
-                            <li><span class="step-num">6</span>「全てのデバイス」にチェックを入れる</li>
-                            <li><span class="step-num">7</span>「管理者の招待」をクリックして送信完了です</li>
-                        </ul>
-                    </div>
-                </div>`;
-            }
-
-            // Wi-Fi工事日(wifi)・取付診断(diagnosis)は入力／操作で完了が決まるため、
-            // カードクリックでの手動トグルは無効にする
-            const autoTask = task.wifi || task.diagnosis;
-            const cardOnclick = autoTask ? '' : `onclick="toggleTask(${task.id})"`;
-            const cardCursor = autoTask ? ' style="cursor:default"' : '';
-
-            // 通常タスクは未完了時のみアクションを開く。
-            // 入力UIタスク(autoTask)は完了後も入力内容を見せるため常に開く。
-            const actionOpen = (actionHtml && (autoTask || !done)) ? 'open' : '';
-
-            html += `
-            <div class="task-item ${itemClass}${autoTask ? ' auto-task' : ''}" ${cardOnclick}${cardCursor}>
-                <div class="task-checkbox">${checkHtml}</div>
-                <div class="task-content">
-                    <div class="task-title-row">
-                        <span class="task-title">${task.title}</span>${badges}
-                    </div>
-                    <div class="task-desc">${task.desc}</div>
-                    ${actionHtml ? `<div class="task-action ${actionOpen}">${actionHtml}</div>` : ''}
-                </div>
-            </div>`;
-        });
-
-        html += `</div>`;
-    });
-
-    container.innerHTML = html;
+    if (viewMode === 'wizard') {
+        container.innerHTML = renderWizard() + supportCardHtml();
+    } else {
+        container.innerHTML = renderOverview() + supportCardHtml();
+    }
     updateProgress();
     updateStickyBar();
 }
+
+// ===== スケジュール俯瞰画面 =====
+function renderOverview() {
+    let html = '<div class="ov">';
+
+    html += `
+    <div class="ov-head">
+        <div class="ov-head-title">導入スケジュール</div>
+        <div class="ov-head-sub">3つのSTEPを順に進めます。各STEPを開いてご対応ください。</div>
+    </div>`;
+
+    const phases = getActivePhases();
+    const stepMeta = {
+        1: { name: '事前準備', sub: '取付診断の申し込みまで', when: 'オンラインでの手続き' },
+        2: { name: '現地対応', sub: '取り付け工事当日の作業', when: '取り付け工事当日・物件で' },
+        3: { name: 'アカウント作成', sub: 'クラウド設定・権限共有', when: 'オンラインでの手続き' }
+    };
+
+    phases.forEach(phase => {
+        const status = getPhaseStatus(phase);
+        const meta = stepMeta[phase];
+        const ts = getPhaseTasks(phase);
+        const doneCount = ts.filter(t => completed[t.id]).length;
+
+        let statusLabel, statusClass, btnLabel, btnDisabled = false, lockNote = '';
+        if (status === 'done') {
+            statusLabel = '完了'; statusClass = 'done'; btnLabel = '内容を見る';
+        } else if (status === 'doing') {
+            statusLabel = '進行中'; statusClass = 'doing'; btnLabel = '続ける';
+        } else if (status === 'todo') {
+            statusLabel = '未着手'; statusClass = 'todo'; btnLabel = 'このSTEPを始める';
+        } else {
+            statusLabel = '施錠中'; statusClass = 'locked';
+            btnLabel = 'まだ開けません'; btnDisabled = true;
+            if (phase === 2) {
+                if (!isPhaseComplete(1)) {
+                    lockNote = 'STEP01（事前準備）の完了後に進めます。';
+                } else if (!parseDate0(formData.constructionDate)) {
+                    lockNote = 'RemoteLOCK工事日が未定です。STEP01の取付診断で工事日を入力してください。';
+                } else {
+                    const d = parseDate0(formData.constructionDate);
+                    lockNote = `取り付け工事日（${formatJpDate(d)}）になると進めます。`;
+                }
+            } else if (phase === 3) {
+                lockNote = 'STEP02（現地対応）の完了後に進めます。';
+            }
+        }
+
+        const pct = ts.length ? Math.round(doneCount / ts.length * 100) : 0;
+        html += `
+        <div class="ov-step ov-step-${statusClass}">
+            <div class="ov-step-top">
+                <div class="ov-step-no">STEP ${String(phase).padStart(2, '0')}</div>
+                <div class="ov-step-status ov-status-${statusClass}">${statusLabel}</div>
+            </div>
+            <div class="ov-step-name">${meta.name}</div>
+            <div class="ov-step-sub">${meta.sub}</div>
+            <div class="ov-step-when">${phase === 2 ? SVG.pin : SVG.monitor} ${meta.when}</div>
+            ${status !== 'locked' ? `
+            <div class="ov-step-bar"><div class="ov-step-bar-fill" style="width:${pct}%"></div></div>
+            <div class="ov-step-count">${doneCount} / ${ts.length} 完了</div>` : ''}
+            ${lockNote ? `<div class="ov-step-locknote">${SVG.lock} ${lockNote}</div>` : ''}
+            <button class="ov-step-btn ${btnDisabled ? 'disabled' : ''} ${status === 'done' ? 'ghost' : ''}"
+                ${btnDisabled ? 'disabled' : `onclick="openWizard(${phase})"`}>
+                ${btnLabel}${!btnDisabled && status !== 'done' ? ' ' + SVG.arrowR : ''}
+            </button>
+        </div>`;
+
+        // STEP01とSTEP02の間に、RemoteLOCK工事日の変更欄を挟む
+        // （工事日はSTEP02の解錠を決めるため、そのすぐ手前に置く）
+        if (phase === 1 && phases.includes(2)) {
+            html += renderWorkdateCard();
+        }
+    });
+
+    if (diagnosisResult === 'ng') {
+        html += `
+        <div class="ov-ng-note">
+            <div class="ov-ng-title">${SVG.info} 取付診断の結果：設置不可</div>
+            <div class="ov-ng-text">この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて代替のスマートロック（SwitchBot）をご用意します。STEP02以降のご対応は不要です。設置・初期設定まで弊社現地スタッフが対応します。</div>
+        </div>`;
+    }
+
+    html += '</div>';
+    return html;
+}
+
+// RemoteLOCK工事日の変更欄（STEP01とSTEP02の間に表示）
+function renderWorkdateCard() {
+    return `
+    <div class="ov-workdate">
+        <div class="ov-workdate-label">${SVG.calendar} RemoteLOCK工事日</div>
+        <input type="date" class="form-input ov-date-input" id="f_constructionDateOv" value="${formData.constructionDate || ''}"
+            onclick="openDatePicker(this)" onchange="onConstructionDateOvInput(this.value)">
+        <div class="ov-date-hint">工事日が変わったら、ここで更新してください。下のSTEP02は、この工事日になると開けるようになります。</div>
+    </div>`;
+}
+
+// ===== ウィザード（1STEP分を1タスクずつ） =====
+function renderWizard() {
+    const phase = wizardPhase;
+    const tasks = getPhaseTasks(phase);
+    if (currentTaskIndex < 0) currentTaskIndex = 0;
+    if (currentTaskIndex > tasks.length) currentTaskIndex = tasks.length;
+
+    let html = '<div class="wiz">';
+    html += `<button class="wiz-back-ov" onclick="closeWizard()">${SVG.arrowL} スケジュールに戻る</button>`;
+
+    if (currentTaskIndex >= tasks.length) {
+        const phaseDone = tasks.every(t => completed[t.id]);
+        const nextPhase = phase + 1;
+        const hasNext = getActivePhases().includes(nextPhase);
+        html += `
+        <div class="wiz-done">
+            <div class="wiz-done-icon">${SVG.checkSm}</div>
+            <div class="wiz-done-title">${phaseDone ? `STEP ${String(phase).padStart(2,'0')} が完了しました` : 'STEPの最後です'}</div>
+            <div class="wiz-done-text">
+                ${phaseDone
+                    ? (hasNext
+                        ? 'スケジュール画面に戻って、次のSTEPに進んでください。'
+                        : (diagnosisResult === 'ng'
+                            ? 'RemoteLOCKは設置不可のため、ここまでで完了です。代替品の手配は民泊管理バンクが対応します。'
+                            : 'すべてのSTEPが完了しました。お疲れさまでした。'))
+                    : 'まだ完了していないタスクがあります。「もどる」で確認してください。'}
+            </div>
+            <button class="wiz-btn-next" onclick="closeWizard()">スケジュールに戻る</button>
+            ${currentTaskIndex > 0 ? `<button class="wiz-btn-back" onclick="wizPrev()" style="margin-top:10px">${SVG.arrowL} 前のタスクにもどる</button>` : ''}
+        </div>`;
+        html += '</div>';
+        return html;
+    }
+
+    const task = tasks[currentTaskIndex];
+    const firstOfPhase = currentTaskIndex === 0;
+
+    const doneCount = tasks.filter(t => completed[t.id]).length;
+    const pct = Math.round(doneCount / tasks.length * 100);
+    html += `
+    <div class="wiz-progress">
+        <div class="wiz-progress-info">
+            <span class="wiz-progress-step">STEP ${String(phase).padStart(2,'0')} ・ ${PHASE_NAMES[phase]}</span>
+            <span class="wiz-progress-count">${currentTaskIndex + 1} / ${tasks.length}</span>
+        </div>
+        <div class="wiz-progress-bar"><div class="wiz-progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+
+    if (firstOfPhase) {
+        const pg = PHASE_GUIDE[phase];
+        if (pg) {
+            const prep = pg.prepare.map(x => `<li>${x}</li>`).join('');
+            const onsite = phase === 2;
+            html += `<div class="step-intro${onsite ? ' step-intro-onsite' : ''}">
+                <div class="step-intro-place">${onsite ? SVG.pin : SVG.monitor} ${pg.place}</div>
+                <div class="step-intro-summary">${pg.summary}</div>
+                <div class="step-intro-prep-label">${SVG.book} このSTEPで使うもの</div>
+                <ul class="step-intro-prep">${prep}</ul>
+            </div>`;
+        }
+    }
+
+    html += renderTaskCard(task);
+
+    const isAuto = task.wifi || task.diagnosis;
+    const taskDone = !!completed[task.id];
+    const canNext = isAuto ? taskDone : true;
+    const isLast = currentTaskIndex === tasks.length - 1;
+    const nextLabel = isLast ? 'STEPの完了へ' : '次のタスクへ';
+    html += `
+    <div class="wiz-nav">
+        ${currentTaskIndex > 0
+            ? `<button class="wiz-btn-prev" onclick="wizPrev()">${SVG.arrowL} もどる</button>`
+            : `<button class="wiz-btn-prev" onclick="closeWizard()">${SVG.arrowL} 一覧</button>`}
+        <button class="wiz-btn-next" onclick="wizNext()" ${canNext ? '' : 'disabled'}>${nextLabel} ${SVG.arrowR}</button>
+    </div>
+    ${!canNext ? `<div class="wiz-nav-hint">このタスクを完了すると次に進めます</div>` : ''}`;
+
+    html += '</div>';
+    return html;
+}
+
+// 困ったときのサポートカード（折りたたみ式・共通）
+function supportCardHtml() {
+    const open = supportOpen;
+    return `
+    <div class="support-card">
+        <button class="support-toggle" onclick="toggleSupport()">
+            <span class="support-toggle-label">${SVG.help} 困ったときは</span>
+            <span class="support-toggle-chevron ${open ? 'open' : ''}">${SVG.chevron}</span>
+        </button>
+        <div class="support-body" id="supportBody" style="display:${open ? 'block' : 'none'}">
+            <div class="support-card-body">
+                進め方が分からないときや、うまくいかないときは、下記の窓口にお気軽にご相談ください。
+            </div>
+            <div class="support-card-rows">
+                <div class="support-row">
+                    <div class="support-row-label">民泊管理バンク カスタマーサポート</div>
+                    <a href="mailto:${CS_EMAIL}" class="support-row-action">${SVG.mail}<span>メールで相談</span></a>
+                </div>
+                <div class="support-row">
+                    <div class="support-row-label">RemoteLOCK 公式サポート窓口<br><span class="support-row-sub">株式会社構造計画研究所／平日 9:00〜17:00</span></div>
+                    <a href="tel:050-3185-3733" class="support-row-action">${SVG.phone}<span>050-3185-3733</span></a>
+                </div>
+                <div class="support-row">
+                    <div class="support-row-label">RemoteLOCK 公式ヘルプページ</div>
+                    <a href="https://remotelocksupport.kke.co.jp/hc/ja/" target="_blank" class="support-row-action">${SVG.extLink}<span>ヘルプを開く</span></a>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+// 困ったときは の開閉
+function toggleSupport() {
+    supportOpen = !supportOpen;
+    const body = document.getElementById('supportBody');
+    const chev = document.querySelector('.support-toggle-chevron');
+    if (body) body.style.display = supportOpen ? 'block' : 'none';
+    if (chev) chev.classList.toggle('open', supportOpen);
+}
+
+// 俯瞰画面 → ウィザード（指定STEPを開く）
+function openWizard(phase) {
+    wizardPhase = phase;
+    const tasks = getPhaseTasks(phase);
+    let idx = tasks.findIndex(t => !completed[t.id]);
+    currentTaskIndex = idx < 0 ? tasks.length : idx;
+    viewMode = 'wizard';
+    saveState();
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ウィザード → 俯瞰画面
+function closeWizard() {
+    viewMode = 'overview';
+    saveState();
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ウィザード：次のタスクへ
+function wizNext() {
+    const tasks = getPhaseTasks(wizardPhase);
+    const task = tasks[currentTaskIndex];
+    if (task) {
+        const isAuto = task.wifi || task.diagnosis;
+        if (isAuto && !completed[task.id]) return;
+    }
+    if (currentTaskIndex < tasks.length) currentTaskIndex++;
+    saveState();
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ウィザード：前のタスクへ
+function wizPrev() {
+    if (currentTaskIndex > 0) currentTaskIndex--;
+    saveState();
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 俯瞰画面からのRemoteLOCK工事日の変更
+function onConstructionDateOvInput(value) {
+    if (!isCompleteDate(value)) return;
+    formData.constructionDate = value;
+    saveState();
+    render();
+}
+
 
 // ===== TOGGLE =====
 function toggleTask(id) {
@@ -1386,6 +2162,17 @@ function toggleTask(id) {
     completed[id] = !completed[id];
     saveState();
     render();
+}
+
+// 「詳しい手順を見る」折りたたみの開閉。render経由でないのは
+// 開閉のたびに再描画すると閉じてしまうため（DOMを直接操作する）。
+function toggleGuide(id) {
+    const items = document.getElementById('guideItems' + id);
+    const chevron = document.getElementById('guideChevron' + id);
+    if (!items) return;
+    const open = items.style.display !== 'none';
+    items.style.display = open ? 'none' : 'block';
+    if (chevron) chevron.style.transform = open ? '' : 'rotate(180deg)';
 }
 
 // ===== PROGRESS =====
@@ -1637,10 +2424,27 @@ function openMailClient(subject, body) {
 }
 
 // ===== DIAGNOSIS EMAIL =====
+
+// 取付診断の報告メール（件名・本文）を組み立てる。diagnosisResultに基づく。
+function buildDiagnosisMail() {
+    if (diagnosisResult === 'ng') {
+        return {
+            subject: `【診断報告】RemoteLOCK 設置不可・代替品手配のご依頼 (${formData.property})`,
+            body: `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「設置不可」との回答を受け取りました。\nつきましては、代替のスマートロックの手配・設置・初期設定の対応をお願いいたします。\n`
+        };
+    }
+    const wifiLine = formData.wifiAlreadyDone
+        ? `Wi-Fi: 開通済み${formData.wifiDate ? `（開通日：${formData.wifiDate}）` : ''}`
+        : `Wi-Fi工事日: ${formData.wifiDate}`;
+    return {
+        subject: `【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`,
+        body: `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■日程\n${wifiLine}\nRemoteLOCK工事予定日: ${formData.constructionDate}\n\n取付診断の結果、公式診断フォームより「設置可能」との回答を受け取りました。\n\n引き続き、現地での設置・初期設定を進めてまいります。\n`
+    };
+}
+
 function sendDiagnosis(isOk) {
     if (!validateAndHighlight()) return;
 
-    let subject, body;
     if (isOk) {
         // 設置可能の報告には、Wi-Fiの状況とRemoteLOCK工事日の整合が必須
         if (!isWifiReady()) {
@@ -1657,35 +2461,60 @@ function sendDiagnosis(isOk) {
             return;
         }
         diagnosisResult = 'ok';
-        const wifiLine = formData.wifiAlreadyDone
-            ? `Wi-Fi: 開通済み${formData.wifiDate ? `（開通日：${formData.wifiDate}）` : ''}`
-            : `Wi-Fi工事日: ${formData.wifiDate}`;
-        subject = `【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`;
-        body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■日程\n${wifiLine}\nRemoteLOCK工事予定日: ${formData.constructionDate}\n\n取付診断の結果、公式診断フォームより「設置可能」との回答を受け取りました。\n\n引き続き、現地での設置・初期設定を進めてまいります。\n`;
     } else {
         diagnosisResult = 'ng';
-        subject = `【診断報告】RemoteLOCK 設置不可・代替品手配のご依頼 (${formData.property})`;
-        body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「設置不可」との回答を受け取りました。\nつきましては、代替のスマートロックの手配・設置・初期設定の対応をお願いいたします。\n`;
     }
 
-    // 取付診断タスク（id:3）を完了に
-    completed[3] = true;
+    // メール作成画面を起動した段階。送信の確認はホストの操作（confirmDiagnosisSent）を待つ。
+    diagnosisReported = true;
     formData.showDateInput = false;
+    // ウィザードを取付診断タスクの位置にそろえる（STEP01内のインデックス）
+    const diagIdx = getPhaseTasks(1).findIndex(t => t.id === 3);
+    if (diagIdx >= 0) currentTaskIndex = diagIdx;
     saveState();
     // 先に画面を更新してからメール作成画面を開く
     render();
-    openMailClient(subject, body);
+    const mail = buildDiagnosisMail();
+    openMailClient(mail.subject, mail.body);
 }
 
-// 取付診断の結果（設置可能／不可）だけをやり直す
-function clearDiagnosis() {
-    if (!confirm('取付診断の結果をリセットして選び直しますか？')) return;
-    diagnosisResult = null;
-    completed[3] = false;
-    formData.showDateInput = false;
-    formData.constructionDate = '';
+// メールアプリが開かなかったとき等に、報告メール作成画面を開き直す
+function reopenDiagnosisMail() {
+    if (!diagnosisResult) return;
+    const mail = buildDiagnosisMail();
+    openMailClient(mail.subject, mail.body);
+}
+
+// 報告メールを送信したことをホストが確認 → 取付診断タスクを完了にする
+function confirmDiagnosisSent() {
+    completed[3] = true;
     saveState();
     render();
+}
+
+// 取付診断の結果（設置可能／不可）をやり直す。
+// 診断より後の作業（STEP02・STEP03）は前提が変わるため、あわせてリセットする。
+function clearDiagnosis() {
+    const afterDone = TASKS.some(t => t.phase >= 2 && completed[t.id]);
+    const msg = afterDone
+        ? '取付診断の結果をリセットして選び直しますか？\n\nSTEP02・STEP03の進捗もあわせてリセットされます。'
+        : '取付診断の結果をリセットして選び直しますか？';
+    if (!confirm(msg)) return;
+    diagnosisResult = null;
+    diagnosisReported = false;
+    formData.showDateInput = false;
+    formData.constructionDate = '';
+    // 取付診断タスク（id:3）と、それ以降のSTEP02・STEP03のタスクをすべて未完了に戻す
+    completed[3] = false;
+    TASKS.forEach(t => { if (t.phase >= 2) completed[t.id] = false; });
+    // ウィザードを取付診断タスク（STEP01内のインデックス）に戻す
+    viewMode = 'wizard';
+    wizardPhase = 1;
+    const idx = getPhaseTasks(1).findIndex(t => t.id === 3);
+    if (idx >= 0) currentTaskIndex = idx;
+    saveState();
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ===== MODAL =====
@@ -1788,8 +2617,12 @@ function resetProgress() {
     if (!confirm('進捗をリセットしますか？\nホスト様情報・確認事項・チェック状況がすべて消去されます。')) return;
     completed = {};
     diagnosisResult = null;
+    diagnosisReported = false;
     confirmChecks = {};
     hostConfirmed = false;
+    viewMode = 'overview';
+    wizardPhase = 1;
+    currentTaskIndex = 0;
     formData = {
         property: '', subscriber: '', staff: '', email: '',
         staffSame: false,
