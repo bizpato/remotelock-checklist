@@ -879,8 +879,9 @@
             background: white; border-radius: 20px; border: 1px solid #e2e8f0;
             padding: 24px;
         }
-        .invite-section-label { font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 10px; }
-        .invite-email-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .invite-section-label { font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 8px; }
+        .invite-email-desc { font-size: 12px; font-weight: 500; color: #64748b; line-height: 1.7; margin-bottom: 12px; }
+        .invite-email-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .invite-email-code {
             display: block; background: #f8fafc; border: 1px solid #f1f5f9;
             border-radius: 12px; padding: 14px 18px;
@@ -893,19 +894,6 @@
             font-family: inherit; white-space: nowrap;
         }
         .btn-copy:hover { background: var(--brand-base); }
-        .invite-steps { list-style: none; margin-top: 16px; }
-        .invite-steps li {
-            display: flex; gap: 12px; align-items: flex-start;
-            font-size: 13px; font-weight: 500; color: #475569;
-            line-height: 1.6; margin-bottom: 10px;
-        }
-        .invite-steps li:last-child { margin-bottom: 0; }
-        .step-num {
-            flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
-            background: #f1f5f9; color: var(--brand);
-            font-size: 10px; font-weight: 900;
-            display: flex; align-items: center; justify-content: center;
-        }
 
         /* ── Sticky Bar ── */
         .sticky-bar {
@@ -1400,13 +1388,14 @@ const TASKS = [
     {
         id: 9, phase: 3,
         title: 'デバイスの追加・弊社アカウントの管理者招待',
-        desc: 'Connectに設置場所を登録し（タイムゾーンは「Japan」または「Asia/Tokyo」）、デバイスを追加します。そのあと、民泊管理バンクが設定代行・サポートを行うため、弊社アカウントを管理者として招待してください。<br><br><strong>※ デバイスを登録した時点から、RemoteLOCKの月額利用料の引き落としが始まります。</strong>この費用はホスト様のご負担です。',
+        desc: 'Connectに設置場所を登録し（タイムゾーンは「Japan」または「Asia/Tokyo」）、デバイスを追加します。そのあと、民泊管理バンクが設定代行・サポートを行うため、弊社アカウントを管理者として招待してください。',
         invite: true,
         billing: true,
         guide: {
-            label: 'デバイス追加の手順を見る',
+            label: 'デバイス追加・管理者招待の手順を見る',
             items: [
-                { label: 'デバイスの追加・設定（公式手順）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360034692592' }
+                { label: 'デバイスの追加・設定（公式手順）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360034692592' },
+                { label: '管理者の招待・権限管理（公式手順）', url: 'https://remotelocksupport.kke.co.jp/hc/ja/articles/360016159411' }
             ]
         }
     }
@@ -1849,24 +1838,11 @@ function renderTaskCard(task) {
     if (task.invite) {
         actionHtml += `
         <div class="invite-box">
-            <div>
-                <div class="invite-section-label">招待用メールアドレス</div>
-                <div class="invite-email-row">
-                    <code class="invite-email-code">${CS_EMAIL}</code>
-                    <button class="btn-copy" onclick="event.stopPropagation(); copyText('${CS_EMAIL}')">COPY ADDRESS</button>
-                </div>
-            </div>
-            <div style="margin-top:16px">
-                <div class="invite-section-label">招待手順</div>
-                <ul class="invite-steps">
-                    <li><span class="step-num">1</span>RemoteLOCK Connect 画面右上のアイコンをクリック</li>
-                    <li><span class="step-num">2</span>「管理者と権限タイプ」を選択</li>
-                    <li><span class="step-num">3</span>画面右側の「管理者の招待」をクリック</li>
-                    <li><span class="step-num">4</span>「アカウント共有」ボタンを押す</li>
-                    <li><span class="step-num">5</span>上記メールアドレスを入力し、権限タイプで「Owner」を選択</li>
-                    <li><span class="step-num">6</span>「全てのデバイス」にチェックを入れる</li>
-                    <li><span class="step-num">7</span>「管理者の招待」をクリックして送信完了です</li>
-                </ul>
+            <div class="invite-section-label">管理者招待に使うメールアドレス</div>
+            <div class="invite-email-desc">公式手順の中で招待先のメールアドレスを入力する場面があります。下記の民泊管理バンクのアドレスを入力してください。</div>
+            <div class="invite-email-row">
+                <code class="invite-email-code">${CS_EMAIL}</code>
+                <button class="btn-copy" onclick="event.stopPropagation(); copyText('${CS_EMAIL}')">COPY ADDRESS</button>
             </div>
         </div>`;
     }
