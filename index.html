@@ -1718,7 +1718,6 @@ function renderTaskCard(task) {
             </div>
             <div class="wifi-date-row">
                 <input type="date" class="form-input" id="f_wifiDate" value="${formData.wifiDate || ''}"
-                    onclick="event.stopPropagation(); openDatePicker(this)"
                     onchange="event.stopPropagation(); onWifiDateInput(this.value)"
                     style="max-width:220px">
                 <span style="font-size:12px;font-weight:700;color:#64748b">
@@ -1743,7 +1742,7 @@ function renderTaskCard(task) {
             <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
                 <label class="form-label" style="margin-bottom:6px">RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                    <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onclick="event.stopPropagation(); openDatePicker(this)" onchange="event.stopPropagation(); onConstructionDateInput(this.value)" style="max-width:220px">
+                    <input type="date" class="form-input" id="f_constructionDate" value="${formData.constructionDate || ''}" onchange="event.stopPropagation(); onConstructionDateInput(this.value)" style="max-width:220px">
                     <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>報告メールを作成する →</button>
                 </div>
                 <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
@@ -1975,7 +1974,7 @@ function renderWorkdateCard() {
     <div class="ov-workdate">
         <div class="ov-workdate-label">${SVG.calendar} RemoteLOCK工事日</div>
         <input type="date" class="form-input ov-date-input" id="f_constructionDateOv" value="${formData.constructionDate || ''}"
-            onclick="openDatePicker(this)" onchange="onConstructionDateOvInput(this.value)">
+            onchange="onConstructionDateOvInput(this.value)">
         <div class="ov-date-hint">工事日が変わったら、ここで更新してください。下のSTEP02は、この工事日になると開けるようになります。</div>
     </div>`;
 }
@@ -2340,16 +2339,6 @@ function setWifiMode(alreadyDone) {
     updateWifiCompletion();
     saveState();
     render();
-}
-
-// 日付入力欄をクリックしたとき、可能ならカレンダーを開く。
-// showPicker非対応のブラウザでも、入力欄自体のカレンダーアイコンや
-// 手入力は使えるため、ここで例外が出ても無視してよい。
-// 手入力での途中確定は、値の受け取り側 isCompleteDate() で防いでいる。
-function openDatePicker(el) {
-    if (el && typeof el.showPicker === 'function') {
-        try { el.showPicker(); } catch (e) { /* readonly不可・連続呼び出し等は無視 */ }
-    }
 }
 
 // 完全な日付（YYYY-MM-DD）かどうか。空文字（クリア）も許容する。
