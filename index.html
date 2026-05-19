@@ -123,6 +123,7 @@
             font-size: 12px; font-weight: 600; color: #0c5a8a; line-height: 1.65;
         }
         .autosave-note svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; color: #0ea5e9; }
+        .autosave-note > div { flex: 1; min-width: 0; }
 
         /* ── 入力ページ：戻るボタン ── */
         .btn-back-screen {
@@ -511,12 +512,14 @@
         .date-alert-text { font-size: 12px; font-weight: 700; color: #b91c1c; line-height: 1.7; }
 
         /* ── 課金注意ボックス ── */
+        /* 月額利用料の警告カード：タスクカードと並列に独立配置する */
         .billing-box {
             display: flex; gap: 12px; align-items: flex-start;
             background: #fffbeb; border: 1px solid #fde68a;
-            border-radius: 18px; padding: 16px 20px; margin-bottom: 14px;
+            border-radius: 18px; padding: 16px 18px; margin-bottom: 16px;
         }
         .billing-box svg { flex-shrink: 0; width: 19px; height: 19px; color: var(--warn); margin-top: 1px; }
+        .billing-box > div { flex: 1; min-width: 0; }
         .billing-box-title { font-size: 13px; font-weight: 900; color: #92400e; margin-bottom: 4px; }
         .billing-box-text { font-size: 12px; font-weight: 600; color: #78350f; line-height: 1.7; }
 
@@ -561,6 +564,7 @@
             font-size: 12px; font-weight: 600; color: #78540a; line-height: 1.75;
         }
         .diag-ng-inline svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+        .diag-ng-inline > span { flex: 1; min-width: 0; }
         .diag-ng-inline strong { font-weight: 900; }
         .btn-diag-sent {
             width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -729,15 +733,17 @@
             line-height: 1.6;
         }
         .ov-step-locknote svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+        .ov-step-locknote > span { flex: 1; min-width: 0; }
 
         /* STEP02の状態別案内メッセージ */
         .ov-step-msg {
-            display: flex; align-items: flex-start; gap: 7px;
+            display: flex; align-items: flex-start; gap: 8px;
             font-size: 12px; font-weight: 700; color: #64748b;
             background: #eef2f6; border-radius: 12px;
             padding: 11px 13px; margin-top: 10px; line-height: 1.65;
         }
         .ov-step-msg svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+        .ov-step-msg-text { flex: 1; min-width: 0; }
         .ov-step-msg strong { font-weight: 900; }
         /* 工事日当日・経過後：注意を引くオレンジ基調 */
         .ov-step-msg-today {
@@ -824,7 +830,6 @@
         .wiz-task > .wifi-box,
         .wiz-task > .diagnosis-box,
         .wiz-task > .ng-result-box,
-        .wiz-task > .billing-box,
         .wiz-task > .invite-box { margin-top: 14px; }
 
         /* ── ウィザード：完了チェック ── */
@@ -1847,7 +1852,7 @@ function renderTaskCard(task) {
             const resultLabel = diagnosisResult === 'ng' ? '設置不可' : '設置可能';
             const ngNoticeConfirm = diagnosisResult === 'ng' ? `
                 <div class="diag-ng-inline">
-                    ${SVG.info} この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。設置・初期設定まで弊社現地スタッフが対応しますので、ホスト様による追加作業は不要です。
+                    ${SVG.info}<span>この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。設置・初期設定まで弊社現地スタッフが対応しますので、ホスト様による追加作業は不要です。</span>
                 </div>` : '';
             actionHtml += `
             <div class="diag-confirm-box">
@@ -1875,17 +1880,6 @@ function renderTaskCard(task) {
                 <button class="btn-link-sub" onclick="event.stopPropagation(); clearDiagnosis()">取付診断の結果を選び直す</button>
             </div>`;
         }
-    }
-
-    if (task.billing) {
-        actionHtml += `
-        <div class="billing-box">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            <div>
-                <div class="billing-box-title">月額利用料の課金開始タイミング</div>
-                <div class="billing-box-text">下記の手順でデバイスを登録すると、<strong>その時点からRemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担です。登録のタイミングにご留意ください。</div>
-            </div>
-        </div>`;
     }
 
     // 入力UIタスク（Wi-Fi工事日・取付診断）以外は、完了チェックを手動で操作できる
@@ -1998,14 +1992,14 @@ function renderOverview() {
             const dp = constructionDayPhase();
             if (status === 'locked') {
                 // 施錠中：これが工事日に行う作業だと伝える（落ち着いたトーン）
-                stepMsg = `<div class="ov-step-msg">${SVG.pin} このSTEPは、RemoteLOCKの取り付け工事の日に、物件で行う作業です。</div>`;
+                stepMsg = `<div class="ov-step-msg">${SVG.pin}<span class="ov-step-msg-text">このSTEPは、RemoteLOCKの取り付け工事の日に、物件で行う作業です。</span></div>`;
             } else if (dp === 'today') {
                 // 工事日当日：今日進めるべきだと伝える（注意を引くトーン）
-                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin} <strong>本日はRemoteLOCK工事日です。</strong>物件での作業を進めてください。</div>`;
+                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin}<span class="ov-step-msg-text"><strong>本日はRemoteLOCK工事日です。</strong>物件での作業を進めてください。</span></div>`;
             } else if (dp === 'after') {
                 // 工事日経過後：日付を断定せず、過ぎたことを穏やかに伝える
                 const d = parseDate0(formData.constructionDate);
-                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin} RemoteLOCK工事日（${formatJpDate(d)}）を過ぎています。まだ終わっていない作業があれば、お早めに進めてください。</div>`;
+                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin}<span class="ov-step-msg-text">RemoteLOCK工事日(${formatJpDate(d)})を過ぎています。まだ終わっていない作業があれば、お早めに進めてください。</span></div>`;
             }
         }
 
@@ -2023,7 +2017,7 @@ function renderOverview() {
             ${status !== 'locked' ? `
             <div class="ov-step-bar"><div class="ov-step-bar-fill" style="width:${pct}%"></div></div>
             <div class="ov-step-count">${doneCount} / ${ts.length} 完了</div>` : ''}
-            ${lockNote ? `<div class="ov-step-locknote">${SVG.lock} ${lockNote}</div>` : ''}
+            ${lockNote ? `<div class="ov-step-locknote">${SVG.lock}<span>${lockNote}</span></div>` : ''}
             <button class="ov-step-btn ${btnDisabled ? 'disabled' : ''} ${status === 'done' ? 'ghost' : ''}"
                 ${btnDisabled ? 'disabled' : `onclick="openWizard(${phase})"`}>
                 ${btnLabel}${!btnDisabled && status !== 'done' ? ' ' + SVG.arrowR : ''}
@@ -2131,6 +2125,19 @@ function renderWizard() {
                 <ul class="step-intro-prep">${prep}</ul>
             </div>`;
         }
+    }
+
+    // 課金タイミングの警告は、タスクカードの中ではなく、上に独立した別カードとして配置。
+    // 他のSTEPでSTEP導入ガイドがタスクカードと並列に置かれているのと同じ構造に揃える。
+    if (task.billing) {
+        html += `
+        <div class="billing-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <div>
+                <div class="billing-box-title">月額利用料の課金開始タイミング</div>
+                <div class="billing-box-text">下記の手順でデバイスを登録すると、<strong>その時点からRemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担です。登録のタイミングにご留意ください。</div>
+            </div>
+        </div>`;
     }
 
     html += renderTaskCard(task);
