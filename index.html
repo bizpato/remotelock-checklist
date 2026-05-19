@@ -711,6 +711,24 @@
             line-height: 1.6;
         }
         .ov-step-locknote svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+
+        /* STEP02の状態別案内メッセージ */
+        .ov-step-msg {
+            display: flex; align-items: flex-start; gap: 7px;
+            font-size: 12px; font-weight: 700; color: #64748b;
+            background: #eef2f6; border-radius: 12px;
+            padding: 11px 13px; margin-top: 10px; line-height: 1.65;
+        }
+        .ov-step-msg svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+        .ov-step-msg strong { font-weight: 900; }
+        /* 工事日当日・経過後：注意を引くオレンジ基調 */
+        .ov-step-msg-today {
+            background: #fff7ed; color: #9a4a06;
+            border: 1px solid #fed7aa;
+        }
+        .ov-step-msg-today svg { color: #ea7317; }
+        .ov-step-msg-today strong { color: #c2570c; }
+
         .ov-step-btn {
             width: 100%; margin-top: 14px; padding: 14px; border-radius: 14px;
             border: none; font-size: 14px; font-weight: 900;
@@ -1338,7 +1356,7 @@ const TASKS = [
     {
         id: 5, phase: 2,
         title: '取り付け工事の立ち会い・現地でのデバイス初期設定',
-        desc: '取り付け工事の当日は、物件でホスト様（またはご担当者様）の立ち会いが必要です。<strong>施工会社が行うのは本体の取り付けのみ</strong>です。取り付け後のデバイス初期設定は、下の公式手順に沿って進めてください。<br><br><strong>■ 防犯のため、必ず行ってください</strong><br>・ 初期ローカルPIN（初期値4321）を削除し、新しいPINを作成<br>・ プログラミングコード（初期値123456）を変更<br><span style="color:#64748b">※プログラミングコードとは、本体の設定を変更するための管理用の番号です。変更しないと、一定期間後に自動でランダムな番号に変わります。</span>',
+        desc: '取り付け工事で<strong>施工会社が行うのは、本体の取り付けのみ</strong>です。取り付け後のデバイス初期設定は、下の公式手順に沿って進めてください。<br><br><strong>■ 防犯のため、必ず行ってください</strong><br>・ 初期ローカルPIN（初期値4321）を削除し、新しいPINを作成<br>・ プログラミングコード（初期値123456）を変更<br><span style="color:#64748b">※プログラミングコードとは、本体の設定を変更するための管理用の番号です。変更しないと、一定期間後に自動でランダムな番号に変わります。</span>',
         guide: {
             label: 'デバイス初期設定の手順を見る',
             items: [
@@ -1516,6 +1534,16 @@ function isOnsiteUnlocked() {
     const d = parseDate0(formData.constructionDate);
     if (!d) return false;          // 工事日未定 → まだ待機
     return today0() >= d;          // 工事日当日以降 → 解錠
+}
+
+// 工事日と今日の関係： 'before'（工事日前）/ 'today'（工事日当日）/ 'after'（工事日経過）/ null（工事日未定）
+function constructionDayPhase() {
+    const d = parseDate0(formData.constructionDate);
+    if (!d) return null;
+    const t = today0();
+    if (t < d) return 'before';
+    if (t.getTime() === d.getTime()) return 'today';
+    return 'after';
 }
 
 // STEPの状態を返す： 'locked'（施錠中）/ 'todo'（未着手・着手可）/ 'doing'（進行中）/ 'done'（完了）
@@ -1944,6 +1972,23 @@ function renderOverview() {
             }
         }
 
+        // STEP02：工事日との関係に応じた案内メッセージ（完了後は出さない）
+        let stepMsg = '';
+        if (phase === 2 && status !== 'done') {
+            const dp = constructionDayPhase();
+            if (status === 'locked') {
+                // 施錠中：これが工事日に行う作業だと伝える（落ち着いたトーン）
+                stepMsg = `<div class="ov-step-msg">${SVG.pin} このSTEPは、RemoteLOCKの取り付け工事の日に、物件で行う作業です。</div>`;
+            } else if (dp === 'today') {
+                // 工事日当日：今日進めるべきだと伝える（注意を引くトーン）
+                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin} <strong>本日はRemoteLOCK工事日です。</strong>物件での作業を進めてください。</div>`;
+            } else if (dp === 'after') {
+                // 工事日経過後：日付を断定せず、過ぎたことを穏やかに伝える
+                const d = parseDate0(formData.constructionDate);
+                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin} RemoteLOCK工事日（${formatJpDate(d)}）を過ぎています。まだ終わっていない作業があれば、お早めに進めてください。</div>`;
+            }
+        }
+
         const pct = ts.length ? Math.round(doneCount / ts.length * 100) : 0;
         html += `
         <div class="ov-step ov-step-${statusClass}">
@@ -1954,6 +1999,7 @@ function renderOverview() {
             <div class="ov-step-name">${meta.name}</div>
             <div class="ov-step-sub">${meta.sub}</div>
             <div class="ov-step-when">${phase === 2 ? SVG.pin : SVG.monitor} ${meta.when}</div>
+            ${stepMsg}
             ${status !== 'locked' ? `
             <div class="ov-step-bar"><div class="ov-step-bar-fill" style="width:${pct}%"></div></div>
             <div class="ov-step-count">${doneCount} / ${ts.length} 完了</div>` : ''}
