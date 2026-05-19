@@ -787,15 +787,6 @@
         .ov-finish-text { font-size: 13px; font-weight: 600; color: #7c3a06; line-height: 1.85; }
         .ov-finish-text strong { font-weight: 900; }
 
-        /* ウィザード：スケジュールに戻る */
-        .wiz-back-ov {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: white; border: 1px solid #e2e8f0; color: #475569;
-            border-radius: 12px; padding: 9px 16px; margin-bottom: 14px;
-            font-size: 12px; font-weight: 900; cursor: pointer; font-family: inherit;
-        }
-        .wiz-back-ov svg { width: 14px; height: 14px; }
-
         /* ── ウィザード：進捗バー ── */
         .wiz-progress { margin-bottom: 18px; }
         .wiz-progress-info {
@@ -919,8 +910,8 @@
             font-size: 14px; font-weight: 700; color: #334155; font-family: monospace;
         }
         .btn-copy {
-            font-size: 10px; font-weight: 900; color: var(--brand);
-            border: 1px solid #bfdbfe; padding: 6px 14px; border-radius: 10px;
+            font-size: 12px; font-weight: 900; color: var(--brand);
+            border: 1px solid #bfdbfe; padding: 8px 16px; border-radius: 10px;
             background: white; cursor: pointer; transition: background 0.2s;
             font-family: inherit; white-space: nowrap;
         }
@@ -1650,6 +1641,7 @@ function renderConfirmList() {
 
 // 物件情報の表示状態を更新。
 // 未入力時：カード（アラート）を表示。確定後：細い1行バーに切り替え。
+// ウィザード中（STEP対応中）はバーも非表示にして、目の前のタスクに集中させる。
 function renderHostCard() {
     const cardEl = document.getElementById('hostCard');
     const barEl  = document.getElementById('hostBar');
@@ -1657,10 +1649,15 @@ function renderHostCard() {
     if (!cardEl || !barEl) return;
 
     if (hostConfirmed) {
-        // 確定後：カードを隠し、物件名だけの細いバーを表示
         cardEl.style.display = 'none';
-        barEl.style.display = 'flex';
-        if (barName) barName.textContent = formData.property || '（物件名未設定）';
+        if (viewMode === 'wizard') {
+            // ウィザード中：物件情報バーも隠す
+            barEl.style.display = 'none';
+        } else {
+            // 俯瞰画面：物件名だけの細いバーを表示
+            barEl.style.display = 'flex';
+            if (barName) barName.textContent = formData.property || '（物件名未設定）';
+        }
     } else {
         // 未入力：アラートカードを表示、バーは隠す
         cardEl.style.display = 'block';
@@ -1755,6 +1752,18 @@ function renderTaskCard(task) {
             `<a href="${l.url}" target="_blank" class="btn-primary" onclick="event.stopPropagation()">${l.label} ${SVG.extLink}</a>`
         ).join('');
         actionHtml += `<div class="btn-group">${btns}</div>`;
+    }
+
+    if (task.invite) {
+        actionHtml += `
+        <div class="invite-box">
+            <div class="invite-section-label">管理者招待に使うメールアドレス</div>
+            <div class="invite-email-desc">公式手順の中で招待先のメールアドレスを入力する場面があります。下記の民泊管理バンクのアドレスを入力してください。</div>
+            <div class="invite-email-row">
+                <code class="invite-email-code">${CS_EMAIL}</code>
+                <button class="btn-copy" onclick="event.stopPropagation(); copyText('${CS_EMAIL}')">コピー</button>
+            </div>
+        </div>`;
     }
 
     if (task.guide) {
@@ -1879,18 +1888,6 @@ function renderTaskCard(task) {
         </div>`;
     }
 
-    if (task.invite) {
-        actionHtml += `
-        <div class="invite-box">
-            <div class="invite-section-label">管理者招待に使うメールアドレス</div>
-            <div class="invite-email-desc">公式手順の中で招待先のメールアドレスを入力する場面があります。下記の民泊管理バンクのアドレスを入力してください。</div>
-            <div class="invite-email-row">
-                <code class="invite-email-code">${CS_EMAIL}</code>
-                <button class="btn-copy" onclick="event.stopPropagation(); copyText('${CS_EMAIL}')">COPY ADDRESS</button>
-            </div>
-        </div>`;
-    }
-
     // 入力UIタスク（Wi-Fi工事日・取付診断）以外は、完了チェックを手動で操作できる
     const autoTask = task.wifi || task.diagnosis;
     let checkRow = '';
@@ -1914,6 +1911,9 @@ function renderTaskCard(task) {
 // ===== RENDER（viewModeで俯瞰画面／ウィザードを切り替え） =====
 function render() {
     const container = document.getElementById('tasksContainer');
+
+    // viewModeに応じて物件情報バーの表示／非表示を切り替え
+    renderHostCard();
 
     // ロック中（物件情報・確認事項が未完了）は何も進められない
     if (!isUnlocked()) {
@@ -2033,7 +2033,8 @@ function renderOverview() {
         // STEP01とSTEP02の間に、RemoteLOCK工事日の変更欄を挟む。
         // 工事日は取付診断で初めて入力されるため、入力済みのときだけ表示する
         // （診断前に工事日を入れられてしまう違和感を防ぐ）。
-        if (phase === 1 && phases.includes(2) && parseDate0(formData.constructionDate)) {
+        // STEP02が完了済みなら、工事日を変更する意味がないので出さない。
+        if (phase === 1 && phases.includes(2) && parseDate0(formData.constructionDate) && !isPhaseComplete(2)) {
             html += renderWorkdateCard();
         }
     });
@@ -2079,7 +2080,6 @@ function renderWizard() {
     if (currentTaskIndex > tasks.length) currentTaskIndex = tasks.length;
 
     let html = '<div class="wiz">';
-    html += `<button class="wiz-back-ov" onclick="closeWizard()">${SVG.arrowL} STEP一覧に戻る</button>`;
 
     if (currentTaskIndex >= tasks.length) {
         const phaseDone = tasks.every(t => completed[t.id]);
@@ -2092,14 +2092,14 @@ function renderWizard() {
             <div class="wiz-done-text">
                 ${phaseDone
                     ? (hasNext
-                        ? 'スケジュール画面に戻って、次のSTEPに進んでください。'
+                        ? 'TOPに戻って、次のSTEPに進んでください。'
                         : (diagnosisResult === 'ng'
                             ? 'RemoteLOCKは設置不可のため、ここまでで完了です。代替品の手配は民泊管理バンクが対応します。'
                             : 'すべてのSTEPが完了しました。お疲れさまでした。'))
-                    : 'まだ完了していないタスクがあります。「もどる」で確認してください。'}
+                    : 'まだ完了していないタスクがあります。「前のタスクへ」で確認してください。'}
             </div>
-            <button class="wiz-btn-next" onclick="closeWizard()">スケジュールに戻る</button>
-            ${currentTaskIndex > 0 ? `<button class="wiz-btn-back" onclick="wizPrev()" style="margin-top:10px">${SVG.arrowL} 前のタスクにもどる</button>` : ''}
+            <button class="wiz-btn-next" onclick="closeWizard()">TOPに戻る</button>
+            ${currentTaskIndex > 0 ? `<button class="wiz-btn-back" onclick="wizPrev()" style="margin-top:10px">${SVG.arrowL} 前のタスクへ</button>` : ''}
         </div>`;
         html += '</div>';
         return html;
@@ -2139,12 +2139,12 @@ function renderWizard() {
     const taskDone = !!completed[task.id];
     const canNext = isAuto ? taskDone : true;
     const isLast = currentTaskIndex === tasks.length - 1;
-    const nextLabel = isLast ? 'STEPを完了して一覧へ' : '次のタスクへ';
+    const nextLabel = isLast ? 'STEPを完了してTOPへ' : '次のタスクへ';
     html += `
     <div class="wiz-nav">
         ${currentTaskIndex > 0
-            ? `<button class="wiz-btn-prev" onclick="wizPrev()">${SVG.arrowL} もどる</button>`
-            : `<button class="wiz-btn-prev" onclick="closeWizard()">${SVG.arrowL} STEP一覧</button>`}
+            ? `<button class="wiz-btn-prev" onclick="wizPrev()">${SVG.arrowL} 前のタスクへ</button>`
+            : `<button class="wiz-btn-prev" onclick="closeWizard()">${SVG.arrowL} TOPに戻る</button>`}
         <button class="wiz-btn-next" onclick="wizNext()" ${canNext ? '' : 'disabled'}>${nextLabel} ${SVG.arrowR}</button>
     </div>
     ${!canNext ? `<div class="wiz-nav-hint">このタスクを完了すると次に進めます</div>` : ''}`;
@@ -2343,6 +2343,11 @@ function updateStickyBar() {
     }
     // 設置不可の場合は完了報告フロー（STEP03のクラウド報告）は不要のため非表示
     if (diagnosisResult === 'ng') {
+        bar.classList.remove('visible');
+        return;
+    }
+    // ウィザード（STEP対応）の最中は出さない。TOPに戻ったときだけ案内する。
+    if (viewMode === 'wizard') {
         bar.classList.remove('visible');
         return;
     }
