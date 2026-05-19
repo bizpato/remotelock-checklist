@@ -2035,9 +2035,10 @@ function renderOverview() {
             </button>
         </div>`;
 
-        // STEP01とSTEP02の間に、RemoteLOCK工事日の変更欄を挟む
-        // （工事日はSTEP02の解錠を決めるため、そのすぐ手前に置く）
-        if (phase === 1 && phases.includes(2)) {
+        // STEP01とSTEP02の間に、RemoteLOCK工事日の変更欄を挟む。
+        // 工事日は取付診断で初めて入力されるため、入力済みのときだけ表示する
+        // （診断前に工事日を入れられてしまう違和感を防ぐ）。
+        if (phase === 1 && phases.includes(2) && parseDate0(formData.constructionDate)) {
             html += renderWorkdateCard();
         }
     });
