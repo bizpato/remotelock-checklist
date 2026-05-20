@@ -116,29 +116,19 @@
         .dash-top { display: flex; justify-content: flex-end; margin-bottom: 12px; }
 
         /* 自動保存の案内バナー */
+        /* 自動保存の案内バナー（補助情報なので控えめに） */
         .autosave-note {
             display: flex; align-items: flex-start; gap: 9px;
-            background: #f0f9ff; border: 1px solid #bae6fd;
+            background: #f8fafc; border: 1px solid #e2e8f0;
             border-radius: 13px; padding: 12px 14px; margin-bottom: 16px;
-            font-size: 12px; font-weight: 600; color: #0c5a8a; line-height: 1.65;
+            font-size: 12px; font-weight: 600; color: #64748b; line-height: 1.65;
         }
-        .autosave-note svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; color: #0ea5e9; }
+        .autosave-note svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; color: #94a3b8; }
         .autosave-note > div { flex: 1; min-width: 0; }
-
-        /* ── 入力ページ：戻るボタン ── */
-        .btn-back-screen {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: white; color: #475569;
-            padding: 10px 18px; border-radius: 14px;
-            font-size: 12px; font-weight: 700; cursor: pointer;
-            border: 1px solid #e2e8f0; font-family: inherit;
-            margin-bottom: 20px; transition: border-color 0.2s;
-        }
-        .btn-back-screen:hover { border-color: var(--brand); }
-        .btn-back-screen svg { width: 14px; height: 14px; display: block; }
 
         /* ── 入力ページ：確定ナビ ── */
         .input-nav { margin: 24px 0 8px; }
+        .input-nav-row { display: flex; gap: 12px; align-items: stretch; }
         .input-nav-hint {
             text-align: center; font-size: 11px; font-weight: 700;
             color: #94a3b8; margin-top: 10px;
@@ -245,8 +235,17 @@
             transition: background 0.2s;
         }
         .card-edit-btn:hover { background: var(--brand-base); }
+        .btn-host-back {
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 18px 20px; border-radius: 18px;
+            background: white; color: #475569; border: 1.5px solid #e2e8f0;
+            font-size: 14px; font-weight: 900; cursor: pointer; font-family: inherit;
+            flex-shrink: 0; transition: border-color 0.2s;
+        }
+        .btn-host-back:hover { border-color: var(--brand); }
+        .btn-host-back svg { width: 16px; height: 16px; flex-shrink: 0; }
         .btn-host-save {
-            width: 100%; padding: 18px; border-radius: 18px;
+            flex: 1; padding: 18px; border-radius: 18px;
             background: var(--brand); color: white; border: none;
             font-size: 15px; font-weight: 900; cursor: pointer; font-family: inherit;
             box-shadow: 0 8px 24px rgba(33,83,135,0.25); transition: opacity 0.2s;
@@ -269,7 +268,7 @@
         /* ── Form ── */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-full { grid-column: 1 / -1; }
-        .form-label { display: block; font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px; }
+        .form-label { display: block; font-size: 14px; font-weight: 900; color: #1e293b; margin-bottom: 8px; }
         .form-label .required { color: var(--danger); margin-left: 3px; }
         .form-input {
             width: 100%; background: #f8fafc; border: 1px solid #e2e8f0;
@@ -462,6 +461,59 @@
             font-family: inherit;
         }
         .btn-diag-ng:hover { background: var(--danger); color: white; }
+
+        /* 工事日「同じ／異なる」切り替え */
+        .construction-mode-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .construction-mode-opt {
+            flex: 1; min-width: 140px;
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 14px; border-radius: 14px;
+            background: white; border: 2px solid #e2e8f0;
+            font-size: 12px; font-weight: 900; color: #64748b;
+            cursor: pointer; transition: border-color 0.2s, color 0.2s;
+        }
+        .construction-mode-opt.active { border-color: var(--brand); color: var(--brand); background: var(--brand-base); }
+        .construction-mode-opt input[type="radio"] { accent-color: var(--brand); }
+        .construction-mode-opt span { flex: 1; }
+
+        /* 設置不可屋号の選択チェックリスト */
+        .ng-picker-box {
+            background: #fff5f5; border: 1px solid #fecaca;
+            border-radius: 14px; padding: 16px 18px; margin-bottom: 16px;
+        }
+        .ng-picker-title {
+            display: flex; align-items: flex-start; gap: 7px;
+            font-size: 13px; font-weight: 900; color: #b91c1c;
+            margin-bottom: 10px; line-height: 1.5;
+        }
+        .ng-picker-title svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: var(--danger); }
+        .ng-picker-list { display: flex; flex-direction: column; gap: 8px; }
+        .ng-picker-row {
+            display: flex; align-items: center; gap: 10px;
+            background: white; border: 1px solid #fed7d7;
+            border-radius: 10px; padding: 10px 12px;
+            font-size: 13px; font-weight: 700; color: #475569;
+            cursor: pointer;
+        }
+        .ng-picker-row input[type="checkbox"] { accent-color: var(--danger); width: 16px; height: 16px; }
+        .ng-picker-row span { flex: 1; }
+        .ng-picker-note {
+            display: flex; align-items: flex-start; gap: 7px;
+            background: white; border: 1px solid #fde68a;
+            border-radius: 10px; padding: 10px 12px; margin-top: 12px;
+            font-size: 11px; font-weight: 600; color: #78540a; line-height: 1.7;
+        }
+        .ng-picker-note svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; color: var(--warn); }
+        .ng-picker-note > span { flex: 1; min-width: 0; }
+        .ng-picker-note strong { font-weight: 900; color: #92400e; }
+
+        /* 工事日2列レイアウト（最短日／最遅日） */
+        .date-multi-row { display: flex; gap: 14px; flex-wrap: wrap; }
+        .date-multi-col { flex: 1; min-width: 220px; }
+        .date-multi-label {
+            font-size: 11px; font-weight: 900; color: #475569;
+            margin-bottom: 6px;
+        }
 
         /* ── Wi-Fi工事日 入力ボックス ── */
         .wifi-box {
@@ -840,6 +892,11 @@
             cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
         }
         .wiz-check.checked { background: #f0f9ff; border-color: #10b981; }
+        .wiz-check.disabled-pending {
+            background: #f8fafc; border-color: #e2e8f0; cursor: not-allowed;
+        }
+        .wiz-check.disabled-pending .wiz-check-label { color: #94a3b8; }
+        .wiz-check.disabled-pending .wiz-check-box { border-color: #cbd5e1; background: white; }
         .wiz-check-box {
             flex-shrink: 0; width: 30px; height: 30px; border-radius: 9px;
             border: 2px solid #cbd5e1; background: white;
@@ -921,6 +978,27 @@
             font-family: inherit; white-space: nowrap;
         }
         .btn-copy:hover { background: var(--brand-base); }
+
+        /* デバイス登録名の入力欄（屋号と1:1で対応） */
+        .device-names-box {
+            background: white; border-radius: 20px; border: 1px solid #e2e8f0;
+            padding: 22px; margin-top: 14px;
+        }
+        .device-names-desc {
+            font-size: 12px; font-weight: 500; color: #64748b;
+            line-height: 1.75; margin-bottom: 14px;
+        }
+        .device-names-desc strong { font-weight: 900; color: #334155; }
+        .device-row {
+            display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;
+        }
+        .device-row:last-child { margin-bottom: 0; }
+        .device-row-yago {
+            font-size: 12px; font-weight: 900; color: #1e293b;
+            background: #f1f5f9; border-radius: 8px; padding: 6px 10px;
+            display: inline-block; align-self: flex-start;
+        }
+        .device-name-input { font-size: 14px; }
 
         /* ── Sticky Bar ── */
         .sticky-bar {
@@ -1154,11 +1232,6 @@
     <!-- ========== 画面2：入力ページ ========== -->
     <div class="screen" id="screenInput">
 
-        <div class="btn-back-screen" onclick="backToDash()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            ダッシュボードにもどる
-        </div>
-
         <!-- 自動保存の案内 -->
         <div class="autosave-note">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -1177,9 +1250,15 @@
             <div class="card-body">
                 <div class="form-grid">
                     <div class="form-full">
-                        <label class="form-label">物件名<span class="required">*</span></label>
-                        <input type="text" class="form-input" id="f_property" placeholder="例：〇〇マンション 101号室">
-                        <div class="form-hint" id="hint_property">物件名を入力してください</div>
+                        <label class="form-label">今回ご導入の物件数<span class="required">*</span></label>
+                        <input type="number" class="form-input" id="f_propertyCount" min="1" step="1" placeholder="例：1" style="max-width:140px">
+                        <div class="form-hint" id="hint_propertyCount">1以上の整数を入力してください</div>
+                        <div class="form-note" style="font-size:11px;font-weight:600;color:#94a3b8;line-height:1.6;margin-top:6px">※今回のチェックリストでRemoteLOCKを導入する物件の数を入力してください。すでに民泊管理バンクのアカウントに連携済みの物件は含めません。</div>
+                    </div>
+                    <div class="form-full" id="propertyNamesField">
+                        <label class="form-label">物件屋号<span class="required">*</span></label>
+                        <div id="propertyNamesList"></div>
+                        <div class="form-hint" id="hint_propertyNames">すべての屋号を入力してください</div>
                     </div>
                     <div class="form-full">
                         <label class="form-label">ご契約者様名<span class="required">*</span></label>
@@ -1223,7 +1302,13 @@
 
         <!-- 確定ボタン -->
         <div class="input-nav">
-            <button class="btn-host-save" id="btnHostSave" onclick="saveInputScreen()">この内容で確定して進む</button>
+            <div class="input-nav-row">
+                <button class="btn-host-back" onclick="backToDash()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    もどる
+                </button>
+                <button class="btn-host-save" id="btnHostSave" onclick="saveInputScreen()">この内容で確定して進む</button>
+            </div>
             <div class="input-nav-hint" id="inputNavHint"></div>
         </div>
 
@@ -1409,8 +1494,9 @@ const TASKS = [
     {
         id: 7, phase: 3,
         title: 'RemoteLOCKアカウントの作成（ビジネススタンダードプランを選択）',
-        desc: 'RemoteLOCKのクラウド管理システム「Connect」のアカウントを、ホスト様ご自身で作成します。デバイス初期設定・Wi-Fi設定が終わってから行ってください。<br><br><strong>■ プランは「ビジネススタンダード」を選んでください</strong><br>アカウント作成の途中に、プランを選ぶ画面が出てきます。予約サイトなどの外部システムと連携するには<strong>「ビジネススタンダード」プランが必須</strong>です。ほかのプランで作成を進めてしまわないよう、プラン選択画面では必ず「ビジネススタンダード」を選んでください。<br><br><strong>■ クレジットカードについて</strong><br>アカウント作成時にクレジットカード情報の登録が必要ですが、この時点ではまだ料金はかかりません（あとのデバイス登録時から引き落としが始まります）。',
+        desc: 'RemoteLOCKのクラウド管理システム「Connect」のアカウントを、ホスト様ご自身で作成します。デバイス初期設定・Wi-Fi設定が終わってから行ってください。<br><br><strong>■ プランは「ビジネススタンダード」を選んでください</strong><br>アカウント作成の途中に、プランを選ぶ画面が出てきます。予約サイトなどの外部システムと連携するには<strong>「ビジネススタンダード」プランが必須</strong>です。ほかのプランで作成を進めてしまわないよう、プラン選択画面では必ず「ビジネススタンダード」を選んでください。<br><br><strong>■ クレジットカードについて</strong><br>アカウント作成時にクレジットカード情報の登録が必要ですが、この時点ではまだ料金はかかりません（あとのデバイス登録時から引き落としが始まります）。<br><br><strong>■ アカウント情報の保存</strong><br>アカウントを作成したら、下の欄に<strong>ログインID（メールアドレス）とパスワード</strong>を入力してください。導入完了報告メールに添付して民泊管理バンクへ共有します。',
         critical: true,
+        accountCred: true,
         links: [{ label: 'Connect ログイン画面を開く', url: 'https://connect.remotelock.jp/sign-in' }],
         guide: {
             label: 'アカウント作成の手順を見る',
@@ -1425,6 +1511,7 @@ const TASKS = [
         desc: 'Connectに設置場所を登録し（タイムゾーンは「Japan」または「Asia/Tokyo」）、デバイスを追加します。そのあと、民泊管理バンクが設定代行・サポートを行うため、弊社アカウントを管理者として招待してください。',
         invite: true,
         billing: true,
+        links: [{ label: 'Connect ログイン画面を開く', url: 'https://connect.remotelock.jp/sign-in' }],
         guide: {
             label: 'デバイス追加・管理者招待の手順を見る',
             items: [
@@ -1438,12 +1525,27 @@ const TASKS = [
 // ===== STATE =====
 let completed = {};
 let formData = {
-    property: '', subscriber: '', staff: '', email: '',
+    // 物件情報：導入台数(propertyCount)と、台数分の物件屋号(propertyNames配列)。
+    // 物件名（property）は廃止。複数物件への導入を扱えるようにするため。
+    propertyCount: 1,
+    propertyNames: [''],
+    // 屋号と同じインデックスで対応するデバイス登録名(deviceNames配列)。
+    // タスク9（デバイスの追加・管理者招待）の完了前に、屋号ごとに入力してもらう。
+    deviceNames: [''],
+    subscriber: '', staff: '', email: '',
     staffSame: false,        // ご担当者様がご契約者様と同じか
     loginId: '', password: '',
     wifiAlreadyDone: false,  // Wi-Fiがすでに開通済みか
     wifiDate: '',            // Wi-Fi工事日（開通日）
-    constructionDate: '',    // RemoteLOCK工事予定日
+    // RemoteLOCK工事予定日。
+    // 物件数1または「全物件で同じ日」の場合は constructionDate のみ使用。
+    // 物件数2以上で「物件ごとに異なる」場合は constructionDate=最短日、constructionDateLatest=最遅日。
+    constructionDate: '',
+    constructionDatesDiffer: false,  // 複数物件で工事日が異なるか
+    constructionDateLatest: '',      // 異なる場合の最遅日
+    // 取付診断で「設置不可」と判定された屋号のインデックス配列。
+    // 空=全物件設置可能、全インデックス=全物件設置不可、一部=一部設置不可。
+    ngPropertyIdxs: [],
     showDateInput: false
 };
 // 取付診断の結果： null=未報告 / 'ok'=設置可能 / 'ng'=設置不可
@@ -1479,6 +1581,37 @@ function loadState() {
             const parsed = JSON.parse(raw);
             if (parsed.completed) completed = parsed.completed;
             if (parsed.formData)  formData  = { ...formData, ...parsed.formData, showDateInput: false };
+            // 旧形式（property: 1つの文字列）からの移行：
+            // 既存ユーザーのlocalStorageに property だけがあり、新形式のフィールドが
+            // 保存されていない（＝デフォルトの空配列のまま）場合は、
+            // その物件名を1件目の屋号として propertyNames に移し、台数1にする。
+            const hasNewFormat = parsed.formData
+                && (Array.isArray(parsed.formData.propertyNames) && parsed.formData.propertyNames.some(v => v));
+            if (typeof formData.property === 'string' && formData.property && !hasNewFormat) {
+                formData.propertyNames = [formData.property];
+                formData.propertyCount = 1;
+            }
+            // property フィールドは新形式では持たないので必ず削除
+            if ('property' in formData) delete formData.property;
+            // 念のための整合性確認
+            if (!Number.isInteger(formData.propertyCount) || formData.propertyCount < 1) formData.propertyCount = 1;
+            if (!Array.isArray(formData.propertyNames) || formData.propertyNames.length === 0) formData.propertyNames = [''];
+            // 屋号配列の長さを台数に合わせる
+            while (formData.propertyNames.length < formData.propertyCount) formData.propertyNames.push('');
+            if (formData.propertyNames.length > formData.propertyCount) {
+                formData.propertyNames = formData.propertyNames.slice(0, formData.propertyCount);
+            }
+            // デバイス登録名配列の整合性確認（屋号と同じ長さに揃える）
+            if (!Array.isArray(formData.deviceNames)) formData.deviceNames = [];
+            while (formData.deviceNames.length < formData.propertyCount) formData.deviceNames.push('');
+            if (formData.deviceNames.length > formData.propertyCount) {
+                formData.deviceNames = formData.deviceNames.slice(0, formData.propertyCount);
+            }
+            // 設置不可屋号インデックスを正規化（配列で、範囲内のインデックスのみ保持）
+            if (!Array.isArray(formData.ngPropertyIdxs)) formData.ngPropertyIdxs = [];
+            formData.ngPropertyIdxs = formData.ngPropertyIdxs
+                .map(v => Number(v))
+                .filter(v => Number.isInteger(v) && v >= 0 && v < formData.propertyCount);
             if (parsed.diagnosisResult) diagnosisResult = parsed.diagnosisResult;
             if (parsed.diagnosisReported) diagnosisReported = parsed.diagnosisReported;
             if (parsed.confirmChecks) confirmChecks = parsed.confirmChecks;
@@ -1560,6 +1693,7 @@ function isOnsiteUnlocked() {
 }
 
 // 工事日と今日の関係： 'before'（工事日前）/ 'today'（工事日当日）/ 'after'（工事日経過）/ null（工事日未定）
+// 複数日対応：constructionDateは最短日として扱うため、解錠判定・当日判定はこれで正しい。
 function constructionDayPhase() {
     const d = parseDate0(formData.constructionDate);
     if (!d) return null;
@@ -1567,6 +1701,49 @@ function constructionDayPhase() {
     if (t < d) return 'before';
     if (t.getTime() === d.getTime()) return 'today';
     return 'after';
+}
+
+// 工事日の表示文字列を返す。
+// 単一日（物件数1、または「全物件同じ」）→「M月D日」
+// 複数日（物件数2以上で「異なる」）→「M月D日 〜 M月D日」
+function formatConstructionDate() {
+    const d1 = parseDate0(formData.constructionDate);
+    if (!d1) return '';
+    if (formData.constructionDatesDiffer && formData.constructionDateLatest) {
+        const d2 = parseDate0(formData.constructionDateLatest);
+        if (d2) return `${formatJpDate(d1)} 〜 ${formatJpDate(d2)}`;
+    }
+    return formatJpDate(d1);
+}
+
+// 工事日が複数日として入力されているか（同じ／異なるチェックを使うか）
+function shouldShowDifferToggle() {
+    return (formData.propertyCount || 1) >= 2;
+}
+
+// 設置不可状態の判定。
+// 'none' = 全物件設置可能、'all' = 全物件設置不可、'partial' = 一部設置不可。
+function ngState() {
+    const n = formData.propertyCount || 1;
+    const ngs = Array.isArray(formData.ngPropertyIdxs) ? formData.ngPropertyIdxs : [];
+    if (ngs.length === 0) return 'none';
+    if (ngs.length >= n) return 'all';
+    return 'partial';
+}
+
+// 屋号が設置不可と判定されているか
+function isNgProperty(idx) {
+    return Array.isArray(formData.ngPropertyIdxs) && formData.ngPropertyIdxs.includes(idx);
+}
+
+// 設置可能と判定された屋号インデックス一覧
+function okPropertyIdxs() {
+    const n = formData.propertyCount || 1;
+    const result = [];
+    for (let i = 0; i < n; i++) {
+        if (!isNgProperty(i)) result.push(i);
+    }
+    return result;
 }
 
 // STEPの状態を返す： 'locked'（施錠中）/ 'todo'（未着手・着手可）/ 'doing'（進行中）/ 'done'（完了）
@@ -1645,6 +1822,24 @@ function renderConfirmList() {
 }
 
 // 物件情報の表示状態を更新。
+// 物件情報バーに表示するラベルを作る。
+// 屋号1件→屋号そのもの、複数→「先頭屋号 ほかN件」。
+function formatPropertyBarLabel() {
+    const names = (formData.propertyNames || []).filter(v => v);
+    if (names.length === 0) return '（物件屋号未設定）';
+    if (names.length === 1) return names[0];
+    return `${names[0]} ほか${names.length - 1}件`;
+}
+
+// 報告メールなどに使う「物件屋号」の文字列を作る。
+// 1件→「物件屋号: ◯◯」、複数→「物件屋号(N件): A、B、C」。
+function formatPropertiesForMail() {
+    const names = (formData.propertyNames || []).filter(v => v);
+    if (names.length === 0) return '物件屋号: （未設定）';
+    if (names.length === 1) return `物件屋号: ${names[0]}`;
+    return `物件屋号(${names.length}件): ${names.join('、')}`;
+}
+
 // 未入力時：カード（アラート）を表示。確定後：細い1行バーに切り替え。
 // ウィザード中（STEP対応中）はバーも非表示にして、目の前のタスクに集中させる。
 function renderHostCard() {
@@ -1659,9 +1854,9 @@ function renderHostCard() {
             // ウィザード中：物件情報バーも隠す
             barEl.style.display = 'none';
         } else {
-            // 俯瞰画面：物件名だけの細いバーを表示
+            // 俯瞰画面：物件屋号（複数なら「屋号1 ほかN件」）を細いバーに表示
             barEl.style.display = 'flex';
-            if (barName) barName.textContent = formData.property || '（物件名未設定）';
+            if (barName) barName.textContent = formatPropertyBarLabel();
         }
     } else {
         // 未入力：アラートカードを表示、バーは隠す
@@ -1692,7 +1887,7 @@ function showScreen(name) {
 function openInputScreen() {
     showScreen('input');
     updateInputNav();
-    const el = document.getElementById('f_property');
+    const el = document.getElementById('f_propertyCount');
     if (el) el.focus();
 }
 
@@ -1769,6 +1964,35 @@ function renderTaskCard(task) {
                 <button class="btn-copy" onclick="event.stopPropagation(); copyText('${CS_EMAIL}')">コピー</button>
             </div>
         </div>`;
+
+        // デバイス登録名の入力欄。屋号ごとに1つずつ。
+        // 設置可能と判定された屋号のみ対象とする（一部設置不可の場合、設置不可屋号は除外）。
+        // 全屋号分のデバイス登録名が入力されないと、このタスクの完了チェックは入れられない。
+        const names = formData.propertyNames || [];
+        const devs = formData.deviceNames || [];
+        const okIdxs = okPropertyIdxs();
+        let rows = '';
+        for (const i of okIdxs) {
+            const yago = names[i] || `屋号${i + 1}`;
+            const val = devs[i] || '';
+            rows += `
+            <div class="device-row">
+                <div class="device-row-yago">${escapeHtml(yago)}</div>
+                <input type="text" class="form-input device-name-input" data-idx="${i}" value="${escapeHtml(val)}" placeholder="例：玄関RemoteLOCK" oninput="onDeviceNameInput(${i}, this.value)" onclick="event.stopPropagation()">
+            </div>`;
+        }
+        // 一部設置不可の場合は対象屋号を明示する補足を入れる
+        const ngst = ngState();
+        const partialNote = ngst === 'partial'
+            ? `<div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:8px">※設置不可の物件は対象外です（民泊管理バンクが代替品を手配します）。</div>`
+            : '';
+        actionHtml += `
+        <div class="device-names-box">
+            <div class="invite-section-label">登録したデバイスの名前</div>
+            <div class="device-names-desc">Connectで登録したデバイスの名前を、それぞれの物件屋号に対応させて入力してください。<strong>すべての屋号にデバイス名を入力すると、このタスクを完了にできます。</strong></div>
+            ${partialNote}
+            ${rows}
+        </div>`;
     }
 
     if (task.guide) {
@@ -1821,14 +2045,69 @@ function renderTaskCard(task) {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 <div class="date-alert-text">${dateProblem}</div>
             </div>` : '';
-            const canSend = formData.showDateInput && formData.constructionDate && !dateProblem;
-            const dateInputHtml = formData.showDateInput ? `
-            <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
-                <label class="form-label" style="margin-bottom:6px">RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
+            // 複数日対応：物件数2以上なら「同じ／異なる」チェック、異なる場合は最遅日も入力
+            const multi = shouldShowDifferToggle();
+            const differ = !!formData.constructionDatesDiffer;
+            // 設置不可状態
+            const ngst = ngState();
+            // 送信可否：通常は constructionDate（最短日）が必須。「異なる」なら最遅日も必須。
+            // ただし全物件設置不可（'all'）なら日付不要。
+            const datesOk = formData.constructionDate && (!differ || formData.constructionDateLatest);
+            const canSend = formData.showDateInput && (ngst === 'all' || (datesOk && !dateProblem));
+            const differToggleHtml = multi ? `
+                <div class="construction-mode-row">
+                    <label class="construction-mode-opt ${!differ ? 'active' : ''}">
+                        <input type="radio" name="construction_mode" ${!differ ? 'checked' : ''} onclick="event.stopPropagation(); setConstructionDatesDiffer(false)">
+                        <span>全ての物件で同じ日</span>
+                    </label>
+                    <label class="construction-mode-opt ${differ ? 'active' : ''}">
+                        <input type="radio" name="construction_mode" ${differ ? 'checked' : ''} onclick="event.stopPropagation(); setConstructionDatesDiffer(true)">
+                        <span>物件ごとに異なる</span>
+                    </label>
+                </div>` : '';
+            const dateFieldsHtml = differ ? `
+                <div class="date-multi-row">
+                    <div class="date-multi-col">
+                        <div class="date-multi-label">最も早い工事日</div>
+                        ${dateSelectHtml('cons', formData.constructionDate, 'onConstructionDateInput')}
+                    </div>
+                    <div class="date-multi-col">
+                        <div class="date-multi-label">最も遅い工事日</div>
+                        ${dateSelectHtml('consLate', formData.constructionDateLatest, 'onConstructionDateLatestInput')}
+                    </div>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">最も早い工事日の到来でSTEP02に進めます。</div>
+            ` : `
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
                     ${dateSelectHtml('cons', formData.constructionDate, 'onConstructionDateInput')}
-                    <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(true)" style="margin:0" ${canSend ? '' : 'disabled'}>報告メールを作成する →</button>
                 </div>
+            `;
+            // 設置不可屋号選択（複数物件のとき、または既に1件以上選択されているとき）
+            const showNgPicker = formData.showDateInput && multi && ngst !== 'none';
+            // 工事日入力の表示条件：設置可能な物件が1件以上ある場合のみ
+            const showDateFields = formData.showDateInput && ngst !== 'all';
+            const ngPickerHtml = showNgPicker ? `
+                <div class="ng-picker-box" onclick="event.stopPropagation()">
+                    <div class="ng-picker-title">${SVG.info} 設置不可だった物件を選択してください（複数可）</div>
+                    <div class="ng-picker-list">
+                        ${(formData.propertyNames || []).map((nm, i) => `
+                            <label class="ng-picker-row">
+                                <input type="checkbox" ${isNgProperty(i) ? 'checked' : ''} onclick="event.stopPropagation(); toggleNgProperty(${i})">
+                                <span>${escapeHtml(nm || '(屋号未入力)')}</span>
+                            </label>`).join('')}
+                    </div>
+                    ${ngst === 'partial' ? `
+                    <div class="ng-picker-note">${SVG.info}<span>選ばれた屋号は、民泊管理バンクにて<strong>代替スマートロック（SwitchBot）</strong>でご用意します。残りの屋号については、このあと工事予定日を入力し、STEP02・03にお進みください。</span></div>` : ''}
+                    ${ngst === 'all' ? `
+                    <div class="ng-picker-note">${SVG.info}<span>すべての物件が設置不可となりました。STEP02以降の対応は不要です。民泊管理バンクにて<strong>代替スマートロック（SwitchBot）</strong>を手配します。</span></div>` : ''}
+                </div>` : '';
+            const dateInputHtml = formData.showDateInput ? `
+            <div id="constructionDateArea" style="margin:14px 0 4px;" onclick="event.stopPropagation()">
+                ${ngPickerHtml}
+                ${showDateFields ? `
+                <label class="form-label" style="margin-bottom:6px">${ngst === 'partial' ? '設置可能な物件の' : ''}RemoteLOCK工事予定日 <span class="required" style="color:var(--danger)">*</span></label>
+                ${differToggleHtml}
+                ${dateFieldsHtml}
                 <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:6px">
                     ${formData.wifiAlreadyDone
                         ? 'Wi-Fiは開通済みのため、工事予定日に制約はありません'
@@ -1836,24 +2115,45 @@ function renderTaskCard(task) {
                             ? `Wi-Fi工事日（${formData.wifiDate}）の翌日以降の日付を指定してください`
                             : 'まず「Wi-Fi工事日（開通日）の確認・入力」を完了してください'}
                 </div>
-                ${alertHtml}
+                ${alertHtml}` : ''}
+                <div style="margin-top:12px">
+                    <button class="btn-diag-ok" onclick="event.stopPropagation(); sendDiagnosis(${ngst === 'all' ? 'false' : 'true'})" style="margin:0" ${canSend ? '' : 'disabled'}>報告メールを作成する →</button>
+                </div>
             </div>` : '';
+            // 設置不可ボタンのラベル：物件数1なら「設置不可」、複数なら「設置不可ありを選択」
+            const ngBtnLabel = multi ? '設置不可ありを選択' : '設置不可';
+            // 設置不可ボタンの動作：物件数1なら従来通り即送信、複数ならshowNgPicker()
+            const ngBtnAction = multi ? 'showNgPicker()' : 'sendDiagnosis(false)';
             actionHtml += `
             <div class="diagnosis-box">
                 <div class="diagnosis-label">公式診断の結果を選んでください</div>
                 <div class="diagnosis-btns">
-                    <button class="btn-diag-ok" onclick="event.stopPropagation(); showDateInput()">設置可能</button>
-                    <button class="btn-diag-ng" onclick="event.stopPropagation(); sendDiagnosis(false)">設置不可</button>
+                    <button class="btn-diag-ok" onclick="event.stopPropagation(); showDateInput()">${multi ? '全物件設置可能' : '設置可能'}</button>
+                    <button class="btn-diag-ng" onclick="event.stopPropagation(); ${ngBtnAction}">${ngBtnLabel}</button>
                 </div>
                 ${dateInputHtml}
             </div>`;
         } else if (!completed[task.id]) {
             // ── 報告メール作成済み・送信確認待ち ──
-            const resultLabel = diagnosisResult === 'ng' ? '設置不可' : '設置可能';
-            const ngNoticeConfirm = diagnosisResult === 'ng' ? `
+            const ngst = ngState();
+            const resultLabel = diagnosisResult === 'ng'
+                ? '全物件設置不可'
+                : (ngst === 'partial' ? '一部設置不可' : '設置可能');
+            // 設置不可の物件についての案内
+            let ngNoticeConfirm = '';
+            if (diagnosisResult === 'ng') {
+                ngNoticeConfirm = `
                 <div class="diag-ng-inline">
-                    ${SVG.info}<span>この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。設置・初期設定まで弊社現地スタッフが対応しますので、ホスト様による追加作業は不要です。</span>
-                </div>` : '';
+                    ${SVG.info}<span>いずれの物件もRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。設置・初期設定まで弊社現地スタッフが対応しますので、ホスト様による追加作業は不要です。</span>
+                </div>`;
+            } else if (ngst === 'partial') {
+                const names = formData.propertyNames || [];
+                const ngList = (formData.ngPropertyIdxs || []).slice().sort((a,b)=>a-b).map(i => escapeHtml(names[i] || '(屋号未入力)')).join('、');
+                ngNoticeConfirm = `
+                <div class="diag-ng-inline">
+                    ${SVG.info}<span>設置不可の物件（<strong>${ngList}</strong>）は民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。残りの設置可能な物件については、引き続きSTEP02・03を進めてください。</span>
+                </div>`;
+            }
             actionHtml += `
             <div class="diag-confirm-box">
                 <div class="diag-confirm-title">${SVG.mail} 報告メールを作成しました（結果：${resultLabel}）</div>
@@ -1869,14 +2169,28 @@ function renderTaskCard(task) {
             </div>`;
         } else {
             // ── 報告完了 ──
-            const resultLabel = diagnosisResult === 'ng' ? '設置不可' : '設置可能';
+            const ngst = ngState();
+            const resultLabel = diagnosisResult === 'ng'
+                ? '全物件設置不可'
+                : (ngst === 'partial' ? '一部設置不可' : '設置可能');
+            let doneText = '';
+            if (diagnosisResult === 'ng') {
+                doneText = `
+                <div class="diag-done-text">
+                    いずれの物件もRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。設置・初期設定まで弊社現地スタッフが対応しますので、ホスト様による追加作業は不要です。
+                </div>`;
+            } else if (ngst === 'partial') {
+                const names = formData.propertyNames || [];
+                const ngList = (formData.ngPropertyIdxs || []).slice().sort((a,b)=>a-b).map(i => escapeHtml(names[i] || '(屋号未入力)')).join('、');
+                doneText = `
+                <div class="diag-done-text">
+                    設置不可の物件（<strong>${ngList}</strong>）は民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。残りの設置可能な物件については、引き続きSTEP02・03を進めてください。
+                </div>`;
+            }
             actionHtml += `
             <div class="diag-done-box">
                 <div class="diag-done-title">${SVG.checkSm} 取付診断の結果（${resultLabel}）を報告しました</div>
-                ${diagnosisResult === 'ng' ? `
-                <div class="diag-done-text">
-                    この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて<strong>代替のスマートロック（SwitchBot）をご用意</strong>します。設置・初期設定まで弊社現地スタッフが対応しますので、ホスト様による追加作業は不要です。
-                </div>` : ''}
+                ${doneText}
                 <button class="btn-link-sub" onclick="event.stopPropagation(); clearDiagnosis()">取付診断の結果を選び直す</button>
             </div>`;
         }
@@ -1886,10 +2200,19 @@ function renderTaskCard(task) {
     const autoTask = task.wifi || task.diagnosis;
     let checkRow = '';
     if (!autoTask) {
+        // 招待タスクは、全屋号分のデバイス登録名が入力されないと完了にできない
+        const inviteGated = task.invite && !done && !allDeviceNamesFilled();
+        const extraAttr = task.invite ? ' data-invite="1"' : '';
+        const disabledCls = inviteGated ? ' disabled-pending' : '';
+        const labelText = done
+            ? 'このタスクは完了しました'
+            : (inviteGated ? '全ての屋号にデバイス登録名を入力してください' : 'できたらタップして完了にする');
+        // onclickは常に付ける。招待タスクの完了ガードはtoggleTask側で行う。
+        // これにより、デバイス名を後から入力した場合もカード再描画なしでチェック可能になる。
         checkRow = `
-        <div class="wiz-check ${done ? 'checked' : ''}" onclick="toggleTask(${task.id})">
+        <div class="wiz-check ${done ? 'checked' : ''}${disabledCls}"${extraAttr} onclick="toggleTask(${task.id})">
             <div class="wiz-check-box">${done ? SVG.check : ''}</div>
-            <div class="wiz-check-label">${done ? 'このタスクは完了しました' : 'できたらタップして完了にする'}</div>
+            <div class="wiz-check-label">${labelText}</div>
         </div>`;
     }
 
@@ -1978,8 +2301,12 @@ function renderOverview() {
                 } else if (!parseDate0(formData.constructionDate)) {
                     lockNote = 'RemoteLOCK工事日が未定です。STEP01の取付診断で工事日を入力してください。';
                 } else {
-                    const d = parseDate0(formData.constructionDate);
-                    lockNote = `取り付け工事日（${formatJpDate(d)}）になると進めます。`;
+                    const dateLabel = formatConstructionDate();
+                    if (formData.constructionDatesDiffer && formData.constructionDateLatest) {
+                        lockNote = `工事日（${dateLabel}）の最初の日になると進めます。`;
+                    } else {
+                        lockNote = `取り付け工事日（${dateLabel}）になると進めます。`;
+                    }
                 }
             } else if (phase === 3) {
                 lockNote = 'STEP02（現地対応）の完了後に進めます。';
@@ -1995,11 +2322,15 @@ function renderOverview() {
                 stepMsg = `<div class="ov-step-msg">${SVG.pin}<span class="ov-step-msg-text">このSTEPは、RemoteLOCKの取り付け工事の日に、物件で行う作業です。</span></div>`;
             } else if (dp === 'today') {
                 // 工事日当日：今日進めるべきだと伝える（注意を引くトーン）
-                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin}<span class="ov-step-msg-text"><strong>本日はRemoteLOCK工事日です。</strong>物件での作業を進めてください。</span></div>`;
+                // 複数日の場合は「工事日が始まる日」であることを表現
+                const todayMsg = (formData.constructionDatesDiffer && formData.constructionDateLatest)
+                    ? `<strong>本日からRemoteLOCK工事が始まります。</strong>各物件の工事日に合わせて作業を進めてください。`
+                    : `<strong>本日はRemoteLOCK工事日です。</strong>物件での作業を進めてください。`;
+                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin}<span class="ov-step-msg-text">${todayMsg}</span></div>`;
             } else if (dp === 'after') {
                 // 工事日経過後：日付を断定せず、過ぎたことを穏やかに伝える
-                const d = parseDate0(formData.constructionDate);
-                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin}<span class="ov-step-msg-text">RemoteLOCK工事日(${formatJpDate(d)})を過ぎています。まだ終わっていない作業があれば、お早めに進めてください。</span></div>`;
+                const dateLabel = formatConstructionDate();
+                stepMsg = `<div class="ov-step-msg ov-step-msg-today">${SVG.pin}<span class="ov-step-msg-text">RemoteLOCK工事日(${dateLabel})を過ぎています。まだ終わっていない作業があれば、お早めに進めてください。</span></div>`;
             }
         }
 
@@ -2033,11 +2364,26 @@ function renderOverview() {
         }
     });
 
+    // 設置不可の表示
+    const ngst = ngState();
     if (diagnosisResult === 'ng') {
+        // 全物件設置不可（B）
         html += `
         <div class="ov-ng-note">
-            <div class="ov-ng-title">${SVG.info} 取付診断の結果：設置不可</div>
-            <div class="ov-ng-text">この物件はRemoteLOCKの設置ができないため、民泊管理バンクにて代替のスマートロック（SwitchBot）をご用意します。STEP02以降のご対応は不要です。設置・初期設定まで弊社現地スタッフが対応します。</div>
+            <div class="ov-ng-title">${SVG.info} 取付診断の結果：全物件設置不可</div>
+            <div class="ov-ng-text">いずれの物件もRemoteLOCKの設置ができないため、民泊管理バンクにて代替のスマートロック（SwitchBot）をご用意します。STEP02以降のご対応は不要です。設置・初期設定まで弊社現地スタッフが対応します。</div>
+        </div>`;
+    } else if (ngst === 'partial') {
+        // 一部設置不可（C）
+        const names = formData.propertyNames || [];
+        const ngList = (formData.ngPropertyIdxs || [])
+            .slice().sort((a, b) => a - b)
+            .map(i => escapeHtml(names[i] || '(屋号未入力)')).join('、');
+        html += `
+        <div class="ov-ng-note">
+            <div class="ov-ng-title">${SVG.info} 取付診断の結果：一部の物件は設置不可</div>
+            <div class="ov-ng-text">下記の物件はRemoteLOCKの設置ができないため、民泊管理バンクにて代替のスマートロック（SwitchBot）をご用意します。これらの物件についてはホスト様の追加対応は不要です。残りの物件については、引き続きSTEP02・03を進めてください。</div>
+            <div class="ov-ng-text" style="margin-top:8px"><strong>設置不可の物件：${ngList}</strong></div>
         </div>`;
     }
 
@@ -2058,11 +2404,42 @@ function renderOverview() {
 
 // RemoteLOCK工事日の変更欄（STEP01とSTEP02の間に表示）
 function renderWorkdateCard() {
+    const multi = shouldShowDifferToggle();
+    const differ = !!formData.constructionDatesDiffer;
+    // 複数日（同じ／異なる）の切り替え（物件数2以上のときだけ）
+    const differToggleHtml = multi ? `
+        <div class="construction-mode-row" style="margin-top:10px">
+            <label class="construction-mode-opt ${!differ ? 'active' : ''}">
+                <input type="radio" name="ov_construction_mode" ${!differ ? 'checked' : ''} onclick="setConstructionDatesDiffer(false)">
+                <span>全ての物件で同じ日</span>
+            </label>
+            <label class="construction-mode-opt ${differ ? 'active' : ''}">
+                <input type="radio" name="ov_construction_mode" ${differ ? 'checked' : ''} onclick="setConstructionDatesDiffer(true)">
+                <span>物件ごとに異なる</span>
+            </label>
+        </div>` : '';
+    // 日付入力欄
+    const dateFieldsHtml = differ ? `
+        <div class="date-multi-row" style="margin-top:10px">
+            <div class="date-multi-col">
+                <div class="date-multi-label">最も早い工事日</div>
+                ${dateSelectHtml('consOv', formData.constructionDate, 'onConstructionDateOvInput')}
+            </div>
+            <div class="date-multi-col">
+                <div class="date-multi-label">最も遅い工事日</div>
+                ${dateSelectHtml('consOvLate', formData.constructionDateLatest, 'onConstructionDateLatestOvInput')}
+            </div>
+        </div>
+        <div class="ov-date-hint">最も早い工事日になるとSTEP02を開けるようになります。工事日が変わったらここで更新してください。</div>
+    ` : `
+        <div style="margin-top:10px">${dateSelectHtml('consOv', formData.constructionDate, 'onConstructionDateOvInput')}</div>
+        <div class="ov-date-hint">工事日が変わったら、ここで更新してください。下のSTEP02は、この工事日になると開けるようになります。</div>
+    `;
     return `
     <div class="ov-workdate">
         <div class="ov-workdate-label">${SVG.calendar} RemoteLOCK工事日</div>
-        ${dateSelectHtml('consOv', formData.constructionDate, 'onConstructionDateOvInput')}
-        <div class="ov-date-hint">工事日が変わったら、ここで更新してください。下のSTEP02は、この工事日になると開けるようになります。</div>
+        ${differToggleHtml}
+        ${dateFieldsHtml}
     </div>`;
 }
 
@@ -2135,7 +2512,7 @@ function renderWizard() {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             <div>
                 <div class="billing-box-title">月額利用料の課金開始タイミング</div>
-                <div class="billing-box-text">下記の手順でデバイスを登録すると、<strong>その時点からRemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担です。登録のタイミングにご留意ください。</div>
+                <div class="billing-box-text">このあとデバイスを登録すると、<strong>その時点からRemoteLOCKの月額利用料の引き落としが開始されます。</strong>この費用はホスト様のご負担です。</div>
             </div>
         </div>`;
     }
@@ -2258,6 +2635,14 @@ function onConstructionDateOvInput(value) {
     render();
 }
 
+// 俯瞰画面からの最遅日変更
+function onConstructionDateLatestOvInput(value) {
+    if (!isCompleteDate(value)) return;
+    formData.constructionDateLatest = value;
+    saveState();
+    render();
+}
+
 
 // ===== TOGGLE =====
 function toggleTask(id) {
@@ -2265,6 +2650,8 @@ function toggleTask(id) {
     // カードクリックによる手動トグルは受け付けない
     const task = TASKS.find(t => t.id === id);
     if (task && (task.wifi || task.diagnosis)) return;
+    // 招待タスクは全屋号分のデバイス登録名が入力されないと完了にできない
+    if (task && task.invite && !completed[id] && !allDeviceNamesFilled()) return;
     completed[id] = !completed[id];
     saveState();
     render();
@@ -2295,20 +2682,58 @@ function updateProgress() {
 function isFormComplete() {
     // ご担当者様が契約者様と同じ場合は契約者名で代替する
     const staffOk = formData.staffSame ? !!formData.subscriber : !!formData.staff;
-    return !!(formData.property && formData.subscriber && staffOk && isValidEmail(formData.email));
+    const countOk = Number.isInteger(formData.propertyCount) && formData.propertyCount >= 1;
+    const namesOk = countOk
+        && Array.isArray(formData.propertyNames)
+        && formData.propertyNames.length === formData.propertyCount
+        && formData.propertyNames.every(v => !!v);
+    return !!(countOk && namesOk && formData.subscriber && staffOk && isValidEmail(formData.email));
 }
 
 function validateAndHighlight() {
+    const missing = [];
+    let firstEl = null;
+
+    // 導入台数：1以上の整数
+    {
+        const el = document.getElementById('f_propertyCount');
+        const hint = document.getElementById('hint_propertyCount');
+        const n = formData.propertyCount;
+        if (!Number.isInteger(n) || n < 1) {
+            missing.push('今回ご導入の物件数');
+            if (el) { el.classList.add('invalid'); if (hint) hint.classList.add('show'); }
+            if (!firstEl) firstEl = el;
+        } else if (el) {
+            el.classList.remove('invalid'); if (hint) hint.classList.remove('show');
+        }
+    }
+    // 物件屋号：すべて入力されているか
+    {
+        const hint = document.getElementById('hint_propertyNames');
+        const inputs = document.querySelectorAll('.property-name-input');
+        const empty = formData.propertyNames && formData.propertyNames.some(v => !v);
+        if (empty || !formData.propertyNames || formData.propertyNames.length !== formData.propertyCount) {
+            missing.push('物件屋号（' + formData.propertyCount + '件すべて）');
+            inputs.forEach((el, i) => {
+                if (!formData.propertyNames[i]) {
+                    el.classList.add('invalid');
+                    if (!firstEl) firstEl = el;
+                }
+            });
+            if (hint) hint.classList.add('show');
+        } else {
+            inputs.forEach(el => el.classList.remove('invalid'));
+            if (hint) hint.classList.remove('show');
+        }
+    }
+
+    // ご契約者様名・ご担当者様名・連絡先メール
     const fields = [
-        { key: 'property',   id: 'f_property',   hint: 'hint_property',   label: '物件名' },
         { key: 'subscriber', id: 'f_subscriber', hint: 'hint_subscriber', label: 'ご契約者様名' },
         { key: 'staff',      id: 'f_staff',      hint: 'hint_staff',      label: 'ご担当者様名' },
         { key: 'email',      id: 'f_email',      hint: 'hint_email',      label: '連絡先メールアドレス' }
     ];
-    const missing = [];
-    let firstEl = null;
     fields.forEach(f => {
-        // ご担当者様が契約者様と同じ場合、担当者名欄は非表示のため検証スキップ
         if (f.key === 'staff' && formData.staffSame) return;
         const el   = document.getElementById(f.id);
         const hint = document.getElementById(f.hint);
@@ -2332,6 +2757,7 @@ function validateAndHighlight() {
             hint.classList.remove('show');
         }
     });
+
     if (missing.length > 0) {
         alert('以下のホスト様情報をご確認ください。\n\n・' + missing.join('\n・'));
         if (firstEl) firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2369,7 +2795,6 @@ function updateStickyBar() {
 // ===== FORM INPUTS =====
 function bindFormInputs() {
     const fields = {
-        f_property:   'property',
         f_subscriber: 'subscriber',
         f_staff:      'staff',
         f_email:      'email'
@@ -2398,6 +2823,35 @@ function bindFormInputs() {
         });
     });
 
+    // 導入台数の入力欄。台数を変更すると屋号欄が動的に増減する。
+    const cntEl = document.getElementById('f_propertyCount');
+    if (cntEl) {
+        cntEl.value = formData.propertyCount || 1;
+        cntEl.addEventListener('input', () => {
+            const n = Math.max(1, Math.floor(Number(cntEl.value) || 1));
+            formData.propertyCount = n;
+            // 屋号配列の長さをnに合わせる（増えた分は空文字、減った分は切り捨て）
+            if (formData.propertyNames.length < n) {
+                while (formData.propertyNames.length < n) formData.propertyNames.push('');
+            } else if (formData.propertyNames.length > n) {
+                formData.propertyNames = formData.propertyNames.slice(0, n);
+            }
+            // デバイス登録名配列も同じ長さに合わせる
+            if (!Array.isArray(formData.deviceNames)) formData.deviceNames = [];
+            if (formData.deviceNames.length < n) {
+                while (formData.deviceNames.length < n) formData.deviceNames.push('');
+            } else if (formData.deviceNames.length > n) {
+                formData.deviceNames = formData.deviceNames.slice(0, n);
+            }
+            renderPropertyNameInputs();
+            const hint = document.getElementById('hint_propertyCount');
+            if (n >= 1) { cntEl.classList.remove('invalid'); if (hint) hint.classList.remove('show'); }
+            updateInputNav();
+            saveState();
+        });
+    }
+    renderPropertyNameInputs();
+
     // 「ご担当者様はご契約者様と同じ」チェックボックス
     const sameEl = document.getElementById('f_staffSame');
     if (sameEl) {
@@ -2414,6 +2868,34 @@ function bindFormInputs() {
         });
     }
     applyStaffSameUI();
+}
+
+// 屋号入力欄を、台数(propertyCount)に応じて動的に描画する
+function renderPropertyNameInputs() {
+    const list = document.getElementById('propertyNamesList');
+    if (!list) return;
+    const n = formData.propertyCount || 1;
+    let html = '';
+    for (let i = 0; i < n; i++) {
+        const val = formData.propertyNames[i] || '';
+        const placeholder = n === 1 ? '例：〇〇マンション 101号室' : `屋号 ${i + 1}（例：〇〇マンション ${101 + i}号室）`;
+        html += `<input type="text" class="form-input property-name-input" data-idx="${i}" value="${escapeHtml(val)}" placeholder="${placeholder}" style="margin-bottom:8px">`;
+    }
+    list.innerHTML = html;
+    // 各入力欄にハンドラを付ける
+    list.querySelectorAll('.property-name-input').forEach(el => {
+        el.addEventListener('input', () => {
+            const idx = Number(el.dataset.idx);
+            formData.propertyNames[idx] = el.value.trim();
+            const hint = document.getElementById('hint_propertyNames');
+            if (formData.propertyNames.every(v => v)) {
+                list.querySelectorAll('.property-name-input').forEach(e => e.classList.remove('invalid'));
+                if (hint) hint.classList.remove('show');
+            }
+            updateInputNav();
+            saveState();
+        });
+    });
 }
 
 // 「担当者は契約者と同じ」の状態に応じて担当者名欄の表示/非表示を切り替え
@@ -2446,6 +2928,47 @@ function setWifiMode(alreadyDone) {
     updateWifiCompletion();
     saveState();
     render();
+}
+
+// デバイス登録名の入力。屋号と同じインデックスで保持。
+// 入力中にrender()でDOMを再生成するとフォーカスが外れて操作しづらいため、
+// ここではstateを更新して保存するだけにとどめ、完了チェックの可否表示だけ更新する。
+function onDeviceNameInput(idx, value) {
+    if (!Array.isArray(formData.deviceNames)) formData.deviceNames = [];
+    formData.deviceNames[idx] = (value || '').trim();
+    saveState();
+    refreshDeviceCompletionUI();
+}
+
+// 設置可能屋号すべてにデバイス登録名が入力されているか（設置不可屋号は対象外）
+function allDeviceNamesFilled() {
+    const okIdxs = okPropertyIdxs();
+    if (okIdxs.length === 0) return false;
+    if (!Array.isArray(formData.deviceNames)) return false;
+    for (const i of okIdxs) {
+        if (!formData.deviceNames[i]) return false;
+    }
+    return true;
+}
+
+// デバイス登録名の入力状況に応じて、タスクカード上の完了チェックボックスの
+// disabled-pendingクラスとラベル文字を更新する。inputイベントごとにrender()せず、必要箇所だけ更新する。
+function refreshDeviceCompletionUI() {
+    const check = document.querySelector('.wiz-check[data-invite="1"]');
+    if (!check) return;
+    if (check.classList.contains('checked')) return;  // すでに完了の場合は何もしない
+    const filled = allDeviceNamesFilled();
+    if (filled) {
+        check.classList.remove('disabled-pending');
+        check.removeAttribute('aria-disabled');
+    } else {
+        check.classList.add('disabled-pending');
+        check.setAttribute('aria-disabled', 'true');
+    }
+    const label = check.querySelector('.wiz-check-label');
+    if (label) {
+        label.textContent = filled ? 'できたらタップして完了にする' : '全ての屋号にデバイス登録名を入力してください';
+    }
 }
 
 // 完全な日付（YYYY-MM-DD）かどうか。空文字（クリア）も許容する。
@@ -2529,10 +3052,64 @@ function onWifiDateInput(value) {
     render();
 }
 
-// RemoteLOCK工事予定日の入力時の処理
+// RemoteLOCK工事予定日（最短日）の入力時の処理
 function onConstructionDateInput(value) {
     if (!isCompleteDate(value)) return;
     formData.constructionDate = value;
+    saveState();
+    render();
+}
+
+// 最も遅い工事日の入力時の処理（複数日対応）
+function onConstructionDateLatestInput(value) {
+    if (!isCompleteDate(value)) return;
+    formData.constructionDateLatest = value;
+    saveState();
+    render();
+}
+
+// 「全ての物件で同じ／物件ごとに異なる」の切り替え
+function setConstructionDatesDiffer(differ) {
+    formData.constructionDatesDiffer = !!differ;
+    if (!differ) {
+        // 「同じ」に切り替えたら最遅日はクリア（不要なため）
+        formData.constructionDateLatest = '';
+    }
+    saveState();
+    render();
+}
+
+// 設置不可ありモードを表示。複数物件のときに「設置不可ありを選択」ボタンで呼ばれる。
+// 最初は誰も選ばれていない状態だと「設置可能」ボタンと同じになってしまうため、
+// 初期は1件目を仮選択しておく（ユーザーが選び直す）。
+function showNgPicker() {
+    if (!validateAndHighlight()) return;
+    if (!isWifiReady()) {
+        alert('先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。\n\nWi-Fiの状況（これから工事する／すでに開通済み）を選択してください。');
+        const el = document.getElementById('wifi_y');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+    formData.showDateInput = true;
+    // 1件目を仮選択（ユーザーが調整する）
+    if (!Array.isArray(formData.ngPropertyIdxs) || formData.ngPropertyIdxs.length === 0) {
+        formData.ngPropertyIdxs = [0];
+    }
+    saveState();
+    render();
+}
+
+// 屋号の設置不可フラグをトグル
+function toggleNgProperty(idx) {
+    if (!Array.isArray(formData.ngPropertyIdxs)) formData.ngPropertyIdxs = [];
+    const pos = formData.ngPropertyIdxs.indexOf(idx);
+    if (pos >= 0) {
+        formData.ngPropertyIdxs.splice(pos, 1);
+    } else {
+        formData.ngPropertyIdxs.push(idx);
+    }
+    // 1件も選ばれていない状態は「全物件設置可能」と等価なので許容する
+    // （ユーザーが結果を見直しているケース）
     saveState();
     render();
 }
@@ -2547,7 +3124,7 @@ function isWifiReady() {
 // 問題があれば警告メッセージ（文字列）、問題なければ '' を返す。
 function checkConstructionDate() {
     // 「すでに開通済み」を選んでいれば、Wi-Fiは既に使えるため日付チェック不要
-    if (formData.wifiAlreadyDone) return '';
+    if (formData.wifiAlreadyDone) return checkConstructionDateRange();
     if (!formData.wifiDate) {
         return 'Wi-Fi工事日がまだ入力されていません。先に「Wi-Fi工事日（開通日）の確認・入力」を完了してください。';
     }
@@ -2555,9 +3132,22 @@ function checkConstructionDate() {
     const wifi = new Date(formData.wifiDate + 'T00:00:00');
     const remote = new Date(formData.constructionDate + 'T00:00:00');
     if (isNaN(wifi) || isNaN(remote)) return '';
-    // RemoteLOCK工事日は Wi-Fi工事日の翌日以降である必要がある
+    // RemoteLOCK工事日（最短日）はWi-Fi工事日の翌日以降である必要がある
     if (remote <= wifi) {
         return `RemoteLOCK工事予定日がWi-Fi工事日（${formData.wifiDate}）以前になっています。Wi-Fi開通前に工事を行うと、当日中にデバイス初期設定が完了できません。RemoteLOCK工事日はWi-Fi工事日の翌日以降に設定してください。`;
+    }
+    return checkConstructionDateRange();
+}
+
+// 複数日対応：最遅日が最短日より前になっていないかチェック
+function checkConstructionDateRange() {
+    if (!formData.constructionDatesDiffer) return '';
+    if (!formData.constructionDate || !formData.constructionDateLatest) return '';
+    const early = new Date(formData.constructionDate + 'T00:00:00');
+    const late = new Date(formData.constructionDateLatest + 'T00:00:00');
+    if (isNaN(early) || isNaN(late)) return '';
+    if (late < early) {
+        return '最も遅い工事日が、最も早い工事日より前になっています。最も遅い工事日は、最も早い工事日と同じか後の日付にしてください。';
     }
     return '';
 }
@@ -2591,20 +3181,43 @@ function openMailClient(subject, body) {
 
 // ===== DIAGNOSIS EMAIL =====
 
-// 取付診断の報告メール（件名・本文）を組み立てる。diagnosisResultに基づく。
+// 取付診断の報告メール（件名・本文）を組み立てる。diagnosisResultとngPropertyIdxsに基づく。
 function buildDiagnosisMail() {
+    const subjLabel = formatPropertyBarLabel();
+    const propLine = formatPropertiesForMail();
+    const names = formData.propertyNames || [];
     if (diagnosisResult === 'ng') {
+        // 全物件設置不可（B）
         return {
-            subject: `【診断報告】RemoteLOCK 設置不可・代替品手配のご依頼 (${formData.property})`,
-            body: `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「設置不可」との回答を受け取りました。\nつきましては、代替のスマートロックの手配・設置・初期設定の対応をお願いいたします。\n`
+            subject: `【診断報告】RemoteLOCK 設置不可・代替品手配のご依頼 (${subjLabel})`,
+            body: `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n今回ご導入の物件数: ${formData.propertyCount}件\n${propLine}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n取付診断の結果、公式診断フォームより「設置不可」との回答を受け取りました。\nつきましては、代替のスマートロックの手配・設置・初期設定の対応をお願いいたします。\n`
         };
     }
     const wifiLine = formData.wifiAlreadyDone
         ? `Wi-Fi: 開通済み${formData.wifiDate ? `（開通日：${formData.wifiDate}）` : ''}`
         : `Wi-Fi工事日: ${formData.wifiDate}`;
+    // 工事予定日：単一日 or 期間（最短〜最遅）
+    const constructionDateLine = (formData.constructionDatesDiffer && formData.constructionDateLatest)
+        ? `RemoteLOCK工事予定日: ${formData.constructionDate} 〜 ${formData.constructionDateLatest}（物件ごとに異なる）`
+        : `RemoteLOCK工事予定日: ${formData.constructionDate}`;
+
+    // 一部設置不可（C）の場合、設置不可物件リストと設置可能物件リストを本文に含める
+    const ngst = ngState();
+    let resultSection;
+    if (ngst === 'partial') {
+        const ngList = (formData.ngPropertyIdxs || [])
+            .slice().sort((a, b) => a - b)
+            .map(i => `  ・${names[i] || '(屋号未入力)'}`).join('\n');
+        const okList = okPropertyIdxs()
+            .map(i => `  ・${names[i] || '(屋号未入力)'}`).join('\n');
+        resultSection = `取付診断の結果、一部の物件は「設置不可」、残りは「設置可能」との回答を受け取りました。\n\n■設置不可の物件（代替スマートロック手配をお願いいたします）\n${ngList}\n\n■設置可能の物件（引き続きSTEP02・03で設置・初期設定を進めます）\n${okList}\n`;
+    } else {
+        // 全物件設置可能（A）
+        resultSection = `取付診断の結果、公式診断フォームより「設置可能」との回答を受け取りました。\n\n引き続き、現地での設置・初期設定を進めてまいります。\n`;
+    }
     return {
-        subject: `【診断報告】RemoteLOCK 取付診断結果報告 (${formData.property})`,
-        body: `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■日程\n${wifiLine}\nRemoteLOCK工事予定日: ${formData.constructionDate}\n\n取付診断の結果、公式診断フォームより「設置可能」との回答を受け取りました。\n\n引き続き、現地での設置・初期設定を進めてまいります。\n`
+        subject: `【診断報告】RemoteLOCK 取付診断結果報告 (${subjLabel})`,
+        body: `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの取付診断結果についてご報告いたします。\n\n■ホスト様情報\n今回ご導入の物件数: ${formData.propertyCount}件\n${propLine}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■日程\n${wifiLine}\n${constructionDateLine}\n\n${resultSection}`
     };
 }
 
@@ -2670,6 +3283,9 @@ function clearDiagnosis() {
     diagnosisReported = false;
     formData.showDateInput = false;
     formData.constructionDate = '';
+    formData.constructionDatesDiffer = false;
+    formData.constructionDateLatest = '';
+    formData.ngPropertyIdxs = [];
     // 取付診断タスク（id:3）と、それ以降のSTEP02・STEP03のタスクをすべて未完了に戻す
     completed[3] = false;
     TASKS.forEach(t => { if (t.phase >= 2) completed[t.id] = false; });
@@ -2690,8 +3306,8 @@ function openModal() {
     <div class="modal-section">
         <div class="modal-section-label">Host &amp; Property Info</div>
         <div class="modal-info-box">
-            <div class="modal-info-name">${formData.property}</div>
-            <div class="modal-info-sub">${formData.subscriber} / ${formData.staff}</div>
+            <div class="modal-info-name">${escapeHtml(formatPropertyBarLabel())}</div>
+            <div class="modal-info-sub">${escapeHtml(formData.subscriber || '')} / ${escapeHtml(formData.staff || '')}</div>
         </div>
     </div>
     <div class="modal-section">
@@ -2754,8 +3370,25 @@ function sendFinalEmail() {
         }
         return;
     }
-    const subject = `【導入完了報告】RemoteLOCK 設定完了 (${formData.property})`;
-    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの導入状況についてご報告いたします。\n\n■ホスト様情報\n物件名: ${formData.property}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■ログイン情報\nID: ${formData.loginId}\nPASS: ${formData.password}\n\nご確認と連携作業をお願いいたします。`;
+    const subject = `【導入完了報告】RemoteLOCK 設定完了 (${formatPropertyBarLabel()})`;
+    // 屋号とデバイス登録名の対応表を整形（設置可能のみ）
+    const names = formData.propertyNames || [];
+    const devs = formData.deviceNames || [];
+    const okIdxs = okPropertyIdxs();
+    let mappingLines = '';
+    okIdxs.forEach((i, n) => {
+        mappingLines += `  ${n + 1}. ${names[i] || '(屋号未入力)'} → ${devs[i] || '(デバイス名未入力)'}\n`;
+    });
+    // 設置不可（C：一部）があれば、設置不可物件も別セクションで明記
+    const ngst = ngState();
+    let ngSection = '';
+    if (ngst === 'partial') {
+        const ngList = (formData.ngPropertyIdxs || [])
+            .slice().sort((a, b) => a - b)
+            .map(i => `  ・${names[i] || '(屋号未入力)'}`).join('\n');
+        ngSection = `\n■設置不可の物件（代替スマートロックで対応済み・対応予定）\n${ngList}\n`;
+    }
+    let body = `民泊管理バンク カスタマーサポート様\n\nRemoteLOCKの導入状況についてご報告いたします。\n\n■ホスト様情報\n今回ご導入の物件数: ${formData.propertyCount}件\n${formatPropertiesForMail()}\n契約者名: ${formData.subscriber}\n担当者名: ${formData.staff}\n連絡先: ${formData.email}\n\n■屋号とデバイス登録名の対応（設置可能物件）\n${mappingLines}${ngSection}\n■ログイン情報\nID: ${formData.loginId}\nPASS: ${formData.password}\n\nご確認と連携作業をお願いいたします。`;
     closeModal();
     openMailClient(subject, body);
 }
@@ -2790,18 +3423,24 @@ function resetProgress() {
     wizardPhase = 1;
     currentTaskIndex = 0;
     formData = {
-        property: '', subscriber: '', staff: '', email: '',
+        propertyCount: 1, propertyNames: [''], deviceNames: [''],
+        subscriber: '', staff: '', email: '',
         staffSame: false,
         loginId: '', password: '',
         wifiAlreadyDone: false, wifiDate: '', constructionDate: '',
+        constructionDatesDiffer: false, constructionDateLatest: '',
+        ngPropertyIdxs: [],
         showDateInput: false
     };
     saveState();
     // 入力欄を空に戻す
-    ['f_property','f_subscriber','f_staff','f_email'].forEach(id => {
+    ['f_subscriber','f_staff','f_email'].forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.value = ''; el.classList.remove('invalid'); }
     });
+    const cntEl = document.getElementById('f_propertyCount');
+    if (cntEl) { cntEl.value = 1; cntEl.classList.remove('invalid'); }
+    renderPropertyNameInputs();
     const sameEl = document.getElementById('f_staffSame');
     if (sameEl) sameEl.checked = false;
     document.querySelectorAll('.form-hint').forEach(h => h.classList.remove('show'));
