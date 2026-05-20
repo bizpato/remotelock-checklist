@@ -1975,10 +1975,13 @@ function renderTaskCard(task) {
         for (const i of okIdxs) {
             const yago = names[i] || `屋号${i + 1}`;
             const val = devs[i] || '';
+            // プレースホルダーはその行の屋号を例として表示。
+            // ホストが屋号と同じ名前をデバイス登録名にしたい場合も、そのまま参考にできる。
+            const placeholder = `例：${yago}`;
             rows += `
             <div class="device-row">
                 <div class="device-row-yago">${escapeHtml(yago)}</div>
-                <input type="text" class="form-input device-name-input" data-idx="${i}" value="${escapeHtml(val)}" placeholder="例：玄関RemoteLOCK" oninput="onDeviceNameInput(${i}, this.value)" onclick="event.stopPropagation()">
+                <input type="text" class="form-input device-name-input" data-idx="${i}" value="${escapeHtml(val)}" placeholder="${escapeHtml(placeholder)}" oninput="onDeviceNameInput(${i}, this.value)" onclick="event.stopPropagation()">
             </div>`;
         }
         // 一部設置不可の場合は対象屋号を明示する補足を入れる
