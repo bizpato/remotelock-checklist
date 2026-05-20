@@ -1992,7 +1992,7 @@ function renderTaskCard(task) {
         actionHtml += `
         <div class="device-names-box">
             <div class="invite-section-label">登録したデバイスの名前</div>
-            <div class="device-names-desc">Connectで登録したデバイスの名前を、それぞれの物件屋号に対応させて入力してください。<strong>すべての屋号にデバイス名を入力すると、このタスクを完了にできます。</strong></div>
+            <div class="device-names-desc">Connectで登録したデバイスの名前を、それぞれの物件屋号に対応させて入力してください。<strong>各物件を区別できるよう、デバイス名はそれぞれ異なるものを付けてください。</strong>すべての屋号にデバイス名を入力すると、このタスクを完了にできます。</div>
             ${partialNote}
             ${rows}
         </div>`;
@@ -2203,13 +2203,22 @@ function renderTaskCard(task) {
     const autoTask = task.wifi || task.diagnosis;
     let checkRow = '';
     if (!autoTask) {
-        // 招待タスクは、全屋号分のデバイス登録名が入力されないと完了にできない
-        const inviteGated = task.invite && !done && !allDeviceNamesFilled();
+        // 招待タスクは、全屋号分のデバイス登録名が入力され、かつ重複がないと完了にできない
+        const filled = allDeviceNamesFilled();
+        const duplicated = hasDuplicateDeviceNames();
+        const inviteGated = task.invite && !done && (!filled || duplicated);
         const extraAttr = task.invite ? ' data-invite="1"' : '';
         const disabledCls = inviteGated ? ' disabled-pending' : '';
-        const labelText = done
-            ? 'このタスクは完了しました'
-            : (inviteGated ? '全ての屋号にデバイス登録名を入力してください' : 'できたらタップして完了にする');
+        let labelText;
+        if (done) {
+            labelText = 'このタスクは完了しました';
+        } else if (task.invite && !filled) {
+            labelText = '全ての屋号にデバイス登録名を入力してください';
+        } else if (task.invite && duplicated) {
+            labelText = '同じデバイス名が使われています。それぞれ異なる名前にしてください';
+        } else {
+            labelText = 'できたらタップして完了にする';
+        }
         // onclickは常に付ける。招待タスクの完了ガードはtoggleTask側で行う。
         // これにより、デバイス名を後から入力した場合もカード再描画なしでチェック可能になる。
         checkRow = `
@@ -2653,8 +2662,8 @@ function toggleTask(id) {
     // カードクリックによる手動トグルは受け付けない
     const task = TASKS.find(t => t.id === id);
     if (task && (task.wifi || task.diagnosis)) return;
-    // 招待タスクは全屋号分のデバイス登録名が入力されないと完了にできない
-    if (task && task.invite && !completed[id] && !allDeviceNamesFilled()) return;
+    // 招待タスクは全屋号分のデバイス登録名が入力され、かつ重複がない場合のみ完了にできる
+    if (task && task.invite && !completed[id] && !deviceNamesValid()) return;
     completed[id] = !completed[id];
     saveState();
     render();
@@ -2954,6 +2963,26 @@ function allDeviceNamesFilled() {
     return true;
 }
 
+// 設置可能屋号のデバイス登録名に重複があるか
+// （各物件を区別するため、同じ名前は許可しない）
+function hasDuplicateDeviceNames() {
+    const okIdxs = okPropertyIdxs();
+    if (!Array.isArray(formData.deviceNames)) return false;
+    const seen = new Set();
+    for (const i of okIdxs) {
+        const v = (formData.deviceNames[i] || '').trim();
+        if (!v) continue;  // 空はここでは無視（allDeviceNamesFilledで弾かれる）
+        if (seen.has(v)) return true;
+        seen.add(v);
+    }
+    return false;
+}
+
+// デバイス登録名が完了条件を満たすか（全入力かつ重複なし）
+function deviceNamesValid() {
+    return allDeviceNamesFilled() && !hasDuplicateDeviceNames();
+}
+
 // デバイス登録名の入力状況に応じて、タスクカード上の完了チェックボックスの
 // disabled-pendingクラスとラベル文字を更新する。inputイベントごとにrender()せず、必要箇所だけ更新する。
 function refreshDeviceCompletionUI() {
@@ -2961,7 +2990,9 @@ function refreshDeviceCompletionUI() {
     if (!check) return;
     if (check.classList.contains('checked')) return;  // すでに完了の場合は何もしない
     const filled = allDeviceNamesFilled();
-    if (filled) {
+    const duplicated = hasDuplicateDeviceNames();
+    const ok = filled && !duplicated;
+    if (ok) {
         check.classList.remove('disabled-pending');
         check.removeAttribute('aria-disabled');
     } else {
@@ -2970,7 +3001,14 @@ function refreshDeviceCompletionUI() {
     }
     const label = check.querySelector('.wiz-check-label');
     if (label) {
-        label.textContent = filled ? 'できたらタップして完了にする' : '全ての屋号にデバイス登録名を入力してください';
+        if (ok) {
+            label.textContent = 'できたらタップして完了にする';
+        } else if (!filled) {
+            label.textContent = '全ての屋号にデバイス登録名を入力してください';
+        } else {
+            // 入力は揃ったが重複あり
+            label.textContent = '同じデバイス名が使われています。それぞれ異なる名前にしてください';
+        }
     }
 }
 
